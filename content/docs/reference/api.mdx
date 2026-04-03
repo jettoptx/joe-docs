@@ -1,0 +1,58 @@
+---
+title: API Reference
+description: WebSocket RPC, REST endpoints, and platform capabilities for OPTX integration.
+icon: Code2
+---
+
+The OPTX platform exposes a **WebSocket API** for real-time agent communication and **REST endpoints** for frontend integration.
+
+## WebSocket RPC (JOE Agent)
+
+Connect to the **JOE agent** via the DOJO Connections tab. Authentication required.
+
+```typescript
+// JOE Agent WebSocket message types
+// Connection is managed by the DOJO — no direct endpoint access
+
+// Chat message
+{ type: "chat", user: "your-username", content: "Hello JOE" }
+
+// Response format
+{
+  content: "JOE's response text",
+  tensor: "COG/EMO/ENV classification",
+  cstb_score: 0.85,  // CSTB attestation score
+}
+
+// Wallet queries (admin only)
+{ type: "wallet_status" }   // → balances + attestation
+{ type: "wallet_metadata" } // → ERC-8004 agent identity
+{ type: "x402_policy" }     // → payment policy
+{ type: "bridge_status" }   // → LayerZero bridge info
+```
+
+## Platform Capabilities
+
+Core platform capabilities available to integrated applications:
+
+```json
+{
+  "capabilities": [
+    "gaze_data_storage",        // Store COG/ENV/EMO gaze tensors
+    "gaze_data_retrieval",      // Retrieve gaze tracking history
+    "gaze_pattern_analysis",    // AI-powered gaze pattern insights
+    "context_awareness",        // Spatial workspace state management
+    "ai_chat",                  // Multi-model AI assistant
+    "usage_analytics"           // API usage and audit trail
+  ]
+}
+```
+
+## REST Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/gaze/store` | Submit gaze tensor data for attestation |
+| **GET** | `/api/gaze/history` | Retrieve gaze session history |
+| **POST** | `/api/verify-session` | Verify subscription and access tier |
+| **GET** | `/api/attestation/status` | Check CSTB attestation progress |

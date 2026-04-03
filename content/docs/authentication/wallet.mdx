@@ -1,0 +1,58 @@
+---
+title: ERC-8004 Agent Wallet
+description: Non-transferable soulbound identity bound to gaze biometrics for computational proof.
+icon: Wallet
+---
+
+The OPTX Agent Wallet implements a **non-transferable, soulbound identity** bound to gaze biometrics. Unlike standard wallets, the **ERC-8004** interface links computational proof to the holder's identity.
+
+## Wallet Integration
+
+```typescript
+// Connect Phantom or OKX wallet
+import { useWallet } from "@solana/wallet-adapter-react"
+
+function OPTXWallet() {
+  const { publicKey, signTransaction } = useWallet()
+
+  // Mint $OPTX on devnet
+  const mintOPTX = async () => {
+    const mint = new PublicKey("4r9WoPsRjJzrYEuj6VdwowVrFZaXpu16Qt6xogcmdUXC")
+    const program = new PublicKey("91SqqYLMi5zNsfMab6rnvipwJhDpN4FEMSLgu8F3bbGq")
+
+    // Call DePIN program to mint tokens
+    // Requires valid CSTB attestation (min 2/5 sessions)
+    const tx = await program.methods
+      .mintOptxReward({ amount: new BN(1000) })
+      .accounts({
+        authority: publicKey,
+        optxMint: mint,
+        userTokenAccount: ata,
+      })
+      .transaction()
+
+    await signTransaction(tx)
+  }
+}
+```
+
+## Agent Metadata
+
+Each OPTX Agent Wallet carries metadata that includes **CSTB profile URI**, **gaze attestation hash**, and **AGT baseline weights**.
+
+```json
+{
+  "agent_wallet": {
+    "type": "ERC-8004",
+    "soulbound": true,
+    "metadata": {
+      "cstb_profile_uri": "https://jettoptics.ai/cstb/profile/...",
+      "gaze_attestation_hash": "0x...",
+      "agt_baseline": { "COG": 42, "EMO": 31, "ENV": 27 },
+      "min_gaze_cs": 222,
+      "entropy": 750,
+      "difficulty": 1000
+    }
+  }
+}
+```

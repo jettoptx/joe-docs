@@ -1,0 +1,58 @@
+---
+icon: Bot
+title: AstroJOE Agent OS
+description: The primary intelligent agent in the OPTX Agentic OS — orchestrates DePIN, spatial encryption, and multi-agent swarms.
+---
+
+**AstroJOE** is the jOSH Operating Environment (JOE) — the primary intelligent agent in the OPTX ecosystem. It runs on Hermes Agent v0.7.0 with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state.
+
+## Architecture
+
+```
+User → Hermes Workspace UI (:5555)
+         ↓
+    hermes-optx-api (:8643)
+         ↓                    ↕ SpacetimeDB (Jetson :3000)
+    Hermes Agent (:8642)      ↕ SKILL.md tools
+         ↓                    ↕ AARON Router (:8888)
+    HEDGEHOG (:8811)          ↕ Matrix/Conduit (:6167)
+         ↓
+    Grok 4.20 (xAI)
+```
+
+## What AstroJOE Does
+
+| Capability | Service | Description |
+|-----------|---------|-------------|
+| **Task Orchestration** | hermes-optx-api | Create, claim, execute, complete tasks with DAG workflows |
+| **Memory** | SpacetimeDB | Persistent memory with categories, importance scoring, and full-text search |
+| **Gaze Verification** | AARON Router | Manage gaze sessions, analyze AGT tensors (COG/EMO/ENV) |
+| **Web Search** | HEDGEHOG | Search web and X/Twitter via Grok 4.20 multi-agent |
+| **Messaging** | Matrix/Conduit | Communicate via federated Matrix homeserver |
+| **Swarm Coordination** | hermes-optx-api | Decompose goals into parallel/sequential/DAG subtasks |
+
+## Identity
+
+| Field | Value |
+|-------|-------|
+| **Name** | AstroJOE |
+| **Email** | joe@jettoptics.ai |
+| **Matrix** | @joe:jettoptics.ai |
+| **Solana Wallet** | `EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk` |
+| **ETH/Base Wallet** | `0xB06c9B91Fa4B460551880459dc35803DC7567b93` |
+| **Metaplex Agent NFT** | [`9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R`](https://www.metaplex.com/agents/9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R) |
+| **Metaplex Wallet** | `G8MxbW8LKEsvKvXRneCHpMASR4yDit7CzERW1ZfgPkqD` |
+| **Protocol** | EIP-8004 Registration v1, x402 Supported |
+| **Owner Authority** | `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` |
+
+## Personality
+
+AstroJOE is direct, efficient, and slightly witty. It takes initiative — it doesn't just answer questions, it executes. It's an agent, not an assistant. It has tools and uses them proactively.
+
+## Explore
+
+- **[Skills System](/docs/astrojoe/skills)** — SKILL.md format and available skills
+- **[Memory](/docs/astrojoe/memory)** — SpacetimeDB-backed persistent memory
+- **[Orchestration](/docs/astrojoe/orchestration)** — Task lifecycle and swarm coordination
+- **[HEDGEHOG Gateway](/docs/astrojoe/hedgehog)** — Multi-API AI gateway
+- **[hermes-optx-api](/docs/astrojoe/api)** — Enhanced API bridge

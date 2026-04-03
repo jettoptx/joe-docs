@@ -1,0 +1,69 @@
+---
+icon: Eye
+title: Gaze-Gated Policy
+description: Biometric verification flow for sensitive operations — AARON Router creates gaze challenges that gate task execution.
+---
+
+## Gaze-Gated Policy Enforcement
+
+Tasks flagged with `gaze_required: true` require biometric verification before an agent can claim them.
+
+```mermaid
+sequenceDiagram
+    participant Agent as AstroJOE
+    participant API as hermes-optx-api
+    participant AARON as AARON Router
+    participant User as User (Mobile)
+    participant STDB as SpacetimeDB
+
+    Agent->>API: POST /api/tasks/{id}/claim
+    API->>API: Check task.gaze_required
+
+    alt Gaze Required
+        API->>AARON: POST /session (create challenge)
+        AARON-->>API: {session_id, qr_code}
+        API-->>Agent: Awaiting gaze verification
+
+        User->>AARON: Perform gaze sequence (4-6 positions, ≥500ms hold)
+        AARON->>AARON: Classify COG/EMO/ENV tensors
+        AARON->>AARON: Entropy scoring
+        AARON->>STDB: store_gaze_attestation
+        AARON-->>API: Verification passed
+
+        API->>STDB: Update task → InProgress
+        API-->>Agent: Claim approved
+    else No Gaze Required
+        API->>STDB: Update task → InProgress
+        API-->>Agent: Claim approved
+    end
+```
+
+## AGT Tensor Classification
+
+The AARON Router classifies iris landmarks (MediaPipe FaceLandmarker 468/473) into three Agentive Gaze Tensor (AGT) types:
+
+| Tensor | Name | Pattern | Meaning |
+|--------|------|---------|---------|
+| **COG** | Cognitive | Focused, intentional gaze | Task execution, concentration |
+| **EMO** | Emotional | Micro-expression correlated | Sentiment, affect, stress |
+| **ENV** | Environmental | Peripheral, scanning | Spatial awareness, context |
+
+## Verification Flow
+
+1. **Session Creation**: AARON generates a session ID and QR challenge
+2. **Gaze Sequence**: User performs 4-6 gaze positions, holding each ≥500ms
+3. **Tensor Classification**: AARON classifies each position into COG/EMO/ENV
+4. **Entropy Scoring**: Measures randomness/uniqueness of the gaze pattern (0-1585 range)
+5. **Attestation**: Results stored in SpacetimeDB `gaze_attestation` table with hash, entropy, and verification status
+
+## When Gaze is Required
+
+- High-value task operations (reward > threshold)
+- Sensitive data access
+- Agent wallet transactions
+- Policy changes
+- Any task with `gaze_required: true`
+
+## Related
+- [AARON Protocol](/docs/protocol) — Full protocol documentation
+- [Gaze Verification Guide](/docs/authentication/gaze) — Implementation guide

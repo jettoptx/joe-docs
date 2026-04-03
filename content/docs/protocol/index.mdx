@@ -1,0 +1,118 @@
+---
+title: AARON Protocol Overview
+description: Asynchronous Audit RAG Optical Node — the biometric proof protocol that underpins the Astro Knots registry.
+icon: Fingerprint
+---
+
+**AARON** (Asynchronous Audit RAG Optical Node) is the biometric proof protocol that underpins the **Astro Knots** registry. It generates quantum-resistant gaze proofs by encoding AGT tensor sequences into knot invariants, then anchoring them on Solana via CSTB attestations.
+
+AARON connects **JETT Auth** (your biometric gaze signature) through **OPT&#x1D54F;** (the secure bridge) to the public **OPTX** blockchain on Solana. Private compute on edge hardware, public attestations on-chain.
+
+```bash
+curl https://api.astroknots.space/aaron \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "register",
+    "gaze": "MEDIUM",
+    "x402": "0.05 OPTX"
+  }'
+```
+
+## Naming Hierarchy
+
+| Name | Full Form | Description |
+|------|-----------|-------------|
+| **JETT Auth** | Joule Encryption Temporal Template Auth | Biometric gaze signature + SSO system on Jetson. The identity layer. |
+| **OPT&#x1D54F;** | Optical Program Technologic &#x1D54F;tension | The secure bridge that turns JETT Auth into verifiable on-chain proofs. |
+| **AARON** | Asynchronous Audit RAG Optical Node | The on-chain protocol + private edge router. DePIN node that validates and routes. |
+| **OPTX** | The Public Blockchain & Token Network | The public-facing Solana mainnet token and protocol. What the world sees. |
+| **AGT** | Agentive Gaze Tensor | The biometric tensor system (COG/EMO/ENV) that powers JETT Auth. Performs the Web4 actions for authentication. |
+
+## What Does AARON Stand For?
+
+- **A** — **Asynchronous**: Non-blocking event-driven architecture. Sessions, proofs, and attestations process in parallel across edge and chain.
+- **A** — **Audit**: Every gaze proof, wallet signature, and token action is cryptographically logged. Immutable trail from eye to chain.
+- **R** — **RAG**: Retrieval-Augmented Generation. Aaron enriches AI responses with real-time context from SpacetimeDB, Solana state, and gaze history.
+- **O** — **Optical**: Gaze biometrics via iris tracking. The camera becomes the key. MediaPipe FaceLandmarker captures COG/EMO/ENV tensor regions.
+- **N** — **Node**: Runs on a physical edge node (Jetson Orin Nano). Private compute that never exposes raw biometric data to the network.
+
+> **DePIN** = Decentralized Physical Infrastructure Network. AARON is a DePIN node that validates human identity through gaze via **JETT Auth**, bridges proofs through **OPT&#x1D54F;**, and earns $OPTX on the public network.
+
+## For Humans
+
+Aaron is a **privacy-first login system** that uses your eyes instead of passwords.
+
+- You look at your screen. Your gaze pattern becomes your identity.
+- The camera data stays on a local device (never uploaded to a cloud).
+- A mathematical proof of your gaze goes to Solana blockchain.
+- You earn **$OPTX** tokens for proving you are human.
+- No passwords. No emails. No centralized database. Just your eyes.
+
+## For Agents
+
+Aaron exposes a **stateless REST API** for autonomous agent integration.
+
+- `POST /session` creates a challenge. `POST /verify` validates a gaze proof.
+- All I/O is JSON over HTTPS. No cookies, no sessions on the agent side.
+- Agents call Aaron via **x402 micropayments** ($OPTX per attestation).
+- SpacetimeDB subscriptions enable real-time event-driven workflows.
+- Bridge service watches verified sessions and auto-submits to Solana.
+
+## How AARON + JOE + HEDGEHOG Work Together
+
+| Component | Role | Description |
+|-----------|------|-------------|
+| **AARON** | The Router | Validates gaze proofs, manages auth sessions, bridges to Solana. The front door for all authentication. |
+| **JOE** | The Agent | JETT Optical Engine. Autonomous AI agent on the edge node. Executes tools, manages services, talks via Matrix chat. |
+| **HEDGEHOG** | The Brain | MCP context bridge. Routes AI queries to Grok 4.1, stores gaze data in SpacetimeDB, tracks API usage. The memory layer. |
+
+```text
+  User (Eyes + Wallet)
+        |
+        v
+  +-----------+     +-----------+     +-------------+
+  |  Frontend |---->|   AARON   |---->| SpacetimeDB |
+  | (Next.js) |     |  Router   |     |  (Edge DB)  |
+  +-----------+     +-----+-----+     +------+------+
+        |                 |                   |
+        |           validates            stores gaze
+        |           gaze proof           sessions +
+        |           + AGT tensors        attestations
+        |                 |                   |
+        |                 v                   v
+        |           +-----+-----+     +------+------+
+        |           |    JOE    |<--->|  HEDGEHOG   |
+        |           |  (Agent)  |     |   (Brain)   |
+        |           +-----+-----+     +------+------+
+        |                 |                   |
+        |           executes tools      routes AI to
+        |           Matrix chat,        Grok 4.1 Fast,
+        |           service mgmt        tracks tokens
+        |                 |                   |
+        |                 v                   v
+        |           +-----+-----+     +------+------+
+        |           |  Solana   |     |   SQLite    |
+        |           |  (Chain)  |     | (API audit) |
+        |           +-----------+     +-------------+
+        |                 |
+        v                 v
+  $OPTX minted     Attestation PDA
+  to wallet        stored on-chain
+
+  ---------------------------------------------------
+  All three run on a single Jetson Orin Nano (edge).
+  Raw biometric data never leaves this device.
+  Only 32-byte opaque proofs reach the blockchain.
+```
+
+## Core Principles
+
+- **Privacy First** — Raw biometric data never leaves the edge node. Only opaque 32-byte proofs go on-chain.
+- **Quantum Resistant** — Agentive Gaze Tensor (AGT) sequences encoded as knot invariants — resistant to quantum attacks.
+- **x402 Native** — Micropayment attestation built-in. Pay-per-action with $OPTX staking tiers.
+
+## Source Code
+
+The AARON Router is open source:
+
+- [aaron-router on GitHub](https://github.com/jettoptx/aaron-router) — FastAPI edge router for gaze session management, proof validation, and Solana bridging.

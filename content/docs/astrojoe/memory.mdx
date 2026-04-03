@@ -1,0 +1,68 @@
+---
+icon: Database
+title: Memory System
+description: SpacetimeDB-backed persistent memory with categories, importance scoring, and real-time subscriptions.
+---
+
+AstroJOE's memory is backed by **SpacetimeDB** running on the Jetson Orin Nano edge node. The `optx-cortex` database provides real-time reducers and subscriptions for persistent agent state.
+
+## Database: optx-cortex
+
+| Table | Purpose |
+|-------|---------|
+| `memory_entry` | Persistent agent memory (category, key, value, importance, source, owner) |
+| `agent_state` | Agent status tracking (status, current_task, metadata) |
+| `gaze_attestation` | JETT Auth gaze verification records |
+| `session_log` | Session start/end tracking |
+| `matrix_message` | Matrix/Conduit message bridge |
+
+## Memory Entry Schema
+
+Each memory has:
+- **category**: `system`, `task`, `observation`, `skill`, `user`
+- **key**: Unique identifier
+- **value**: Content (string, can contain JSON)
+- **importance**: 1-10 score for retrieval priority
+- **source**: Where it came from (`hermes`, `aaron`, `matrix`, etc.)
+- **owner**: Agent that owns this memory
+
+## Reducers (Write Operations)
+
+| Reducer | Args | Purpose |
+|---------|------|---------|
+| `store_memory` | category, key, value, source, owner, importance, session_id | Store or update a memory |
+| `touch_memory` | id | Update last-accessed timestamp |
+| `delete_memory` | id | Remove a memory entry |
+| `set_agent_state` | agent_name, status, current_task, metadata | Update agent state |
+| `store_gaze_attestation` | session_id, gaze_hash, entropy_score, positions, verified | Record gaze verification |
+| `start_session` | session_type, metadata | Begin a new session |
+| `end_session` | session_id, summary | Close a session |
+| `process_matrix_message` | room_id, sender, body, direction | Bridge Matrix message |
+
+## API Endpoints (via hermes-optx-api)
+
+```
+POST   /api/memory          — Store a memory
+GET    /api/memory           — List memories (filter by category, search)
+GET    /api/memory/{id}      — Get specific memory
+DELETE /api/memory/{id}      — Delete a memory
+GET    /api/memory/stats     — Memory statistics
+GET    /api/memory/health    — Backend health check
+```
+
+## Memory Backends
+
+The hermes-optx-api supports pluggable memory backends:
+
+| Backend | Description | Default |
+|---------|-------------|---------|
+| **holographic** | SQLite + FTS5 full-text search (local) | Yes |
+| **spacetimedb** | SpacetimeDB on Jetson (real-time, shared) | Production |
+| **custom** | Implement your own `MemoryBackend` interface | — |
+
+## SpacetimeDB Limitations
+
+- **No CREATE TABLE** via SQL (requires Rust module recompile)
+- **No ORDER BY** (sort client-side)
+- **No LIKE operator** (filter client-side)
+- SQL is read-only; all writes go through reducers

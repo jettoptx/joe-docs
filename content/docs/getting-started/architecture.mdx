@@ -1,0 +1,82 @@
+---
+title: System Architecture
+description: End-to-end architecture from client gaze capture through edge compute to on-chain attestation.
+icon: Layers
+---
+
+## Architecture Overview
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│  CLIENT (Next.js / React Native)                        │
+│  ├── Gaze Camera Feed → MediaPipe → AGT Classification  │
+│  ├── Account Auth + Gaze Biometric (identity)           │
+│  └── Phantom / OKX Wallet Connection                    │
+├─────────────────────────────────────────────────────────┤
+│  EDGE COMPUTE                                           │
+│  ├── JOE Agent (AI-powered assistant)                   │
+│  ├── Real-time state engine (subscriptions)             │
+│  └── Encrypted mesh networking                          │
+├─────────────────────────────────────────────────────────┤
+│  ON-CHAIN (Solana Devnet / Mainnet)                     │
+│  ├── CSTB Trust DePIN Program (Anchor)                  │
+│  ├── $OPTX Token (Token-2022 SPL)                       │
+│  ├── $JTX Governance Token                              │
+│  └── LayerZero OFT Bridge (Solana ↔ EVM)               │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Component Interaction
+
+```text
+  User (Eyes + Wallet)
+        |
+        v
+  +-----------+     +-----------+     +-------------+
+  |  Frontend |---->|   AARON   |---->| SpacetimeDB |
+  | (Next.js) |     |  Router   |     |  (Edge DB)  |
+  +-----------+     +-----+-----+     +------+------+
+                          |                   |
+                    validates            stores gaze
+                    gaze proof           sessions +
+                    + AGT tensors        attestations
+                          |                   |
+                          v                   v
+                    +-----+-----+     +------+------+
+                    |    JOE    |<--->|  HEDGEHOG   |
+                    |  (Agent)  |     |   (Brain)   |
+                    +-----+-----+     +------+------+
+                          |                   |
+                    executes tools      routes AI to
+                    Matrix chat,        Grok, tracks
+                    service mgmt        tokens + context
+                          |                   |
+                          v                   v
+                    +-----+-----+     +------+------+
+                    |  Solana   |     |   SQLite    |
+                    |  (Chain)  |     | (API audit) |
+                    +-----------+     +-------------+
+```
+
+## On-Chain Addresses
+
+| Asset | Address | Network |
+|-------|---------|---------|
+| **DePIN Program** | `91SqqYLMi5zNsfMab6rnvipwJhDpN4FEMSLgu8F3bbGq` | devnet |
+| **$OPTX Mint** | `4r9WoPsRjJzrYEuj6VdwowVrFZaXpu16Qt6xogcmdUXC` | devnet |
+| **$JTX Mint** | `9XpJiKEYzq5yDo5pJzRfjSRMPL2yPfDQXgiN7uYtBhUj` | mainnet |
+| **$CSTB Mint** | `4waAAfTjqf5LNpj2TC5zoeiAgegVwKWoy4WiJgjdBkVL` | devnet |
+
+> **$OPTX**, **$CSTB**, and the **DePIN Program** are currently on Solana devnet. **$JTX** is on mainnet.
+
+## Edge Hardware
+
+All private compute runs on a **Jetson Orin Nano** edge node:
+
+- **AARON Router** — FastAPI gaze session manager + Solana bridge
+- **JOE Agent** — Autonomous AI agent with Matrix chat + tool execution
+- **HEDGEHOG** — MCP gateway routing AI queries through Grok, storing gaze data in SpacetimeDB
+- **SpacetimeDB** — Real-time database with reducers + subscriptions
+- **Conduit** — Matrix homeserver for federated agent communication
+
+Raw biometric data never leaves this device. Only 32-byte opaque proofs reach the blockchain.

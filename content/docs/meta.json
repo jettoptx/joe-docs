@@ -1,0 +1,14 @@
+{
+  "title": "OPTX Docs",
+  "pages": [
+    "index",
+    "getting-started",
+    "authentication",
+    "protocol",
+    "astrojoe",
+    "cockpit",
+    "architecture",
+    "infrastructure",
+    "reference"
+  ]
+}

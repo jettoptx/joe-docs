@@ -1,0 +1,96 @@
+---
+title: Architecture
+description: High-level system diagram of the AARON protocol stack, bridge flow, and on-chain addresses.
+icon: Building
+---
+
+High-level system diagram of the **AARON protocol** stack.
+
+## System Diagram
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│  CLIENT (Browser / iOS / Agent)                         │
+│  ├── Camera Feed → MediaPipe → AGT Classification       │
+│  ├── Wallet Connection (Phantom / OKX)                  │
+│  └── x402 Payment Attestation                           │
+├─────────────────────────────────────────────────────────┤
+│  JETT AUTH (Joule Encryption Temporal Template)          │
+│  ├── Agentive Gaze Tensor (AGT: COG/EMO/ENV)           │
+│  ├── Biometric identity capture on-device               │
+│  └── Generates JOULE template (knot encoding)           │
+├─────────────────────────────────────────────────────────┤
+│  AARON EDGE ROUTER (Astro Knots Router)                 │
+│  ├── Gaze verification + audit logging                  │
+│  ├── x402 micropayment settlement                       │
+│  └── IP protocol filter + rate limiting                 │
+├─────────────────────────────────────────────────────────┤
+│  USDC BRIDGE + XAHAU HOOKS                              │
+│  ├── XRP → USDC via Xahau programmable hooks            │
+│  ├── Wormhole/DeBridge cross-chain transfer              │
+│  └── MPP agent payments (donate_usdc_agent)              │
+├─────────────────────────────────────────────────────────┤
+│  OPTx (Optical Program Technologic Xtension)            │
+│  ├── Verification hash → 32-byte opaque proof           │
+│  ├── Bridge: SpacetimeDB → Solana transaction           │
+│  └── Turns JETT Auth into on-chain attestations         │
+├─────────────────────────────────────────────────────────┤
+│  OPTX NETWORK (Solana — Public)                         │
+│  ├── CSTB Trust DePIN Program (Anchor)                  │
+│  ├── $OPTX Token (Token-2022 SPL)                       │
+│  ├── $JTX Governance Token                              │
+│  ├── Vault Program (JTX5...YA7)                         │
+│  └── Attestation + DonorReceipt PDAs on-chain           │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Bridge Flow: XRP to Solana USDC
+
+```text
+XRP User / Agent
+      │
+      ▼
+┌──────────────┐     ┌──────────────────┐
+│  Xahau Hook  │────▶│  USDC Bridge     │
+│  (XRP Ledger)│     │  (Wormhole /     │
+│              │     │   DeBridge)      │
+└──────────────┘     └───────┬──────────┘
+                             │
+                     USDC on Solana
+                             │
+                             ▼
+                  ┌─────────────────────┐
+                  │  Vault Program      │
+                  │  donate_usdc_agent  │
+                  │  (JTX5...YA7)       │
+                  └──────────┬──────────┘
+                             │
+                     ┌───────┴───────┐
+                     │               │
+                     ▼               ▼
+              DonorReceipt     VaultConfig
+              PDA created      raised_usdc++
+```
+
+## Architecture Layers
+
+| Layer | Description |
+|-------|-------------|
+| **Edge Layer** | Biometric data stays private. Only hashes leave the device. |
+| **Protocol Layer** | AARON validates proofs and routes x402 payments. |
+| **Chain Layer** | Solana stores attestation PDAs. Public verification. |
+
+## On-Chain Addresses
+
+| Asset | Address | Network |
+|-------|---------|---------|
+| **DePIN Program** | `91SqqYLMi5zNsfMab6rnvipwJhDpN4FEMSLgu8F3bbGq` | devnet |
+| **Vault Program** | `JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7` | devnet |
+| **Trust Program** | `79nQsecDspUWxvAMyJvK36EUty4yEoP5ssLvHZuNiugF` | devnet |
+| **$OPTX Mint** | `4r9WoPsRjJzrYEuj6VdwowVrFZaXpu16Qt6xogcmdUXC` | devnet |
+| **$JTX Mint** | `9XpJiKEYzq5yDo5pJzRfjSRMPL2yPfDQXgiN7uYtBhUj` | mainnet |
+| **$CSTB Mint** | `4waAAfTjqf5LNpj2TC5zoeiAgegVwKWoy4WiJgjdBkVL` | devnet |
+| **Founder Wallet** | `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` | mainnet |
+| **JOE Wallet** | `EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk` | mainnet |
+| **XRPL Hook** | `rLXCpNStZodh9HjXn5DyoSFMKies1vKBUG` | XRPL |
+| **Anodos DEX** | `r21wnrTT2G52FcKrTBAb8hhn4aGSGn1eX` | XRPL |

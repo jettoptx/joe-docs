@@ -1,0 +1,90 @@
+---
+icon: Server
+title: Infrastructure Topology
+description: Full network map of all OPTX services across Jetson edge, CorsairOne Docker, and cloud deployments.
+---
+
+## Infrastructure Topology
+
+```mermaid
+flowchart TD
+    subgraph Devices["User Devices"]
+        PC["CorsairOne PC"]
+        IP["iPhone"]
+        MAC["Mac"]
+    end
+
+    subgraph TS["Tailscale Mesh (WireGuard)"]
+        TSN["Encrypted Tunnels"]
+    end
+
+    subgraph Jetson["Jetson Orin Nano — Edge Node"]
+        K3S["K3s Kubernetes"]
+        STDB["SpacetimeDB :3000"]
+        HH["HEDGEHOG :8811"]
+        AAR["AARON Router :8888"]
+        JWS["JOE WebSocket :8765"]
+        CON["Conduit Matrix :6167"]
+    end
+
+    subgraph Docker["CorsairOne Docker Desktop"]
+        HRM["Hermes Agent :8642"]
+        HWS["Hermes Workspace :5555"]
+        AGC["AgenC Coordinator :8840"]
+        API["hermes-optx-api :8643"]
+    end
+
+    subgraph Cloud["Cloud Services"]
+        VCL["Vercel — jettoptics.ai"]
+        CVX["Convex — SaaS sync"]
+        SOL["Solana Devnet/Mainnet"]
+        XAI["xAI API — Grok 4.20"]
+    end
+
+    Devices --> TS
+    TS --> Jetson
+    TS --> Docker
+    Docker <--> Jetson
+    Docker --> Cloud
+    Jetson --> Cloud
+    HH --> XAI
+```
+
+## Jetson Orin Nano — Edge Services
+
+| Port | Service | Description |
+|------|---------|-------------|
+| 3000 | SpacetimeDB | Primary edge database (optx-cortex) |
+| 8811 | HEDGEHOG | AI gateway (Grok proxy + memory) |
+| 8888 | AARON Router | Gaze verification + tensor classification |
+| 8765 | JOE WebSocket | Matrix relay for mobile tasking |
+| 6167 | Conduit | Matrix homeserver (jettoptics.ai) |
+
+## CorsairOne Docker — Agent Services
+
+| Port | Service | Container |
+|------|---------|-----------|
+| 8642 | Hermes Agent | astrojoe-brain |
+| 5555 | Hermes Workspace | astrojoe-ui |
+| 8643 | hermes-optx-api | (planned) |
+| 8840 | AgenC Coordinator | optx-agenc |
+
+## Cloud Services
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| Vercel | jettoptics.ai | Frontend (Next.js) |
+| Convex (prod) | hushed-nightingale-624.convex.cloud | User sync, subscriptions |
+| Solana | Helius RPC | On-chain operations |
+| xAI | api.x.ai | Grok 4.20 inference |
+
+## Network
+
+All internal communication flows through **Tailscale** mesh networking with WireGuard encryption. Public access points:
+- `jettoptics.ai` — Vercel CDN
+- `matrix.jettoptics.ai` — Cloudflare Tunnel → Conduit
+- `docs.optx.space` — Documentation site
+
+## Related
+- [System Architecture](/docs/getting-started/architecture) — High-level overview
+- [Edge MCP](/docs/infrastructure/edge) — HEDGEHOG on Jetson details

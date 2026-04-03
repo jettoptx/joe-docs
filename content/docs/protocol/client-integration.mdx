@@ -1,0 +1,87 @@
+---
+title: Client Integration
+description: Submit JOULE templates to the AARON registry for on-chain attestation.
+icon: Plug
+---
+
+After the browser CV pipeline produces a **JOULE template**, submit it to the AARON registry for on-chain attestation.
+
+## Submit JOULE Template
+
+```typescript
+// Submit JOULE template to AARON registry
+import type { JOULETemplate } from "@/lib/joule/types";
+
+async function submitToAARON(template: JOULETemplate, userId: number) {
+  // 1. Submit biometric proof to SpacetimeDB
+  const proof = await fetch("/api/aaron/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: userId,
+      polynomial: template.polynomialEncoding,
+      knot: template.knotPolynomial,
+      hash: template.verificationHash,
+      durations: template.holdDurations,
+      confidence: 0.85,
+    }),
+  });
+
+  // 2. Verify proof server-side
+  const { proof_id } = await proof.json();
+  const verify = await fetch("/api/aaron/verify", {
+    method: "POST",
+    body: JSON.stringify({
+      proof_id,
+      nonce: template.sessionNonce,
+      sequence: template.gazeSequence.map(
+        t => t === "COG" ? 1 : t === "EMO" ? 2 : 3
+      ),
+      durations: template.holdDurations,
+      timestamp: template.timestamp,
+    }),
+  });
+
+  // 3. On-chain CSTB attestation (if verified)
+  if (verify.ok) {
+    console.log("AARON proof verified — ready for on-chain attestation");
+  }
+}
+```
+
+## Quick Start SDKs
+
+### TypeScript SDK
+
+```typescript
+import { Aaron } from "@astroknots/sdk";
+
+const aaron = new Aaron({ endpoint: "https://api.astroknots.space" });
+const proof = await aaron.attest({ gaze: "MEDIUM", x402: "0.05 OPTX" });
+console.log(proof.txSignature); // Solana transaction hash
+```
+
+### Python SDK
+
+```python
+from astroknots import Aaron
+
+aaron = Aaron(endpoint="https://api.astroknots.space")
+proof = aaron.attest(gaze="MEDIUM", x402="0.05 OPTX")
+print(proof.tx_signature)  # Solana transaction hash
+```
+
+### Response Shape
+
+```json
+{
+  "status": "attested",
+  "proof_hash": "9f86d08...c150e04",
+  "tx_signature": "5KtR7g...xvN2mQ",
+  "tier": "PIONEER",
+  "x402_settled": true,
+  "timestamp": "2026-02-22T08:30:00Z"
+}
+```
+
+> SDKs are in early alpha. Use the **curl/REST API** for production integrations.

@@ -1,0 +1,141 @@
+---
+title: Biometric Proof Registry
+description: JOULE templates, knot-encoded gaze keys, and the biometric proof submission flow.
+icon: Layers
+---
+
+Each gaze verification session produces a **JOULE template** — a knot encoding of the user's AGT tensor sequence. The AARON protocol hashes this into a **knot invariant** and stores it on-chain.
+
+## JOULE Template
+
+```typescript
+// JOULE Template — knot-encoded gaze key
+interface JOULETemplate {
+  timestamp: number;
+  sessionNonce: string;
+  expirationWindow: number;          // 30s default
+  gazeSequence: GazeTensor[];        // ["COG", "EMO", "ENV", "COG"]
+  holdDurations: number[];           // ms per position
+  transitionVectors: number[][];     // gaze path between positions
+  polynomialEncoding: string;        // "1-2-3-1" (COG=1, EMO=2, ENV=3)
+  knotPolynomial: string;            // "AGT-1231-1708123456789"
+  verificationHash: string;          // SHA-256 of nonce+sequence+durations
+}
+
+// Generate verification hash
+async function generateVerificationHash(
+  nonce: string,
+  sequence: GazeTensor[],
+  durations: number[],
+  timestamp: number
+): Promise<string> {
+  const data = nonce + sequence.join(",") + durations.join(",") + timestamp;
+  const buffer = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(data)
+  );
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+```
+
+## Rust Reducers (SpacetimeDB)
+
+The AARON registry runs as **SpacetimeDB reducers** on the edge node. Biometric proofs are validated server-side before on-chain attestation.
+
+### Submit Biometric Proof
+
+```rust
+// AARON biometric proof — SpacetimeDB module (Rust)
+use spacetimedb::spacetimedb;
+use sha2::{Sha256, Digest};
+
+#[spacetimedb(table)]
+pub struct BiometricProof {
+    #[primarykey]
+    #[autoinc]
+    pub id: u64,
+    pub user_id: u64,
+    pub polynomial_encoding: String,   // "1-2-3-1"
+    pub knot_polynomial: String,       // "AGT-1231-..."
+    pub verification_hash: String,     // SHA-256
+    pub hold_durations_ms: Vec<u64>,
+    pub confidence_mean: f64,
+    pub verified: bool,
+    pub created_at: u64,
+}
+
+#[spacetimedb(reducer)]
+pub fn submit_biometric_proof(
+    ctx: &ReducerContext,
+    user_id: u64,
+    polynomial: String,
+    knot: String,
+    hash: String,
+    durations: Vec<u64>,
+    confidence: f64,
+) -> Result<(), String> {
+    // Validate minimum confidence threshold
+    if confidence < 0.7 {
+        return Err("Confidence below 0.7 threshold".into());
+    }
+
+    BiometricProof::insert(BiometricProof {
+        id: 0,
+        user_id,
+        polynomial_encoding: polynomial,
+        knot_polynomial: knot,
+        verification_hash: hash,
+        hold_durations_ms: durations,
+        confidence_mean: confidence,
+        verified: false,
+        created_at: ctx.timestamp.to_micros_since_epoch(),
+    });
+
+    log::info!("Biometric proof submitted for user {}", user_id);
+    Ok(())
+}
+```
+
+### Verify Proof
+
+```rust
+#[spacetimedb(reducer)]
+pub fn verify_proof(
+    ctx: &ReducerContext,
+    proof_id: u64,
+    nonce: String,
+    sequence: Vec<u8>,        // COG=1, EMO=2, ENV=3
+    durations: Vec<u64>,
+    timestamp: u64,
+) -> Result<(), String> {
+    let proof = BiometricProof::filter_by_id(&proof_id)
+        .ok_or("Proof not found")?;
+
+    // Recompute hash server-side
+    let seq_str: String = sequence.iter()
+        .map(|t| match t { 1 => "COG", 2 => "EMO", 3 => "ENV", _ => "?" })
+        .collect::<Vec<_>>().join(",");
+    let dur_str: String = durations.iter()
+        .map(|d| d.to_string())
+        .collect::<Vec<_>>().join(",");
+
+    let data = format!("{}{}{}{}", nonce, seq_str, dur_str, timestamp);
+    let mut hasher = Sha256::new();
+    hasher.update(data.as_bytes());
+    let computed = format!("{:x}", hasher.finalize());
+
+    if computed != proof.verification_hash {
+        return Err("Hash mismatch — proof invalid".into());
+    }
+
+    // Mark as verified
+    BiometricProof::update_by_id(&proof_id, |p| {
+        p.verified = true;
+    });
+
+    log::info!("Proof {} verified for user {}", proof_id, proof.user_id);
+    Ok(())
+}
+```

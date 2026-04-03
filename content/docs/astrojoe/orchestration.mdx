@@ -1,0 +1,101 @@
+---
+icon: GitBranch
+title: Task Orchestration
+description: Task lifecycle, DAG workflows, swarm decomposition, and gaze-gated policy enforcement.
+---
+
+AstroJOE uses **hermes-optx-api** for task orchestration — a native coordination layer backed by SpacetimeDB that replaces external runtime dependencies.
+
+## Task Lifecycle
+
+Every task follows this lifecycle:
+
+```
+Open → Claimed (InProgress) → Completed
+                            → Failed
+Open → Cancelled
+```
+
+Tasks are stored in SpacetimeDB as `memory_entry` records with `category = "task"`.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/tasks` | Create a new task |
+| `GET` | `/api/tasks` | List tasks (filter by status, agent) |
+| `GET` | `/api/tasks/{id}` | Get task details |
+| `POST` | `/api/tasks/{id}/claim` | Claim a task for an agent |
+| `POST` | `/api/tasks/{id}/complete` | Complete with result data |
+| `DELETE` | `/api/tasks/{id}` | Cancel a task |
+| `POST` | `/api/tasks/swarm` | Decompose goal into subtask DAG |
+| `GET` | `/api/tasks/stats` | Task statistics by status |
+
+## Creating a Task
+
+```bash
+curl -X POST http://localhost:8643/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Scan Solana for OPTX token activity",
+    "description": "Check recent transactions on the OPTX devnet token",
+    "priority": 7,
+    "capabilities": ["INFERENCE", "RESEARCH"],
+    "gaze_required": false
+  }'
+```
+
+### Task Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | string | Short task name |
+| `description` | string | Full requirements |
+| `priority` | int (1-10) | Execution priority |
+| `capabilities` | string[] | Required agent capabilities |
+| `gaze_required` | bool | Requires AARON gaze verification to claim |
+| `depends_on` | string[] | Task IDs this depends on (DAG) |
+| `assigned_agent` | string | Pre-assign to specific agent |
+| `validation_mode` | string | `CreatorReview`, `ValidatorQuorum`, `ExternalAttestation` |
+
+## Swarm Decomposition
+
+Break a complex goal into parallel, sequential, or DAG subtasks:
+
+```bash
+curl -X POST http://localhost:8643/api/tasks/swarm \
+  -H "Content-Type: application/json" \
+  -d '{
+    "goal": "Research OPTX competitors, analyze their tokenomics, and draft a comparison report",
+    "strategy": "dag",
+    "agent_count": 3
+  }'
+```
+
+### Strategies
+
+| Strategy | Behavior |
+|----------|----------|
+| `parallel` | All subtasks execute simultaneously |
+| `sequential` | Each subtask depends on the previous |
+| `dag` | Grok decomposes into a dependency graph |
+
+The decomposition uses HEDGEHOG/Grok to intelligently break goals into subtasks with appropriate dependencies.
+
+## DAG Dependencies
+
+When a task completes, the orchestrator automatically checks if any dependent tasks are now unblocked. If all dependencies for a task are `Completed`, it auto-transitions to `Claimed` if an agent is pre-assigned.
+
+## Gaze-Gated Policy
+
+Tasks with `gaze_required: true` require AARON Router gaze verification before claiming:
+
+1. Agent attempts to claim the task
+2. hermes-optx-api checks `gaze_required` flag
+3. If true, creates an AARON session with a QR challenge
+4. User performs gaze sequence (4-6 positions, ≥500ms hold)
+5. AARON classifies COG/EMO/ENV tensors and scores entropy
+6. On verification, attestation is stored in SpacetimeDB
+7. Task claim is approved
+
+This ensures high-value or sensitive operations require biometric confirmation.

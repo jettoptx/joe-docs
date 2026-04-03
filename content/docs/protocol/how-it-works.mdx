@@ -1,0 +1,62 @@
+---
+title: How It Works
+description: AARON splits biometric authentication into four phases — capture, proof, payment, and access.
+icon: Cog
+---
+
+AARON splits biometric authentication into four phases — **capture**, **proof**, **payment**, and **access**.
+
+## 1. Private Gaze Audit
+
+AARON captures biometric tensors on-device using **MediaPipe face landmarks**. Raw iris data never leaves the edge node. The Agentive Gaze Tensor (AGT) system classifies eye movement into three tensors: **Cognitive (COG)**, **Emotional (EMO)**, and **Environmental (ENV)**. AGT performs the Web4 actions that power JETT Auth.
+
+## 2. Opaque Proof to Solana
+
+A **32-byte verification hash** is computed from the gaze sequence, hold durations, and session nonce. This hash is submitted on-chain via the CSTB DePIN program. Validators confirm the proof without ever seeing raw biometric data.
+
+## 3a. x402 Unlocks Action
+
+Payment attestation triggers domain registration, NFT mint, or agent delegation via micropayment. The **x402 protocol** settles OPTX payments atomically alongside the biometric proof.
+
+## 3b. Machine-to-Machine Payments (MPP)
+
+The MPP protocol enables autonomous agents to pay for AARON attestation services using **USDC**. Agent wallets (like JOE) submit x402 micropayments that are atomically settled alongside proof verification. Each agent payment creates an **AgentAcquisition PDA** on-chain, linking the payment to the authenticated user.
+
+Program: `JTX5uXTiZ1M3hJkjv5Cp5F8dr3Jc7nhJbQjCFmgEYA7`
+
+## 3c. USDC Bridge: XRP to Solana
+
+Cross-chain settlement bridges USDC between **XRP Ledger** (via Xahau hooks) and **Solana**. Agent payments originating on XRP are bridged to SOL-side USDC and deposited into the vault program's `donate_usdc_agent` instruction. The bridge uses **Wormhole/DeBridge** for trustless cross-chain transfers, with Xahau hooks triggering automatic settlement.
+
+## 3d. Vault NFT Receipts
+
+Every donation (SOL or USDC) generates an on-chain **DonorReceipt PDA**. The receipt records:
+
+- Donation amount
+- JTX tokens entitled at $8/token
+- OPTX multiplier (2x in Phase 1)
+- Payment method
+- Claim status
+
+These receipts serve as **NFT claim tickets** for the OPTX airdrop. Vault PDA: `CQmBrff4a9MouY4eQTAPKXKprtvfHZDNSkNCQhRR38tP`.
+
+## 3e. Xahau Hooks (XRP Settlement)
+
+Xahau hooks on the XRP Ledger enable **programmable settlement** for cross-chain payments. When an agent or user initiates a payment on XRP, the hook automatically:
+
+1. Validates the payment amount against USDC rates
+2. Triggers the bridge to Solana
+3. Calls `donate_usdc_agent` on the vault program
+
+This enables XRP-native users and XRP liquidity pools (XAH/mXRP/MAG/RLUSD) to participate in the vault.
+
+## 4. Staked Tiers via Layer 3
+
+**$OPTX** staking determines access tiers. Higher stake = lower x402 fees + priority compute.
+
+| Tier | Stake Required | Benefits |
+|------|---------------|----------|
+| **Explorer** | 0 OPTX | Basic access |
+| **Pioneer** | 100 OPTX | Reduced fees |
+| **Architect** | 1,000 OPTX | Priority compute |
+| **Founder** | 10,000 OPTX | Full access + governance |

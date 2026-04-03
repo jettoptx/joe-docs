@@ -1,0 +1,64 @@
+---
+icon: Play
+title: Task Lifecycle
+description: Happy path sequence diagram — from task creation through HEDGEHOG execution to completion.
+---
+
+## Task Lifecycle (Happy Path)
+
+The complete success workflow from user request through agent execution to result storage.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Workspace as Hermes Workspace
+    participant API as hermes-optx-api
+    participant STDB as SpacetimeDB
+    participant Agent as AstroJOE
+    participant HH as HEDGEHOG
+    participant Grok as Grok 4.20
+
+    User->>Workspace: Submit task
+    Workspace->>API: POST /api/tasks
+    API->>STDB: store_memory(category=task)
+    STDB-->>API: task_id
+    API-->>Workspace: {task_id, status: Open}
+
+    Agent->>STDB: Subscribe to open tasks
+    STDB-->>Agent: New task notification
+    Agent->>API: POST /api/tasks/{id}/claim
+    API->>STDB: Update status → InProgress
+
+    Agent->>HH: Execute via HEDGEHOG skill
+    HH->>Grok: /v1/chat/completions
+    Grok-->>HH: Result
+    HH-->>Agent: Response
+
+    Agent->>API: POST /api/tasks/{id}/complete
+    API->>STDB: Update status → Completed
+    API->>API: Check DAG dependencies
+    API-->>Workspace: Task complete notification
+```
+
+## Key Concepts
+
+### Task Discovery
+AstroJOE discovers tasks by subscribing to SpacetimeDB's `memory_entry` table filtered by `category = "task"` and `status = "Open"`. SpacetimeDB's subscription model delivers real-time notifications without polling.
+
+### Claim Validation
+When an agent claims a task, the API validates:
+1. Task exists and is in `Open` status
+2. Agent has required capabilities (if specified)
+3. Gaze verification is satisfied (if `gaze_required = true`)
+4. Policy constraints are met
+
+### Execution
+The agent uses its SKILL.md tools to execute — typically via HEDGEHOG for AI reasoning, SpacetimeDB for data retrieval, or AARON for gaze operations.
+
+### DAG Resolution
+On completion, the orchestrator checks if this task unblocks any dependent tasks. If all dependencies for a waiting task are `Completed`, it auto-transitions to `Claimed` for the assigned agent.
+
+## Related
+- [Swarm Decomposition](/docs/architecture/swarm-dag) — Multi-agent DAG workflows
+- [Gaze-Gated Policy](/docs/architecture/gaze-policy) — Biometric verification gate
+- [Task Orchestration](/docs/astrojoe/orchestration) — API reference

@@ -1,0 +1,70 @@
+---
+title: Gaze Verification Guide
+description: AGT tensor classification, biometric gaze auth, JETT Protocol encryption, and integration examples.
+icon: Eye
+---
+
+The **Agentive Gaze Tensor (AGT)** system classifies eye movement into three biometric tensors: **Cognitive (COG)**, **Emotional (EMO)**, and **Environmental (ENV)**. These form a unique gaze signature for authentication.
+
+## AGT Tensors
+
+The three biometric tensor zones that power JETT Auth:
+
+### COG — Cognitive Tensor
+
+Upper gaze zone. Analytical focus, reading, problem-solving patterns.
+
+### EMO — Emotional Tensor
+
+Lower-left zone. Emotional processing, social engagement, empathy.
+
+### ENV — Environmental Tensor
+
+Lower-right zone. Spatial awareness, environmental scanning, navigation.
+
+## Integration Example
+
+```typescript
+import { useGazeClassifier } from "@jettoptics/gaze-sdk"
+
+function GazeAuth() {
+  const { tensor, confidence, weights } = useGazeClassifier({
+    camera: true,      // Enable webcam capture
+    fps: 60,           // Classification frequency
+    minConfidence: 0.7 // Minimum confidence threshold
+  })
+
+  // tensor: "COG" | "EMO" | "ENV"
+  // confidence: 0.0 - 1.0
+  // weights: { COG: number, EMO: number, ENV: number }
+
+  // Store gaze data for attestation
+  const attestGaze = async () => {
+    await fetch("/api/gaze/store", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gaze_x: gazePosition.x,
+        gaze_y: gazePosition.y,
+        cog_value: weights.COG,
+        emo_value: weights.EMO,
+        env_value: weights.ENV,
+        confidence: confidence
+      })
+    })
+  }
+}
+```
+
+> Minimum **222 centiseconds** of gaze data required for CSTB attestation.
+
+## JETT Protocol
+
+**Joule Encryption Temporal Template (JETT)** derives quantum-resistant encryption keys from gaze biometrics. Your unique gaze pattern generates a deterministic seed that serves as a wallet signature vault.
+
+| Feature | Description |
+|---------|-------------|
+| **Training Sessions** | Build AGT baseline via `/dojo/training` |
+| **Stability Score** | Analytics tracks tensor consistency |
+| **Gaze Seed** | Deterministic key from weighted AGT |
+| **Vault Signing** | Web3 wallet signs with gaze-derived key |

@@ -1,0 +1,55 @@
+---
+title: LayerZero Bridge
+description: Cross-chain $OPTX bridging between Solana and EVM chains using LayerZero OFT standard.
+icon: Network
+---
+
+Bridge **$OPTX** between Solana and EVM chains using the **LayerZero Omnichain Fungible Token (OFT)** standard. This enables cross-chain DePIN reward distribution and multi-chain wallet verification.
+
+## Bridge Architecture
+
+```text
+Solana ($OPTX SPL Token-2022)
+  │
+  ├── LayerZero Endpoint (Solana)
+  │     └── OFT Adapter Program
+  │
+  ├── ─ ─ ─ LayerZero DVN Verification ─ ─ ─ ─
+  │
+  ├── LayerZero Endpoint (EVM)
+  │     └── OFT Contract (ERC-20 wrapped $OPTX)
+  │
+  └── Supported Chains:
+      ├── Ethereum Mainnet
+      ├── Base
+      ├── Arbitrum
+      └── Polygon
+```
+
+## Bridge Example
+
+```typescript
+// Bridge $OPTX from Solana to Base
+import { OftTools } from "@layerzerolabs/lz-solana-sdk-v2"
+
+const bridgeToEVM = async (amount: number, evmAddress: string) => {
+  const oftConfig = {
+    srcEid: 40168,           // Solana endpoint ID
+    dstEid: 40245,           // Base endpoint ID
+    tokenMint: "4r9WoPsRjJzrYEuj6VdwowVrFZaXpu16Qt6xogcmdUXC",
+  }
+
+  const tx = await OftTools.send(
+    connection,
+    wallet.publicKey,
+    oftConfig,
+    amount,
+    evmAddress,     // Destination EVM address
+    { nativeFee }   // LayerZero messaging fee
+  )
+
+  await wallet.signAndSendTransaction(tx)
+}
+```
+
+> **LayerZero bridge is currently in devnet testing.** Mainnet deployment pending audit.

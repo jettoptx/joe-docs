@@ -1,0 +1,89 @@
+---
+icon: Network
+title: Swarm Decomposition
+description: DAG workflow for multi-agent coordination — decompose goals into parallel, sequential, or dependency-linked subtasks.
+---
+
+## Swarm Decomposition (DAG Workflow)
+
+Complex goals are decomposed into subtasks using Grok, then executed as a Directed Acyclic Graph (DAG) by multiple agents.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant API as hermes-optx-api
+    participant HH as HEDGEHOG / Grok
+    participant STDB as SpacetimeDB
+    participant A1 as Agent 1
+    participant A2 as Agent 2
+    participant A3 as Agent 3
+
+    User->>API: POST /api/tasks/swarm {goal, strategy: dag}
+    API->>HH: Decompose goal into subtasks
+    HH-->>API: [{title, depends_on}, ...]
+
+    loop For each subtask
+        API->>STDB: store_memory(category=task)
+    end
+    API-->>User: {swarm_id, tasks: [...]}
+
+    par Parallel execution (no dependencies)
+        A1->>STDB: Claim Task A
+        A2->>STDB: Claim Task B
+    end
+
+    A1->>STDB: Complete Task A
+    Note over STDB: DAG check: Task C depends on A ✓
+    STDB-->>A3: Task C now unblocked
+    A3->>STDB: Auto-claim Task C
+
+    A2->>STDB: Complete Task B
+    A3->>STDB: Complete Task C
+    Note over API: All subtasks complete → aggregate
+```
+
+## Strategies
+
+### Parallel
+All subtasks created with no dependencies. Every agent can claim immediately.
+
+```json
+{ "goal": "...", "strategy": "parallel", "agent_count": 4 }
+```
+
+### Sequential
+Each subtask depends on the previous one. Forms a linear chain.
+
+```json
+{ "goal": "...", "strategy": "sequential", "agent_count": 1 }
+```
+
+### DAG (Directed Acyclic Graph)
+Grok analyzes the goal and creates subtasks with explicit dependency links. Tasks without dependencies start immediately; blocked tasks wait.
+
+```json
+{ "goal": "...", "strategy": "dag", "agent_count": 3 }
+```
+
+## Dependency Resolution
+
+When a task completes:
+1. Orchestrator queries all tasks with `depends_on` containing the completed task ID
+2. For each dependent task, checks if **all** its dependencies are `Completed`
+3. If yes and an agent is pre-assigned, auto-transitions to `Claimed`
+4. If yes and no agent assigned, transitions to `Open` for discovery
+
+## Example: Research Swarm
+
+**Goal**: "Research OPTX competitors, analyze their tokenomics, and draft a comparison report"
+
+**Grok decomposes into**:
+- Task A: "Research competitor projects on Solana" (no deps)
+- Task B: "Analyze DePIN token models" (no deps)
+- Task C: "Draft comparison report" (depends on A, B)
+
+Tasks A and B execute in parallel. Task C waits until both complete, then auto-starts.
+
+## Related
+- [Task Lifecycle](/docs/architecture/task-lifecycle) — Single task flow
+- [Task State Machine](/docs/architecture/task-states) — All possible states

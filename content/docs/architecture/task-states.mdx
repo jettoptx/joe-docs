@@ -1,0 +1,67 @@
+---
+icon: RefreshCw
+title: Task State Machine
+description: All possible task states and transitions — from discovery through gaze-gating to completion or failure.
+---
+
+## Task Execution State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> Discovered: Task appears in SpacetimeDB
+    Discovered --> PolicyCheck: Agent evaluates task
+
+    PolicyCheck --> Skipped: Capabilities mismatch
+    PolicyCheck --> GazeGate: gaze_required = true
+    PolicyCheck --> Claimed: Policy passes
+
+    GazeGate --> Claimed: Gaze verified via AARON
+    GazeGate --> Skipped: Gaze failed or timeout
+
+    Claimed --> Executing: Agent begins work
+    Executing --> ToolCalling: HEDGEHOG/Grok invoked
+    ToolCalling --> Executing: Tool result returned
+    Executing --> Completed: Result submitted
+    Executing --> Failed: Error or timeout
+
+    Completed --> [*]
+    Failed --> [*]
+    Skipped --> [*]
+```
+
+## States
+
+| State | API Status | Description |
+|-------|-----------|-------------|
+| **Discovered** | `Open` | Task created, visible to agents |
+| **PolicyCheck** | `Open` | Agent evaluating capabilities and policy |
+| **GazeGate** | `Open` | Awaiting AARON gaze verification |
+| **Skipped** | `Open` | Agent passed on this task (stays open for others) |
+| **Claimed** | `InProgress` | Agent has claimed and is executing |
+| **Executing** | `InProgress` | Active work in progress |
+| **ToolCalling** | `InProgress` | HEDGEHOG/Grok invoked for AI reasoning |
+| **Completed** | `Completed` | Result submitted, task done |
+| **Failed** | `Failed` | Error, timeout, or execution failure |
+| **Cancelled** | `Cancelled` | Manually cancelled by creator |
+
+## Transitions
+
+### Open → Claimed
+- Agent calls `POST /api/tasks/{id}/claim`
+- API validates capabilities, policy, gaze (if required)
+
+### Claimed → Completed
+- Agent calls `POST /api/tasks/{id}/complete` with result data
+- Orchestrator checks DAG dependencies and unblocks waiting tasks
+
+### Claimed → Failed
+- Execution error, timeout, or agent crashes
+- Task can be retried by another agent
+
+### Open → Cancelled
+- Creator calls `DELETE /api/tasks/{id}`
+- Terminal state, cannot be reopened
+
+## Related
+- [Task Lifecycle](/docs/architecture/task-lifecycle) — Happy path sequence
+- [Swarm Decomposition](/docs/architecture/swarm-dag) — Multi-agent DAG

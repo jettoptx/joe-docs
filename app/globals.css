@@ -1,0 +1,330 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* ═══ OPTX Orange Theme ═══ */
+:root {
+  --color-fd-primary: 24.6 95% 53.1%;
+  --color-fd-primary-foreground: 0 0% 100%;
+  --fd-background: oklch(0.145 0 0);
+  --color-orange-500: rgb(255, 105, 0);
+  --accent: rgb(181, 82, 0);
+}
+
+/* Override fumadocs defaults for OPTX brand */
+:root.dark,
+.dark {
+  --fd-background: oklch(0.1 0 0);
+  --fd-foreground: oklch(0.985 0 0);
+  --fd-muted-foreground: oklch(0.65 0 0);
+  --fd-card: oklch(0.13 0 0);
+  --fd-border: oklch(0.22 0 0);
+  --fd-accent: oklch(0.18 0 0);
+  --fd-accent-foreground: oklch(0.985 0 0);
+  --fd-popover: oklch(0.13 0 0);
+  --fd-secondary: oklch(0.18 0 0);
+}
+
+:root:not(.dark) {
+  --fd-background: oklch(0.98 0 0);
+  --fd-foreground: oklch(0.08 0 0);
+  --fd-muted-foreground: oklch(0.25 0 0);
+  --fd-card: oklch(1 0 0);
+  --fd-border: oklch(0.85 0 0);
+  --fd-accent: oklch(0.95 0 0);
+  --fd-accent-foreground: oklch(0.08 0 0);
+  --fd-popover: oklch(1 0 0);
+  --fd-secondary: oklch(0.95 0 0);
+}
+
+/* ═══ Typography — Bold headers like AgenC ═══ */
+
+/* Page title (h1) — Orbitron bold, large */
+.prose h1,
+[data-mdx] h1 {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 2.75rem !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em !important;
+  color: rgb(255, 105, 0) !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Section headers (h2) — Orbitron semibold */
+.prose h2,
+[data-mdx] h2 {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.75rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.015em !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.75rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid oklch(0.25 0 0) !important;
+}
+
+.dark .prose h2,
+.dark [data-mdx] h2 {
+  color: oklch(0.92 0 0) !important;
+}
+
+:root:not(.dark) .prose h2,
+:root:not(.dark) [data-mdx] h2 {
+  color: oklch(0.15 0 0) !important;
+  border-bottom-color: oklch(0.88 0 0) !important;
+}
+
+/* Sub-section headers (h3) — Orbitron medium */
+.prose h3,
+[data-mdx] h3 {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1.35rem !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.01em !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.dark .prose h3,
+.dark [data-mdx] h3 {
+  color: rgb(255, 165, 80) !important;
+}
+
+:root:not(.dark) .prose h3,
+:root:not(.dark) [data-mdx] h3 {
+  color: rgb(181, 82, 0) !important;
+}
+
+/* h4 headers */
+.prose h4,
+[data-mdx] h4 {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Body text — Geist Mono, larger, more readable */
+.prose p,
+[data-mdx] p {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.9rem !important;
+  line-height: 1.75 !important;
+}
+
+.dark .prose p,
+.dark [data-mdx] p {
+  color: oklch(0.72 0 0) !important;
+}
+
+:root:not(.dark) .prose p,
+:root:not(.dark) [data-mdx] p {
+  color: oklch(0.15 0 0) !important;
+}
+
+/* List items */
+.prose li,
+[data-mdx] li {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.7 !important;
+}
+
+.dark .prose li,
+.dark [data-mdx] li {
+  color: oklch(0.68 0 0) !important;
+}
+
+:root:not(.dark) .prose li,
+:root:not(.dark) [data-mdx] li {
+  color: oklch(0.18 0 0) !important;
+}
+
+/* Bold text emphasis */
+.prose strong,
+[data-mdx] strong {
+  font-weight: 700 !important;
+}
+
+.dark .prose strong,
+.dark [data-mdx] strong {
+  color: oklch(0.92 0 0) !important;
+}
+
+:root:not(.dark) .prose strong,
+:root:not(.dark) [data-mdx] strong {
+  color: oklch(0.1 0 0) !important;
+}
+
+/* Inline code */
+.prose code:not(pre code),
+[data-mdx] code:not(pre code) {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.82rem !important;
+  padding: 0.15rem 0.4rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.dark .prose code:not(pre code),
+.dark [data-mdx] code:not(pre code) {
+  background: rgba(255, 105, 0, 0.08) !important;
+  color: rgb(255, 180, 120) !important;
+  border: 1px solid rgba(255, 105, 0, 0.15) !important;
+}
+
+:root:not(.dark) .prose code:not(pre code),
+:root:not(.dark) [data-mdx] code:not(pre code) {
+  background: rgba(181, 82, 0, 0.06) !important;
+  color: rgb(160, 60, 0) !important;
+  border: 1px solid rgba(181, 82, 0, 0.12) !important;
+}
+
+/* Code blocks — Geist Mono */
+.prose pre,
+[data-mdx] pre {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.82rem !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid oklch(0.25 0 0) !important;
+}
+
+.dark .prose pre,
+.dark [data-mdx] pre {
+  background: oklch(0.08 0 0) !important;
+}
+
+/* Sidebar styles */
+nav[data-fd-sidebar] {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+}
+
+/* Sidebar group labels — Orbitron uppercase */
+[data-fd-sidebar] [data-fd-sidebar-group-label],
+[data-fd-sidebar] .fd-sidebar-group-label {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+/* Sidebar items — larger text */
+[data-fd-sidebar] a,
+[data-fd-sidebar] [data-fd-sidebar-item] {
+  font-size: 0.92rem !important;
+}
+
+.dark [data-fd-sidebar] [data-fd-sidebar-group-label] {
+  color: rgb(255, 105, 0) !important;
+}
+
+/* Sidebar links active state — orange */
+[data-fd-sidebar] a[data-active="true"],
+[data-fd-sidebar] [data-active="true"] {
+  color: rgb(255, 105, 0) !important;
+  border-left-color: rgb(255, 105, 0) !important;
+}
+
+/* TOC — right sidebar */
+[data-fd-toc] a[data-active="true"] {
+  color: rgb(255, 105, 0) !important;
+  border-left-color: rgb(255, 105, 0) !important;
+}
+
+/* Breadcrumb styling */
+nav[aria-label="breadcrumb"] {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.75rem !important;
+}
+
+/* Search dialog */
+[data-fd-search] {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.3 0 0);
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 105, 0, 0.3);
+  color: white;
+}
+
+/* Links in prose — orange */
+.prose a,
+[data-mdx] a {
+  color: rgb(255, 105, 0) !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+}
+
+.prose a:hover,
+[data-mdx] a:hover {
+  text-decoration: underline !important;
+}
+
+/* Tables */
+.prose table th {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+}
+
+.prose table td {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace !important;
+  font-size: 0.82rem !important;
+}
+
+.dark .prose table th {
+  color: rgb(255, 105, 0) !important;
+}
+
+/* Ensure logo is not clipped in nav */
+[data-fd-nav] a,
+[data-fd-sidebar] > div:first-child {
+  overflow: visible !important;
+}
+
+/* Sidebar flush to left edge */
+aside[data-fd-sidebar] {
+  display: flex !important;
+  flex-direction: column !important;
+  border-right: 1px solid var(--fd-border) !important;
+}
+
+aside[data-fd-sidebar] > div {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+/* Adjust docs layout for custom top header */
+#nd-docs-layout {
+  --fd-docs-height: calc(100dvh - 3.5rem) !important;
+}
+
+/* Sidebar footer pinned to bottom */
+aside[data-fd-sidebar] [data-fd-sidebar-footer] {
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* Callout/admonition styling */
+.fd-callout {
+  border-radius: 0.5rem !important;
+}

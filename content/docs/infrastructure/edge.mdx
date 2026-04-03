@@ -1,0 +1,111 @@
+---
+title: Edge MCP Overview
+description: HEDGEHOG Model Context Protocol — AI gateway, gaze storage, and API audit on edge hardware.
+icon: BrainCircuit
+---
+
+The Edge MCP — codenamed **HEDGEHOG** (Handshake Encryption Delegated Gesture Envelope Handler Optical Gateway) — is the **Model Context Protocol server** that bridges AI reasoning with the spatial authentication stack.
+
+It routes queries through fast reasoning models with automatic context injection, stores gaze tensor data via encrypted edge storage, and provides a unified API gateway for multi-model AI orchestration.
+
+## MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `grok_query` | Query AI reasoning engine with automatic spatial context |
+| `get_context` | Retrieve current workspace state and project metadata |
+| `store_gaze` | Store COG/ENV/EMO tensor data with confidence scores |
+| `retrieve_gaze` | Fetch gaze tracking history for a user |
+| `analyze_pattern` | AI-powered cognitive, emotional, or environmental analysis |
+| `chat` | Multi-model AI chat with automatic routing |
+| `gateway` | Secure API proxy with edge-embedded credentials |
+| `api_history` | Audit trail of all API calls |
+| `api_stats` | Token usage, costs, and success rate metrics |
+
+## Gateway Pattern
+
+The gateway embeds API credentials server-side so clients **never handle keys**. All requests are proxied through the MCP protocol on the edge node.
+
+```python
+# Edge MCP Gateway pattern (Python)
+import aiohttp
+from mcp.server import Server
+
+async def gateway_query(prompt: str, max_tokens: int = 2000):
+    """Proxy to AI reasoning engine — key embedded server-side"""
+    async with aiohttp.ClientSession() as session:
+        resp = await session.post(
+            EDGE_AI_ENDPOINT,
+            headers={"Authorization": f"Bearer {EDGE_API_KEY}"},
+            json={
+                "model": "reasoning-fast",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": max_tokens,
+            }
+        )
+        data = await resp.json()
+        return data["choices"][0]["message"]["content"]
+```
+
+## Usage Examples
+
+### Browser → Edge Store
+
+```typescript
+// Store gaze data from browser MediaPipe pipeline
+const storeGaze = async (userId: number, gazeX: number, gazeY: number) => {
+  const response = await fetch("/api/gaze/store", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "store_gaze",
+      user_id: userId,
+      gaze_x: gazeX,    // -1 to 1 normalized
+      gaze_y: gazeY,    // -1 to 1 normalized
+      cog_value: 0.8,   // AGT tensor weights
+      emo_value: 0.1,
+      env_value: 0.1,
+      confidence: 0.92,
+    }),
+  });
+  return response.json();
+};
+```
+
+### SpacetimeDB Reducer (Rust)
+
+```rust
+// SpacetimeDB reducer — store gaze event (Rust)
+use spacetimedb::spacetimedb;
+
+#[spacetimedb(table)]
+pub struct GazeEvent {
+    #[primarykey]
+    #[autoinc]
+    pub id: u64,
+    pub user_id: u64,
+    pub gaze_x: f64,
+    pub gaze_y: f64,
+    pub cog: f64,
+    pub emo: f64,
+    pub env: f64,
+    pub confidence: f64,
+    pub timestamp: u64,
+}
+
+#[spacetimedb(reducer)]
+pub fn store_gaze(
+    ctx: &ReducerContext,
+    user_id: u64,
+    gaze_x: f64, gaze_y: f64,
+    cog: f64, emo: f64, env: f64,
+    confidence: f64,
+) -> Result<(), String> {
+    GazeEvent::insert(GazeEvent {
+        id: 0,
+        user_id, gaze_x, gaze_y,
+        cog, emo, env, confidence,
+        timestamp: ctx.timestamp.to_micros_since_epoch(),
+    });
+    Ok(())
+}
+```

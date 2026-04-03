@@ -1,0 +1,71 @@
+---
+icon: Zap
+title: HEDGEHOG Gateway
+description: Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway — multi-API AI MCP server.
+---
+
+**HEDGEHOG** (Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway) is the AI gateway that powers AstroJOE's intelligence. It runs on the Jetson Orin Nano edge node and proxies requests to Grok 4.20 via the xAI API.
+
+## Architecture
+
+HEDGEHOG serves two roles:
+
+1. **MCP Server** (stdio) — 12 tools for Claude Code / Cursor integration
+2. **HTTP Service** (port 8811) — OpenAI-compatible shim for Hermes Agent and AgenC
+
+## HTTP Endpoints
+
+### OpenAI-Compatible Chat Completions
+```
+POST /v1/chat/completions
+```
+SSE streaming support. Used by Hermes Agent and AgenC for LLM inference.
+
+### Multi-Agent Responses
+```
+POST /v1/responses
+```
+Proxies to xAI's `/v1/responses` with Grok 4.20 multi-agent mode. Supports built-in tools:
+- `web_search` — Search the web
+- `x_search` — Search X/Twitter
+
+### Memory Endpoints
+```
+POST /memory/store    — Store a key-value memory
+GET  /memory/recall   — Recall by key
+GET  /memory/recent   — Get recent memories
+```
+
+### Models
+```
+GET /v1/models        — List available models
+```
+
+## MCP Tools (12 total)
+
+| Tool | Description |
+|------|-------------|
+| `hedgehog_grok_query` | Query Grok 4.20 with project context |
+| `hedgehog_get_context` | Retrieve jOSH-spatial work context |
+| `hedgehog_store_gaze_data` | Store COG/ENV/EMO gaze tensors |
+| `hedgehog_retrieve_gaze_data` | Retrieve gaze tracking history |
+| `hedgehog_analyze_gaze_pattern` | AI-powered gaze pattern analysis |
+| `hedgehog_chat_completion` | Multi-model AI chat |
+| `hedgehog_xai_api_history` | xAI API call audit trail |
+| `hedgehog_xai_api_stats` | xAI API usage statistics |
+| `hedgehog_gateway` | xAI API Gateway with embedded key |
+| `hedgehog_memory_store` | Store memory in SpacetimeDB |
+| `hedgehog_memory_recall` | Recall memory by key |
+| `hedgehog_memory_search` | Search memories |
+
+## Model Routing
+
+| Priority | Model | Use Case |
+|----------|-------|----------|
+| **Primary** | `grok-4.20-multi-agent-beta-0309` | Web search, X search, research, spatial reasoning |
+| **Fallback** | `grok-4.20-0309-reasoning` | Complex reasoning without multi-agent tools |
+| **Chat** | `grok-3-fast` | Standard chat completions (AgenC, Hermes) |
+
+## Multi-Agent Fallback
+
+If the `/v1/responses` endpoint fails, HEDGEHOG automatically falls back to `/v1/chat/completions` with the reasoning model.
