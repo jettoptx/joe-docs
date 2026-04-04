@@ -708,3 +708,31 @@ aside#nd-sidebar a[data-active="true"]::before {
 .fd-callout {
   border-radius: 0.5rem !important;
 }
+
+/* ═══ Mobile sidebar rail — offset content so it isn't hidden behind the 52px icon rail ═══ */
+@media (max-width: 767px) {
+  /* Push the entire DocsLayout content area to the right of the 52px rail */
+  .mobile-docs-offset {
+    margin-left: 52px;
+  }
+
+  /* Keep the fixed header full-width (it already goes edge-to-edge) */
+  header.fixed {
+    left: 0 !important;
+  }
+
+  /* Fumadocs renders its own mobile sidebar trigger button; hide it since we
+     provide the icon-rail instead. The button lives inside the docs layout nav. */
+  [data-fd-nav] button[aria-label*="sidebar"],
+  [data-fd-nav] button[aria-label*="Sidebar"],
+  [data-fd-nav] button[aria-label*="menu"],
+  [data-fd-nav] button[aria-label*="Menu"] {
+    display: none !important;
+  }
+
+  /* Also hide the fumadocs built-in mobile sidebar overlay sheet */
+  [data-fd-sidebar-overlay] {
+    display: none !important;
+  }
+}
+
