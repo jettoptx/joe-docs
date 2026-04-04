@@ -89,21 +89,19 @@ export default async function Page(props: {
   }
 
   return (
-        <DocsPage
-                toc={data.toc}
-                full={data.full}
-                tableOfContent={{
-                          footer: <CopyForAgents />,
-                }}
-              >
-              <DocsTitle>{data.title}</DocsTitle>
-          {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
-              <DocsDescription>{data.description}</DocsDescription>
-              <DocsBody>
-                      <MDX components={{ ...defaultMdxComponents, pre: Pre }} />
-              </DocsBody>
-        </DocsPage>
-      );
+    <DocsPage
+      toc={data.toc}
+      full={data.full}
+      tableOfContent={{ footer: <CopyForAgentsBtn content={rawContent} /> }}
+    >
+      <DocsTitle>{data.title}</DocsTitle>
+      {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
+      <DocsDescription>{data.description}</DocsDescription>
+      <DocsBody>
+        <MDX components={{ ...defaultMdxComponents, pre: Pre }} />
+      </DocsBody>
+    </DocsPage>
+  );
 }
 
 export async function generateStaticParams() {

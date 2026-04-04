@@ -8,6 +8,7 @@ import { AugmentSpaceBtn } from "@/components/augment-space-btn";
 import { AugmentSpaceOverlay } from "@/components/augment-space-overlay";
 import { NavLink } from "@/components/nav-link";
 import { MobileSidebar } from "@/components/mobile-sidebar";
+import { MobileCopyBtn } from "@/components/mobile-copy-btn";
 
 const navLinks = [
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx" },
@@ -110,6 +111,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           {children}
         </DocsLayout>
       </div>
+      <MobileCopyBtn />
       <AugmentSpaceOverlay />
       <SiteFooter />
     </>
