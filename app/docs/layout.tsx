@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       {/* Full-width top header bar — fixed above everything */}
       <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-fd-border bg-fd-background/80 backdrop-blur-sm">
         <div className="flex items-center justify-between h-14 px-6">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/docs" className="flex items-center gap-2.5">
             <Image
               src="/optx-logo.png"
               alt="OPTX"
@@ -44,6 +44,18 @@ export default function Layout({ children }: { children: ReactNode }) {
               <span className="opacity-60">DOCS</span>
             </span>
           </Link>
+          {/* AGT pills — visible on mobile, hidden on md+ where the full legend shows */}
+          <div className="flex md:hidden items-center gap-3 ml-auto mr-2">
+            {(["COG", "EMO", "ENV"] as const).map((key) => {
+              const colors: Record<string, string> = { COG: "#eab308", EMO: "#f43f5e", ENV: "#60a5fa" };
+              return (
+                <span key={key} className="flex items-center gap-1 text-[9px]">
+                  <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: colors[key] }} />
+                  <span className="font-bold font-[family-name:var(--font-geist-mono)]" style={{ color: colors[key] }}>{key}</span>
+                </span>
+              );
+            })}
+          </div>
           <nav className="hidden md:flex items-center gap-6">
             {/* AGT Tensor Legend */}
             <div className="flex items-center gap-3.5 mr-2 border-r border-fd-border pr-5">
