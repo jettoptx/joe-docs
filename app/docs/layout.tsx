@@ -41,11 +41,36 @@ export default function Layout({ children }: { children: ReactNode }) {
               className="rounded-md shrink-0 hidden dark:block"
               style={{ objectFit: "contain" }}
             />
-            <span className="font-[family-name:var(--font-orbitron)] font-bold text-lg tracking-wider">
+            <span className="font-[family-name:var(--font-orbitron)] font-bold text-lg tracking-wider hidden sm:inline">
               <span style={{ color: "rgb(255, 105, 0)" }}>OPTX</span>{" "}
               <span className="opacity-60">DOCS</span>
             </span>
           </Link>
+
+          {/* Mobile AGT + INDEX — visible only on small screens */}
+          <div className="flex md:hidden items-center gap-3">
+            <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#eab308", boxShadow: "0 0 4px rgba(234,179,8,0.4)" }} />
+              <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)]" style={{ color: "#eab308" }}>COG</span>
+            </Link>
+            <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#f43f5e", boxShadow: "0 0 4px rgba(244,63,94,0.4)" }} />
+              <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)]" style={{ color: "#f43f5e" }}>EMO</span>
+            </Link>
+            <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "#60a5fa", boxShadow: "0 0 4px rgba(96,165,250,0.4)" }} />
+              <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)]" style={{ color: "#60a5fa" }}>ENV</span>
+            </Link>
+            <span className="w-px h-3 bg-fd-border" />
+            <Link
+              href="/docs/reference"
+              className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)] uppercase tracking-wider"
+              style={{ color: "rgb(255, 105, 0)" }}
+            >
+              INDEX
+            </Link>
+          </div>
+
           <nav className="hidden md:flex items-center gap-6">
             {/* AGT Tensor Legend */}
             <div className="flex items-center gap-3.5 mr-2 border-r border-fd-border pr-5">

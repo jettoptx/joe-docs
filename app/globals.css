@@ -335,7 +335,7 @@ aside#nd-sidebar > div:last-child {
 
 /* ═══ Layout ═══ */
 #nd-docs-layout {
-  --fd-sidebar-width: 280px !important;
+  --fd-sidebar-width: 300px !important;
   --fd-docs-height: calc(100dvh - 3.5rem) !important;
 }
 
@@ -446,6 +446,23 @@ aside#nd-sidebar {
   backdrop-filter: blur(20px) saturate(1.2) !important;
   -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
   width: var(--fd-sidebar-width) !important;
+  transition: width 0.2s ease, opacity 0.2s ease !important;
+}
+
+/* Allow sidebar to collapse when toggled — fumadocs uses data-collapsed + translate */
+[data-collapsed="true"] {
+  width: var(--fd-sidebar-width) !important;
+}
+
+/* When collapsed, shrink the placeholder so content reclaims the space */
+#nd-docs-layout:has([data-collapsed="true"]) [data-sidebar-placeholder] {
+  width: 0 !important;
+  min-width: 0 !important;
+  transition: width 0.25s ease !important;
+}
+
+#nd-docs-layout [data-sidebar-placeholder] {
+  transition: width 0.25s ease !important;
 }
 
 .dark aside#nd-sidebar {
@@ -573,6 +590,8 @@ aside#nd-sidebar > div:last-child > button.augment-space-btn {
   flex: 1 1 0 !important;
   min-width: 0 !important;
   margin-right: 0.3rem !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* ═══ Sidebar Section Titles — Orange with muted icons ═══ */

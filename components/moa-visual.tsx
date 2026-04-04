@@ -580,6 +580,28 @@ function MoaVisualInner() {
     []
   );
 
+  // Touch state refs for mobile pan/drag
+  const touchStartRef = useRef<{ id: number; mx: number; my: number; px: number; py: number; node: Node | null; moved: boolean } | null>(null);
+
+  const findNodeFromXY = useCallback(
+    (clientX: number, clientY: number) => {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return null;
+      const pan = panRef.current;
+      const zoom = zoomRef.current;
+      const sx = clientX - rect.left;
+      const sy = clientY - rect.top;
+      const x = (sx - rect.width / 2) / zoom + rect.width / 2 - pan.x;
+      const y = (sy - rect.height / 2) / zoom + rect.height / 2 - pan.y;
+      for (const n of nodesRef.current) {
+        const dx = n.x - x, dy = n.y - y;
+        if (dx * dx + dy * dy < (n.radius + 8) * (n.radius + 8)) return n;
+      }
+      return null;
+    },
+    []
+  );
+
   const activeNode = selected || hovered;
 
   return (
@@ -589,7 +611,72 @@ function MoaVisualInner() {
         width={dims.w}
         height={dims.h}
         className="block"
-        style={{ width: dims.w, height: dims.h, cursor: panning ? "grabbing" : (hovered ? "pointer" : "grab") }}
+        style={{ width: dims.w, height: dims.h, cursor: panning ? "grabbing" : (hovered ? "pointer" : "grab"), touchAction: "none" }}
+        onTouchStart={(e) => {
+          if (e.touches.length !== 1) return;
+          const touch = e.touches[0];
+          const n = findNodeFromXY(touch.clientX, touch.clientY);
+          touchStartRef.current = {
+            id: touch.identifier,
+            mx: touch.clientX,
+            my: touch.clientY,
+            px: panRef.current.x,
+            py: panRef.current.y,
+            node: n,
+            moved: false,
+          };
+          if (n) {
+            setDragging(n);
+            setHovered(n);
+          }
+        }}
+        onTouchMove={(e) => {
+          const ts = touchStartRef.current;
+          if (!ts || e.touches.length !== 1) return;
+          const touch = e.touches[0];
+          const dx = touch.clientX - ts.mx;
+          const dy = touch.clientY - ts.my;
+          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) ts.moved = true;
+
+          if (ts.node && dragging) {
+            // Drag the node
+            const rect = canvasRef.current?.getBoundingClientRect();
+            if (rect) {
+              const pan = panRef.current;
+              const zoom = zoomRef.current;
+              const sx = touch.clientX - rect.left;
+              const sy = touch.clientY - rect.top;
+              dragging.x = (sx - rect.width / 2) / zoom + rect.width / 2 - pan.x;
+              dragging.y = (sy - rect.height / 2) / zoom + rect.height / 2 - pan.y;
+              dragging.vx = 0;
+              dragging.vy = 0;
+            }
+          } else {
+            // Pan the canvas
+            panRef.current = { x: ts.px + dx, y: ts.py + dy };
+            if (!panning) setPanning(true);
+          }
+        }}
+        onTouchEnd={(e) => {
+          const ts = touchStartRef.current;
+          if (ts && !ts.moved) {
+            // Tap — select/deselect node
+            const n = ts.node;
+            if (n) {
+              if (selected?.id === n.id) {
+                navigateTo(n.href);
+              } else {
+                setSelected(n);
+              }
+            } else {
+              setSelected(null);
+            }
+          }
+          touchStartRef.current = null;
+          setDragging(null);
+          setHovered(null);
+          setPanning(false);
+        }}
         onMouseMove={(e) => {
           // Pan: drag on empty space
           if (panStartRef.current && !dragging) {
