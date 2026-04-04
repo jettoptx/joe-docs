@@ -4,30 +4,53 @@ title: Task State Machine
 description: All possible task states and transitions — from discovery through gaze-gating to completion or failure.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Task Execution State Machine
 
-```mermaid
-stateDiagram-v2
-    [*] --> Discovered: Task appears in SpacetimeDB
-    Discovered --> PolicyCheck: Agent evaluates task
+<Mermaid chart={`flowchart TD
+    S((" ")) --> New["  New  "]
+    New --> Policy["  Policy  "]
+    Policy --> Skip["  Skip  "]
+    Policy --> Gaze["  Gaze  "]
+    Policy --> Claim["  Claim  "]
+    Gaze --> Claim
+    Gaze --> Skip
+    Claim --> Exec["  Exec  "]
+    Exec --> Tool["  Tool  "]
+    Tool --> Exec
+    Exec --> Done["  Done  "]
+    Exec --> Fail["  Fail  "]
+    Done --> E1((" "))
+    Fail --> E2((" "))
+    Skip --> E3((" "))
 
-    PolicyCheck --> Skipped: Capabilities mismatch
-    PolicyCheck --> GazeGate: gaze_required = true
-    PolicyCheck --> Claimed: Policy passes
+    style S fill:#eab308,stroke:#eab308
+    style New fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style Policy fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style Gaze fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style Claim fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style Exec fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style Tool fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style Skip fill:#1a1a2e,stroke:#888,color:#888
+    style Done fill:#1a1a2e,stroke:#22c55e,color:#22c55e
+    style Fail fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style E1 fill:#22c55e,stroke:#22c55e
+    style E2 fill:#f43f5e,stroke:#f43f5e
+    style E3 fill:#888,stroke:#888
+`} />
 
-    GazeGate --> Claimed: Gaze verified via AARON
-    GazeGate --> Skipped: Gaze failed or timeout
-
-    Claimed --> Executing: Agent begins work
-    Executing --> ToolCalling: HEDGEHOG/Grok invoked
-    ToolCalling --> Executing: Tool result returned
-    Executing --> Completed: Result submitted
-    Executing --> Failed: Error or timeout
-
-    Completed --> [*]
-    Failed --> [*]
-    Skipped --> [*]
-```
+| State | Phase | Description |
+|-------|-------|-------------|
+| **New** | <span style={{color:"#eab308"}}>Open</span> | Task appears in SpacetimeDB |
+| **Policy** | <span style={{color:"#eab308"}}>Open</span> | Agent evaluates capabilities |
+| **Gaze** | <span style={{color:"#f43f5e"}}>Gate</span> | Awaiting AARON gaze verification |
+| **Skip** | <span style={{color:"#888"}}>Exit</span> | Agent passed — task stays open |
+| **Claim** | <span style={{color:"#60a5fa"}}>Active</span> | Agent has claimed the task |
+| **Exec** | <span style={{color:"#60a5fa"}}>Active</span> | Work in progress |
+| **Tool** | <span style={{color:"#60a5fa"}}>Active</span> | HEDGEHOG / Grok invoked |
+| **Done** | <span style={{color:"#22c55e"}}>End</span> | Result submitted |
+| **Fail** | <span style={{color:"#f43f5e"}}>End</span> | Error or timeout |
 
 ## States
 

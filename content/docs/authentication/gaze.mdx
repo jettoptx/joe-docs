@@ -12,9 +12,9 @@ The three biometric tensor zones that power JETT Auth. Each tensor captures a di
 
 Every page in the OPTX documentation is tagged with its primary AGT tensor — visible in the [Map of Augments](/docs/dojo/moa) and the header legend.
 
-### COG — Cognitive Tensor
+### <span style={{color: "#eab308"}}>COG — Cognitive Tensor</span>
 
-**Color:** Blue (`#60a5fa`) | **Gaze Zone:** Upper field | **Iris landmarks:** 468, 473 (upper arc)
+**Color:** <span style={{color: "#eab308"}}>Yellow (`#eab308`)</span> | **Gaze Zone:** Upper field | **Iris landmarks:** Proprietary mapping
 
 The Cognitive tensor captures **analytical attention** — the patterns your eyes make when processing structured information, reading, reasoning, and solving problems. COG activation correlates with:
 
@@ -25,9 +25,9 @@ The Cognitive tensor captures **analytical attention** — the patterns your eye
 
 In the OPTX documentation, COG-tagged pages are conceptual and architectural: protocol specs, system architecture, how-things-work explanations, and API references.
 
-### EMO — Emotional Tensor
+### <span style={{color: "#f43f5e"}}>EMO — Emotional Tensor</span>
 
-**Color:** Red (`#f43f5e`) | **Gaze Zone:** Lower-left field | **Iris landmarks:** 468, 473 (lower-left arc)
+**Color:** <span style={{color: "#f43f5e"}}>Red (`#f43f5e`)</span> | **Gaze Zone:** Lower-left field | **Iris landmarks:** Proprietary mapping
 
 The Emotional tensor captures **affective processing** — the involuntary eye movements associated with emotional engagement, social cognition, and identity recognition. EMO activation correlates with:
 
@@ -36,11 +36,11 @@ The Emotional tensor captures **affective processing** — the involuntary eye m
 - **Gaze aversion** patterns (looking away during discomfort)
 - **Face-tracking fixations** during social engagement
 
-In the OPTX documentation, EMO-tagged pages relate to identity, personality, agent behavior, and human-facing interfaces: AstroJOE, the Cockpit, gaze verification, and the DOJO.
+In the OPTX documentation, EMO-tagged pages relate to identity, personality, agent behavior, and human-facing interfaces: JOE, gaze verification, and the DOJO.
 
-### ENV — Environmental Tensor
+### <span style={{color: "#60a5fa"}}>ENV — Environmental Tensor</span>
 
-**Color:** Green (`#4ade80`) | **Gaze Zone:** Lower-right field | **Iris landmarks:** 468, 473 (lower-right arc)
+**Color:** <span style={{color: "#60a5fa"}}>Blue (`#60a5fa`)</span> | **Gaze Zone:** Lower-right field | **Iris landmarks:** Proprietary mapping
 
 The Environmental tensor captures **spatial awareness** — how your eyes map physical and digital space, navigate interfaces, and track movement. ENV activation correlates with:
 
@@ -57,9 +57,9 @@ Authentication uses the **weighted combination** of all three tensors, not any s
 
 | Tensor | Weight Range | Primary Signal | Documentation Tag |
 |--------|-------------|----------------|-------------------|
-| **COG** | 0.0 — 1.0 | Analytical attention | Architecture, Protocol, Reference |
-| **EMO** | 0.0 — 1.0 | Affective engagement | Identity, Agent, Cockpit, DOJO |
-| **ENV** | 0.0 — 1.0 | Spatial awareness | Infrastructure, Chain, Topology |
+| <span style={{color: "#eab308"}}>**COG**</span> | 0.0 — 1.0 | Analytical attention | Architecture, Protocol, Reference |
+| <span style={{color: "#f43f5e"}}>**EMO**</span> | 0.0 — 1.0 | Affective engagement | Identity, Agent, JOE, DOJO |
+| <span style={{color: "#60a5fa"}}>**ENV**</span> | 0.0 — 1.0 | Spatial awareness | Infrastructure, Chain, Topology |
 
 ## Integration Example
 
@@ -95,11 +95,11 @@ function GazeAuth() {
 }
 ```
 
-> Minimum **222 centiseconds** of gaze data required for CSTB attestation.
+> Minimum gaze duration threshold required for CSTB attestation (configurable governance parameter).
 
 ## JETT Auth
 
-**Joule Encryption Temporal Template (JETT)** derives quantum-resistant encryption keys from gaze biometrics. Your unique gaze pattern generates a deterministic seed that serves as a wallet signature vault.
+**Joule Encryption Temporal Template (JETT)** derives privacy-preserving encryption keys from gaze biometrics. Your unique gaze pattern generates a deterministic seed that serves as a wallet signature vault.
 
 Proof of you and your attention.
 

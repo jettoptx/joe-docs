@@ -4,6 +4,9 @@ import { source } from "@/lib/source";
 import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/footer";
+import { AugmentSpaceBtn } from "@/components/augment-space-btn";
+import { AugmentSpaceOverlay } from "@/components/augment-space-overlay";
+import { NavLink } from "@/components/nav-link";
 
 const navLinks = [
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx" },
@@ -16,10 +19,10 @@ const navLinks = [
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      {/* Full-width top header bar */}
-      <header className="sticky top-0 z-50 w-full border-b border-fd-border bg-fd-background/80 backdrop-blur-sm">
+      {/* Full-width top header bar — fixed above everything */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-fd-border bg-fd-background/80 backdrop-blur-sm">
         <div className="flex items-center justify-between h-14 px-6">
-          <Link href="/docs" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5">
             <Image
               src="/optx-logo.png"
               alt="OPTX"
@@ -51,26 +54,26 @@ export default function Layout({ children }: { children: ReactNode }) {
                 AGT
               </Link>
               <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
-                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(96,165,250,0.5)]" style={{ backgroundColor: "#60a5fa" }} />
-                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#60a5fa] group-hover:text-[#93bbfc] transition-colors">COG</span>
+                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(234,179,8,0.5)]" style={{ backgroundColor: "#eab308" }} />
+                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#eab308] group-hover:text-[#fbbf24] transition-colors">COG</span>
               </Link>
               <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
                 <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(244,63,94,0.5)]" style={{ backgroundColor: "#f43f5e" }} />
                 <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#f43f5e] group-hover:text-[#f76d8a] transition-colors">EMO</span>
               </Link>
               <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
-                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(74,222,128,0.5)]" style={{ backgroundColor: "#4ade80" }} />
-                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#4ade80] group-hover:text-[#76e8a2] transition-colors">ENV</span>
+                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(96,165,250,0.5)]" style={{ backgroundColor: "#60a5fa" }} />
+                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#60a5fa] group-hover:text-[#93bbfc] transition-colors">ENV</span>
               </Link>
             </div>
             {navLinks.map((link) => (
-              <Link
+              <NavLink
                 key={link.label}
                 href={link.href}
                 className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-fd-foreground transition-colors"
               >
                 {link.label}
-              </Link>
+              </NavLink>
             ))}
             <a
               href="https://github.com/jettoptx"
@@ -87,24 +90,20 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
+      {/* Spacer for fixed header */}
+      <div className="h-14" />
+
       <DocsLayout
         tree={source.pageTree}
         nav={{ enabled: false }}
         sidebar={{
           defaultOpenLevel: 1,
-          footer: (
-            <Link
-              href="/docs"
-              className="augment-space-btn flex items-center justify-center gap-2 flex-1 py-2 rounded-md border border-[rgba(255,105,0,0.2)] bg-[rgba(255,105,0,0.06)] text-[rgb(255,105,0)] hover:bg-[rgba(255,105,0,0.12)] hover:border-[rgba(255,105,0,0.35)] transition-all font-[family-name:var(--font-orbitron)] text-[11px] font-semibold tracking-widest uppercase whitespace-nowrap"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-              Augment Space
-            </Link>
-          ),
+          footer: <AugmentSpaceBtn key="augment-space" />,
         }}
       >
         {children}
       </DocsLayout>
+      <AugmentSpaceOverlay />
       <SiteFooter />
     </>
   );

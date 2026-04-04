@@ -1,0 +1,81 @@
+---
+icon: Zap
+title: Solana Native
+description: Home chain operations — $OPTX, $JTX, $CSTB tokens, DePIN staking, and Metaplex agent identity.
+---
+
+import { Mermaid } from "@/components/mermaid";
+
+Solana is the home chain for OPTX. All verification, staking, and agent identity lives here. This is the trust root that all bridges extend from.
+
+## Token Ecosystem
+
+| Token | Standard | Purpose | Network |
+|-------|----------|---------|---------|
+| **$OPTX** | Token-2022 (SPL) | Utility — DePIN rewards, bridge fees, gaze attestations | Devnet |
+| **$JTX** | SPL Token | Governance — staking for minting/access, AARON priority | Mainnet |
+| **$CSTB** | Token-2022 (SPL) | Attestation — DePIN validator staking via CSTB Trust | Devnet |
+
+### Token-2022 Transfer Hooks
+
+$OPTX and $CSTB use **transfer hooks** — programmable logic that executes on every token transfer. This enables:
+
+- **DePIN reward distribution** on validator attestation
+- **Bridge fee deduction** before LayerZero OFT wrapping
+- **Gaze attestation stamps** embedded in transfer metadata
+
+## Metaplex Agent Identity
+
+AstroJOE is registered as a **Metaplex Core Asset** on mainnet — the on-chain identity for the agent.
+
+| Field | Value |
+|-------|-------|
+| **Agent NFT** | `9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R` |
+| **Agent Wallet** | `G8MxbW8LKEsvKvXRneCHpMASR4yDit7CzERW1ZfgPkqD` |
+| **Owner** | `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` |
+| **Standard** | Core Asset (EIP-8004 Registration v1) |
+| **x402 Protocol** | Supported |
+
+## DePIN Staking (CSTB Trust)
+
+<Mermaid chart={`flowchart TD
+    V["Node"] --> A["AARON"]
+    A --> S["CSTB"]
+    S --> R["OPTX"]
+    R --> V
+
+    style V fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style A fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style S fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style R fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+`} />
+
+| Node | Description |
+|------|-------------|
+| **Node** | DePIN Validator Node (edge compute, gaze proofs) |
+| **AARON** | AARON Router — validates attestations on Solana |
+| **CSTB** | $CSTB stake locked by validator in CSTB Trust |
+| **OPTX** | $OPTX rewards minted via Token-2022 transfer hooks |
+
+Validators stake $CSTB to participate in the DePIN network. AARON validates their attestations (gaze proofs, uptime, edge compute availability), and rewards flow back as $OPTX through Token-2022 transfer hooks.
+
+## Program Addresses
+
+| Program | Address | Network |
+|---------|---------|---------|
+| **CSTB DePIN** | `91SqqYLMi5zNsfMab6rnvipwJhDpN4FEMSLgu8F3bbGq` | Devnet |
+
+## RPC Configuration
+
+All Solana interactions route through **Helius RPC** for enhanced reliability, webhooks, and DAS (Digital Asset Standard) API access.
+
+```text
+Devnet:  https://devnet.helius-rpc.com/?api-key=<key>
+Mainnet: https://mainnet.helius-rpc.com/?api-key=<key>
+```
+
+## Related
+
+- [On-Chain Addresses](/docs/getting-started/on-chain-addresses) — Complete address index
+- [CSTB Trust DePIN](/docs/infrastructure/depin) — Validator staking protocol
+- [Agent Identity](/docs/architecture/agent-identity) — Metaplex registration flow

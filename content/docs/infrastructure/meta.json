@@ -1,4 +1,5 @@
 {
   "title": "Infrastructure",
-  "pages": ["edge", "bridge", "depin"]
+  "icon": "Server",
+  "pages": ["edge", "depin"]
 }

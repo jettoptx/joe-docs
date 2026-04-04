@@ -4,7 +4,7 @@ description: Asynchronous Audit RAG Optical Node — the biometric proof protoco
 icon: Fingerprint
 ---
 
-**AARON** (Asynchronous Audit RAG Optical Node) is the biometric proof protocol that underpins the **Astro Knots** registry. It generates quantum-resistant gaze proofs by encoding AGT tensor sequences into knot invariants, then anchoring them on Solana via CSTB attestations.
+**AARON** (Asynchronous Audit RAG Optical Node) is the biometric proof protocol that underpins the **Astro Knots** registry. It generates privacy-preserving gaze proofs by encoding AGT tensor sequences into knot invariants, then anchoring them on Solana via CSTB attestations.
 
 AARON connects **JETT Auth** (your biometric gaze signature) through **OPT&#x1D54F;** (the secure bridge) to the public **OPTX** blockchain on Solana. Private compute on edge hardware, public attestations on-chain.
 
@@ -33,7 +33,7 @@ curl https://api.astroknots.space/aaron \
 - **A** — **Asynchronous**: Non-blocking event-driven architecture. Sessions, proofs, and attestations process in parallel across edge and chain.
 - **A** — **Audit**: Every gaze proof, wallet signature, and token action is cryptographically logged. Immutable trail from eye to chain.
 - **R** — **RAG**: Retrieval-Augmented Generation. Aaron enriches AI responses with real-time context from SpacetimeDB, Solana state, and gaze history.
-- **O** — **Optical**: Gaze biometrics via iris tracking. The camera becomes the key. MediaPipe FaceLandmarker captures COG/EMO/ENV tensor regions.
+- **O** — **Optical**: Gaze biometrics via iris tracking. The camera becomes the key. Proprietary classification maps iris movement to COG/EMO/ENV tensor regions.
 - **N** — **Node**: Runs on OPTX Validator Nodes across the Solana mainnet. Private compute that never exposes raw biometric data to the network.
 
 > **DePIN** = Decentralized Physical Infrastructure Network. AARON is a DePIN node that validates human identity through gaze via **JETT Auth**, bridges proofs through **OPT&#x1D54F;**, and earns $OPTX on the public network.
@@ -64,7 +64,7 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
 |-----------|------|-------------|
 | **AARON** | The Router | Validates gaze proofs, manages auth sessions, bridges to Solana. The front door for all authentication. |
 | **JOE** | The Agent | JETT Optical Engine. Autonomous AI agent on the validator node. Executes tools, manages services, talks via Matrix chat. |
-| **HEDGEHOG** | The Brain | MCP context bridge. Routes AI queries to Grok 4.1, stores gaze data in SpacetimeDB, tracks API usage. The memory layer. |
+| **HEDGEHOG** | The Brain | MCP context bridge. Routes AI queries to Grok 4.20, stores gaze data in SpacetimeDB, tracks API usage. The memory layer. |
 
 ```text
   User (Eyes + Wallet)
@@ -86,7 +86,7 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
         |           +-----+-----+     +------+------+
         |                 |                   |
         |           executes tools      routes AI to
-        |           Matrix chat,        Grok 4.1 Fast,
+        |           Matrix chat,        Grok 4.20,
         |           service mgmt        tracks tokens
         |                 |                   |
         |                 v                   v
@@ -108,7 +108,7 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
 ## Core Principles
 
 - **Privacy First** — Raw biometric data never leaves the validator node. Only opaque 32-byte proofs go on-chain.
-- **Quantum Resistant** — Agentive Gaze Tensor (AGT) sequences encoded as knot invariants — resistant to quantum attacks.
+- **Knot-Encoded Proofs** — Agentive Gaze Tensor (AGT) sequences encoded as knot invariants for privacy-preserving on-chain attestation.
 - **x402 Native** — Micropayment attestation built-in. Pay-per-action with $OPTX staking tiers.
 
 ## Source Code

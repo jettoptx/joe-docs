@@ -73,6 +73,22 @@ export default function Layout({ children }: { children: ReactNode }) {
             defaultTheme: "dark",
             attribute: "class",
           }}
+          search={{
+            links: [
+              ["Getting Started", "/docs/getting-started/what-is-optx"],
+              ["Gaze Auth", "/docs/authentication/gaze"],
+              ["AARON Protocol", "/docs/protocol"],
+              ["Agent Identity", "/docs/architecture/agent-identity"],
+              ["DOJO IDE", "/docs/dojo"],
+              ["DePIN", "/docs/infrastructure/depin"],
+              ["API Reference", "/docs/reference/api"],
+              ["iOS / ARKit", "/docs/authentication/gaze"],
+              ["Windows / Desktop", "/docs/getting-started/architecture"],
+            ],
+            options: {
+              api: "/api/search",
+            },
+          }}
         >
           {children}
         </RootProvider>

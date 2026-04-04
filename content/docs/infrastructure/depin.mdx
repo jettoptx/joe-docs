@@ -4,7 +4,7 @@ description: On-chain attestation, reward distribution, attestation flow, and th
 icon: Shield
 ---
 
-**CompuStable (CSTB)** is the on-chain attestation layer that verifies gaze biometric proofs. The **DePIN** (Decentralized Physical Infrastructure Network) distributes **$OPTX** rewards to validated gaze sessions.
+**[CompuStable (CSTB)](https://x.com/Compustable)** is the on-chain attestation layer that verifies gaze biometric proofs. The **DePIN** (Decentralized Physical Infrastructure Network) distributes **$OPTX** rewards to validated gaze sessions.
 
 ## Reward Distribution
 
@@ -19,8 +19,8 @@ icon: Shield
 ```text
 1. User starts gaze training session in DOJO
 2. Camera captures eye movement at 60fps
-3. MediaPipe classifies gaze → AGT tensors (COG/EMO/ENV)
-4. Minimum 222cs of data collected (quality threshold)
+3. Proprietary classifier maps gaze → AGT tensors (COG/EMO/ENV)
+4. Minimum gaze data collected (quality threshold)
 5. Edge compute stores tensors in real-time database
 6. JOE Agent validates session integrity
 7. CSTB program on Solana creates attestation PDA
@@ -28,10 +28,10 @@ icon: Shield
 9. Attestation hash stored on-chain for future verification
 
 Requirements:
-  - Min gaze duration: 222 centiseconds
-  - Min entropy: 750
-  - Difficulty target: 1000
-  - AGT constraint: COG + EMO + ENV = 10,000 (normalized)
+  - Min gaze duration: configurable (governance parameter)
+  - Min entropy: configurable (governance parameter)
+  - Difficulty target: configurable (governance parameter)
+  - AGT constraint: COG + EMO + ENV must normalize to unity
 ```
 
 ## Anchor Program
@@ -50,10 +50,10 @@ pub mod cstb_depin {
         gaze_duration_cs: u32,
         entropy: u16,
     ) -> Result<()> {
-        require!(gaze_duration_cs >= 222, CSTBError::InsufficientGaze);
-        require!(entropy >= 750, CSTBError::InsufficientEntropy);
+        require!(gaze_duration_cs >= MIN_GAZE_CS, CSTBError::InsufficientGaze);
+        require!(entropy >= MIN_ENTROPY, CSTBError::InsufficientEntropy);
         require!(
-            agt_weights.iter().sum::<u16>() == 10_000,
+            agt_weights.iter().sum::<u16>() == AGT_NORMALIZATION,
             CSTBError::InvalidAGTWeights
         );
 
@@ -74,3 +74,4 @@ pub mod cstb_depin {
 The CSTB Trust DePIN program is open source:
 
 - [JTX-CSTB.TRUST.DEPIN on GitHub](https://github.com/jettoptx/JTX-CSTB.TRUST.DEPIN) — Anchor program for on-chain gaze attestation and $OPTX reward distribution.
+- [@Compustable on X](https://x.com/Compustable) — Official CompuStable updates and announcements.

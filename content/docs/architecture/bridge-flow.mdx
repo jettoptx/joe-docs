@@ -4,36 +4,54 @@ title: Cross-Chain Bridge
 description: XRPL → Wormhole NTT → Solana pipeline with native USDC, guardian validation, and MPO Tempo x402 payments.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Cross-Chain Bridge Flow (XRPL → Solana)
 
 The OPTX bridge connects XRPL and Solana ecosystems through Wormhole NTT with native USDC burn/mint — no wrapped tokens.
 
-```mermaid
-flowchart LR
-    subgraph XRPL["XRPL Ecosystem"]
-        R9["r9 Wallet"] --> XS["Xaman Signing"]
-        XS --> TJ["TraderJoe Swarm<br/>(4 agents)"]
-        TJ --> USDC1["Circle USDC"]
-    end
+<Mermaid chart={`flowchart TD
+    A["  r9  "] --> B["  Xaman  "]
+    B --> C["  TJ  "]
+    C --> D["  USDC  "]
+    D --> E["  Guards  "]
+    E --> F["  VAA  "]
+    F --> G["  NTT  "]
+    G --> H["  USDC  "]
+    H --> I["  AgenC  "]
+    I --> J["  SubJOE  "]
+    J --> K["  Vault  "]
+    K --> L["  MPO  "]
+    L --> A
 
-    subgraph WH["Wormhole NTT"]
-        USDC1 --> G["19 Guardians"]
-        G --> VAA["VAA Signature<br/>(13/19 quorum)"]
-        VAA --> NTT["NTT Transceiver"]
-    end
+    style A fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style B fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style C fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style D fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style F fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style G fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style H fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style I fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style J fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style K fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style L fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+`} />
 
-    subgraph SOL["Solana Ecosystem"]
-        NTT --> USDC2["Native USDC"]
-        USDC2 --> AC["AgenC Hub"]
-        AC --> SJ["SubJOE Agents"]
-        SJ --> VLT["astroknots Vault"]
-    end
-
-    subgraph PAY["Payments"]
-        VLT --> MPO["MPO Tempo x402"]
-        MPO --> R9
-    end
-```
+| Node | Zone | Description |
+|------|------|-------------|
+| **r9** | <span style={{color:"#f43f5e"}}>XRPL</span> | Primary XRPL wallet |
+| **Xaman** | <span style={{color:"#f43f5e"}}>XRPL</span> | Payload signing — no seed exposure |
+| **TJ** | <span style={{color:"#f43f5e"}}>XRPL</span> | TraderJoe — 4 autonomous trading agents |
+| **USDC** | <span style={{color:"#f43f5e"}}>XRPL</span> | Circle USDC source |
+| **Guards** | <span style={{color:"#eab308"}}>Wormhole</span> | 19 guardian validator nodes |
+| **VAA** | <span style={{color:"#eab308"}}>Wormhole</span> | Verified Action Approval (13/19 quorum) |
+| **NTT** | <span style={{color:"#eab308"}}>Wormhole</span> | NTT Transceiver with `jett_vault` PDA |
+| **USDC** | <span style={{color:"#60a5fa"}}>Solana</span> | Circle USDC minted on Solana |
+| **AgenC** | <span style={{color:"#60a5fa"}}>Solana</span> | SubJOE agent coordination hub |
+| **SubJOE** | <span style={{color:"#60a5fa"}}>Solana</span> | Sub-agent executing DeFi ops |
+| **Vault** | <span style={{color:"#60a5fa"}}>Solana</span> | astroknots.space staking vault |
+| **MPO** | <span style={{color:"#60a5fa"}}>Solana</span> | MPO Tempo x402 agent payments → loops back to r9 |
 
 ## Pipeline Stages
 
@@ -68,5 +86,4 @@ flowchart LR
 | TraderJoe4 | Grid | 6% range, 10-level grid trading |
 
 ## Related
-- [Cockpit: Bridge Overview](/docs/cockpit) — Live dashboard view
-- [Infrastructure: LayerZero Bridge](/docs/infrastructure/bridge) — Technical details
+- [EVM via LayerZero](/docs/on-chain-bridge/evm-layerzero) — LayerZero OFT bridge details

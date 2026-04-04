@@ -1,0 +1,106 @@
+---
+icon: ArrowLeftRight
+title: EVM via LayerZero
+description: Cross-chain $OPTX bridging to Ethereum, Base, Arbitrum, and Polygon using LayerZero OFT standard.
+---
+
+import { Mermaid } from "@/components/mermaid";
+
+**LayerZero OFT (Omnichain Fungible Token)** wraps $OPTX for EVM chains. This is the primary bridge for DePIN reward distribution and multi-chain wallet verification.
+
+## Supported Chains
+
+| Chain | Endpoint ID | Status |
+|-------|-------------|--------|
+| **Ethereum Mainnet** | 30101 | Devnet testing |
+| **Base** | 40245 | Devnet testing |
+| **Arbitrum** | 30110 | Devnet testing |
+| **Polygon** | 30109 | Devnet testing |
+
+## Bridge Architecture
+
+<Mermaid chart={`flowchart TD
+    A["  OPTX  "] --> B["  Lock  "]
+    B --> C["  SOL EP  "]
+    C --> D["  DVN  "]
+    D --> E["  EVM EP  "]
+    E --> F["  ERC20  "]
+    F --> G["  Wallet  "]
+
+    style A fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style B fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style C fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style D fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style F fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style G fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+`} />
+
+| Node | Color | Description |
+|------|-------|-------------|
+| **OPTX** | <span style={{color:"#60a5fa"}}>Blue</span> | Source SPL Token-2022 on Solana |
+| **Lock** | <span style={{color:"#60a5fa"}}>Blue</span> | OFT Adapter Program (lock/unlock) |
+| **SOL EP** | <span style={{color:"#eab308"}}>Yellow</span> | LayerZero Solana Endpoint |
+| **DVN** | <span style={{color:"#eab308"}}>Yellow</span> | Decentralized Verifier Network |
+| **EVM EP** | <span style={{color:"#eab308"}}>Yellow</span> | LayerZero EVM Endpoint |
+| **ERC20** | <span style={{color:"#f43f5e"}}>Red</span> | Wrapped $OPTX as ERC-20 |
+| **Wallet** | <span style={{color:"#f43f5e"}}>Red</span> | Recipient on ETH, Base, ARB, POLY |
+
+## How It Works
+
+1. **Lock on Solana** — $OPTX tokens are locked in the OFT Adapter Program on Solana
+2. **DVN Verification** — LayerZero's Decentralized Verifier Network confirms the lock
+3. **Mint on EVM** — Equivalent ERC-20 wrapped $OPTX is minted on the destination chain
+4. **Return path** — Burn ERC-20 $OPTX on EVM, unlock SPL $OPTX on Solana
+
+## Bridge Example
+
+```typescript
+import { OftTools } from "@layerzerolabs/lz-solana-sdk-v2"
+
+const bridgeToBase = async (amount: number, evmAddress: string) => {
+  const oftConfig = {
+    srcEid: 40168,           // Solana endpoint ID
+    dstEid: 40245,           // Base endpoint ID
+    tokenMint: "4r9WoPsRjJzrYEuj6VdwowVrFZaXpu16Qt6xogcmdUXC",
+  }
+
+  const tx = await OftTools.send(
+    connection,
+    wallet.publicKey,
+    oftConfig,
+    amount,
+    evmAddress,
+    { nativeFee }
+  )
+
+  await wallet.signAndSendTransaction(tx)
+}
+```
+
+## JOE EVM Wallet
+
+The JOE agent operates on EVM chains through its registered wallet:
+
+| Field | Value |
+|-------|-------|
+| **Address** | `0xB06c9B91Fa4B460551880459dc35803DC7567b93` |
+| **Chains** | Ethereum, Base |
+| **Purpose** | Cross-chain agent operations, DePIN reward claims |
+
+## AARON Interaction
+
+The AARON router does **not** operate on EVM chains directly. Its role is pre-bridge:
+
+1. Validate gaze attestation on Solana
+2. Authorize the bridge transaction
+3. Sign the OFT send instruction
+
+Once assets cross to EVM, they follow standard ERC-20 mechanics. Bridging back requires re-verification through AARON.
+
+> **LayerZero bridge is currently in devnet testing.** Mainnet deployment pending audit.
+
+## Related
+
+- [On-Chain Bridge](/docs/on-chain-bridge) — Multi-chain bridge hub
+- [On-Chain Addresses](/docs/getting-started/on-chain-addresses) — Token addresses across chains

@@ -80,7 +80,7 @@ export function SiteFooter() {
                 { label: "Protocol", href: "/docs/protocol" },
                 { label: "API Reference", href: "/docs/reference/api" },
                 { label: "Gaze Guide", href: "/docs/authentication/gaze" },
-                { label: "Bridge", href: "/docs/infrastructure/bridge" },
+                { label: "LayerZero Bridge", href: "/docs/on-chain-bridge/evm-layerzero" },
                 { label: "DePIN", href: "/docs/infrastructure/depin" },
               ].map((link) => (
                 <li key={link.label}>
@@ -200,6 +200,30 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* Changelog / Last Updated */}
+        <div className="mt-10 pt-6 border-t border-fd-border">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
+              Last updated: April 4, 2026 &mdash; v1.5.0
+            </p>
+            <details className="group">
+              <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
+                Changelog
+              </summary>
+              <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
+                <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.5.0</span> &mdash; Final DevSecOps audit, IP review, AGT reclassification, MOA augment overlay, favicon + logo update</li>
+                  <li><span className="text-orange-400">v1.4.0</span> &mdash; On-Chain Bridge section, Mermaid diagrams + legends, DevSecOps audit</li>
+                  <li><span className="text-orange-400">v1.3.0</span> &mdash; Architecture Flows: task lifecycle, state machine, swarm DAG, gaze-gated policy</li>
+                  <li><span className="text-orange-400">v1.2.0</span> &mdash; Full-screen MOA canvas with zoom/pan, glass sidebar, AGT dot colors</li>
+                  <li><span className="text-orange-400">v1.1.0</span> &mdash; AstroJOE agent docs, HEDGEHOG gateway, Hermes OPTX API reference</li>
+                  <li><span className="text-orange-400">v1.0.0</span> &mdash; Initial launch: AARON protocol, gaze auth, DePIN, infrastructure, DOJO</li>
+                </ul>
+              </div>
+            </details>
           </div>
         </div>
       </div>

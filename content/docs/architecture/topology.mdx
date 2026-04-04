@@ -4,86 +4,66 @@ title: Infrastructure Topology
 description: Full network map of all OPTX services across validator nodes, orchestration clusters, and cloud deployments.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Infrastructure Topology
 
-```mermaid
-flowchart TD
-    subgraph Devices["User Devices"]
-        PC["CorsairOne PC"]
-        IP["iPhone"]
-        MAC["Mac"]
-    end
+<Mermaid chart={`flowchart LR
+    A["  Devices  "] --> B["  Tailscale  "]
+    B --> C["  Edge Node  "]
+    B --> D["  Orchestration  "]
+    D --> C
+    C --> D
+    C --> E["  Cloud  "]
+    D --> E
 
-    subgraph TS["Tailscale Mesh (WireGuard)"]
-        TSN["Encrypted Tunnels"]
-    end
+    style A fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style B fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style C fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style D fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
+`} />
 
-    subgraph Jetson["Jetson Orin Nano — Edge Node"]
-        K3S["K3s Kubernetes"]
-        STDB["SpacetimeDB :3000"]
-        HH["HEDGEHOG :8811"]
-        AAR["AARON Router :8888"]
-        JWS["JOE WebSocket :8765"]
-        CON["Conduit Matrix :6167"]
-    end
-
-    subgraph Docker["CorsairOne Docker Desktop"]
-        HRM["Hermes Agent :8642"]
-        HWS["Hermes Workspace :5555"]
-        AGC["AgenC Coordinator :8840"]
-        API["hermes-optx-api :8643"]
-    end
-
-    subgraph Cloud["Cloud Services"]
-        VCL["Vercel — jettoptics.ai"]
-        CVX["Convex — SaaS sync"]
-        SOL["Solana Devnet/Mainnet"]
-        XAI["xAI API — Grok 4.20"]
-    end
-
-    Devices --> TS
-    TS --> Jetson
-    TS --> Docker
-    Docker <--> Jetson
-    Docker --> Cloud
-    Jetson --> Cloud
-    HH --> XAI
-```
+| Layer | Components |
+|-------|------------|
+| <span style={{color: "#60a5fa"}}>**Devices**</span> | Desktop / Workstation, Mobile, Seekers |
+| <span style={{color: "#eab308"}}>**Tailscale**</span> | WireGuard encrypted mesh tunnels |
+| <span style={{color: "#f43f5e"}}>**Edge Node**</span> | K3s, SpacetimeDB, HEDGEHOG, AARON, JOE WS, Conduit |
+| <span style={{color: "#60a5fa"}}>**Orchestration**</span> | Hermes Agent, Workspace UI, AgenC Coordinator |
+| <span style={{color: "#eab308"}}>**Cloud**</span> | Vercel, Convex, Solana, xAI Grok |
 
 ## OPTX Validator Node — Edge Services
 
-| Port | Service | Description |
-|------|---------|-------------|
-| 3000 | SpacetimeDB | Primary edge database (optx-cortex) |
-| 8811 | HEDGEHOG | AI gateway (Grok proxy + memory) |
-| 8888 | AARON Router | Gaze verification + tensor classification |
-| 8765 | JOE WebSocket | Matrix relay for mobile tasking |
-| 6167 | Conduit | Matrix homeserver (jettoptics.ai) |
+| Service | Role |
+|---------|------|
+| **SpacetimeDB** | Primary edge database (reducers + subscriptions) |
+| **HEDGEHOG** | AI gateway (Grok proxy + memory) |
+| **AARON Router** | Gaze verification + tensor classification |
+| **JOE WebSocket** | Matrix relay for mobile tasking |
+| **Conduit** | Matrix homeserver (federated messaging) |
 
 ## Orchestration Cluster — Agent Services
 
-| Port | Service | Container |
-|------|---------|-----------|
-| 8642 | Hermes Agent | astrojoe-brain |
-| 5555 | Hermes Workspace | astrojoe-ui |
-| 8643 | hermes-optx-api | (planned) |
-| 8840 | AgenC Coordinator | optx-agenc |
+| Service | Role |
+|---------|------|
+| **Hermes Agent** | AstroJOE brain — task execution |
+| **Hermes Workspace** | Agent workspace UI |
+| **AgenC Coordinator** | SubJOE agent coordination |
 
 ## Cloud Services
 
-| Service | URL | Purpose |
-|---------|-----|---------|
-| Vercel | jettoptics.ai | Frontend (Next.js) |
-| Convex (prod) | hushed-nightingale-624.convex.cloud | User sync, subscriptions |
-| Solana | Helius RPC | On-chain operations |
-| xAI | api.x.ai | Grok 4.20 inference |
+| Service | Purpose |
+|---------|---------|
+| **Vercel** | Frontend (Next.js) — jettoptics.ai |
+| **Convex** | User sync, subscriptions |
+| **Solana** | On-chain operations via Helius RPC |
+| **xAI** | Grok inference for HEDGEHOG |
 
 ## Network
 
 All internal communication flows through **Tailscale** mesh networking with WireGuard encryption. Public access points:
 - `jettoptics.ai` — Vercel CDN
-- `matrix.jettoptics.ai` — Cloudflare Tunnel → Conduit
-- `docs.optx.space` — Documentation site
+- `matrix.jettoptics.ai` — Federated Matrix homeserver
 
 ## Related
 - [System Architecture](/docs/getting-started/architecture) — High-level overview

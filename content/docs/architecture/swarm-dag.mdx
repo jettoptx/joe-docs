@@ -4,43 +4,52 @@ title: Swarm Decomposition
 description: DAG workflow for multi-agent coordination — decompose goals into parallel, sequential, or dependency-linked subtasks.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Swarm Decomposition (DAG Workflow)
 
 Complex goals are decomposed into subtasks using Grok, then executed as a Directed Acyclic Graph (DAG) by multiple agents.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant API as hermes-optx-api
-    participant HH as HEDGEHOG / Grok
-    participant STDB as SpacetimeDB
-    participant A1 as Agent 1
-    participant A2 as Agent 2
-    participant A3 as Agent 3
+<Mermaid chart={`sequenceDiagram
+    participant USR
+    participant API
+    participant HH
+    participant DB
+    participant A1
+    participant A2
+    participant A3
 
-    User->>API: POST /api/tasks/swarm {goal, strategy: dag}
-    API->>HH: Decompose goal into subtasks
-    HH-->>API: [{title, depends_on}, ...]
+    USR->>API: Create swarm
+    API->>HH: Decompose goal
+    HH-->>API: Subtask list
 
-    loop For each subtask
-        API->>STDB: store_memory(category=task)
+    loop Each subtask
+        API->>DB: Store task
     end
-    API-->>User: {swarm_id, tasks: [...]}
+    API-->>USR: Swarm created
 
-    par Parallel execution (no dependencies)
-        A1->>STDB: Claim Task A
-        A2->>STDB: Claim Task B
+    par No dependencies
+        A1->>DB: Claim Task A
+        A2->>DB: Claim Task B
     end
 
-    A1->>STDB: Complete Task A
-    Note over STDB: DAG check: Task C depends on A ✓
-    STDB-->>A3: Task C now unblocked
-    A3->>STDB: Auto-claim Task C
+    A1->>DB: Complete A
+    Note over DB: DAG: C needs A ✓
+    DB-->>A3: C unblocked
+    A3->>DB: Claim C
 
-    A2->>STDB: Complete Task B
-    A3->>STDB: Complete Task C
-    Note over API: All subtasks complete → aggregate
-```
+    A2->>DB: Complete B
+    A3->>DB: Complete C
+    Note over API: All done → aggregate
+`} />
+
+| Code | Full Name | Role |
+|------|-----------|------|
+| **USR** | User | Swarm initiator |
+| **API** | hermes-optx-api | Task orchestration API |
+| **HH** | HEDGEHOG / Grok | AI decomposition engine |
+| **DB** | SpacetimeDB | Edge database |
+| **A1–A3** | Agent 1–3 | Parallel executing agents |
 
 ## Strategies
 

@@ -4,33 +4,62 @@ title: Agent Identity
 description: On-chain agent registration, multi-chain wallets, Metaplex NFT identity, and xSPECTAR soul binding.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Agent Identity & Registration
 
 AstroJOE has a multi-layered identity spanning on-chain registration, soul-bound NFTs, and biometric attestations.
 
-```mermaid
-flowchart TD
-    subgraph Identity["Identity Sources"]
-        SOUL["SOUL.md<br/>(system prompt)"] --> HRM["Hermes Agent"]
-        NFT["Metaplex Agent NFT<br/>9116ea...ku9R"] --> SOL["Solana Mainnet"]
-        SPEC["xSPECTAR Soul NFTs"] --> XRP["XRPL On-Chain"]
-        GAZE["Gaze Attestation<br/>(COG/EMO/ENV)"] --> AARON["AARON Router"]
-    end
+<Mermaid chart={`flowchart TD
+    A["  SOUL  "] --> B["  Hermes  "]
+    C["  NFT  "] --> D["  Solana  "]
+    E["  xSPECTAR  "] --> F["  XRPL  "]
+    G["  Gaze  "] --> H["  AARON  "]
 
-    subgraph Registration["On-Chain Registration"]
-        SOL --> REG["Agent PDA"]
-        REG --> SKILLS["Skill Registry"]
-        REG --> REP["Reputation Score"]
-        REG --> WAL["Agent Wallets"]
-    end
+    D --> I["  PDA  "]
+    I --> J["  Skills  "]
+    I --> K["  Rep  "]
+    I --> L["  Wallets  "]
 
-    subgraph Wallets["Multi-Chain Wallets"]
-        WAL --> SOL_W["Solana<br/>EFvgELE1Hb4..."]
-        WAL --> ETH_W["ETH/Base<br/>0xB06c9B91Fa..."]
-        WAL --> MPX_W["Metaplex<br/>G8MxbW8LKE..."]
-        WAL --> XRPL_W["XRPL<br/>rq9mNYMKhz..."]
-    end
-```
+    L --> M["  SOL  "]
+    L --> N["  ETH  "]
+    L --> O["  MPX  "]
+    L --> P["  XRP  "]
+
+    style A fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style B fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style C fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style D fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style F fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style G fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style H fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style I fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style J fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style K fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style L fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style M fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style N fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style O fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style P fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+`} />
+
+| Node | Layer | Description |
+|------|-------|-------------|
+| **SOUL** | <span style={{color:"#eab308"}}>Identity</span> | SOUL.md — AstroJOE personality + capabilities |
+| **Hermes** | <span style={{color:"#eab308"}}>Identity</span> | Hermes Agent container (brain) |
+| **NFT** | <span style={{color:"#eab308"}}>Identity</span> | Metaplex Core Asset on Solana |
+| **xSPEC** | <span style={{color:"#eab308"}}>Identity</span> | xSPECTAR soul-bound NFTs on XRPL |
+| **Gaze** | <span style={{color:"#eab308"}}>Identity</span> | Biometric gaze attestation |
+| **AARON** | <span style={{color:"#eab308"}}>Identity</span> | AARON Router — gaze verification |
+| **PDA** | <span style={{color:"#60a5fa"}}>On-Chain</span> | Agent Program Derived Address |
+| **Skills** | <span style={{color:"#60a5fa"}}>On-Chain</span> | On-chain skill registry |
+| **Rep** | <span style={{color:"#60a5fa"}}>On-Chain</span> | On-chain reputation score |
+| **Wallets** | <span style={{color:"#60a5fa"}}>On-Chain</span> | Multi-chain wallet index |
+| **SOL** | <span style={{color:"#f43f5e"}}>Wallet</span> | Solana wallet |
+| **ETH** | <span style={{color:"#f43f5e"}}>Wallet</span> | ETH / Base wallet |
+| **MPX** | <span style={{color:"#f43f5e"}}>Wallet</span> | Metaplex identity wallet |
+| **XRP** | <span style={{color:"#f43f5e"}}>Wallet</span> | XRPL wallet |
 
 ## Metaplex Agent NFT
 

@@ -4,39 +4,48 @@ title: Gaze-Gated Policy
 description: Biometric verification flow for sensitive operations — AARON Router creates gaze challenges that gate task execution.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Gaze-Gated Policy Enforcement
 
 Tasks flagged with `gaze_required: true` require biometric verification before an agent can claim them.
 
-```mermaid
-sequenceDiagram
-    participant Agent as AstroJOE
-    participant API as hermes-optx-api
-    participant AARON as AARON Router
-    participant User as User (Mobile)
-    participant STDB as SpacetimeDB
+<Mermaid chart={`sequenceDiagram
+    participant JOE
+    participant API
+    participant AAR
+    participant USR
+    participant DB
 
-    Agent->>API: POST /api/tasks/{id}/claim
-    API->>API: Check task.gaze_required
+    JOE->>API: Claim task
+    API->>API: Check gaze flag
 
     alt Gaze Required
-        API->>AARON: POST /session (create challenge)
-        AARON-->>API: {session_id, qr_code}
-        API-->>Agent: Awaiting gaze verification
+        API->>AAR: Create session
+        AAR-->>API: Session + QR
+        API-->>JOE: Awaiting gaze
 
-        User->>AARON: Perform gaze sequence (4-6 positions, ≥500ms hold)
-        AARON->>AARON: Classify COG/EMO/ENV tensors
-        AARON->>AARON: Entropy scoring
-        AARON->>STDB: store_gaze_attestation
-        AARON-->>API: Verification passed
+        USR->>AAR: Gaze sequence
+        AAR->>AAR: Classify AGT
+        AAR->>AAR: Entropy score
+        AAR->>DB: Store attestation
+        AAR-->>API: Verified
 
-        API->>STDB: Update task → InProgress
-        API-->>Agent: Claim approved
-    else No Gaze Required
-        API->>STDB: Update task → InProgress
-        API-->>Agent: Claim approved
+        API->>DB: Status → InProgress
+        API-->>JOE: Approved
+    else No Gaze
+        API->>DB: Status → InProgress
+        API-->>JOE: Approved
     end
-```
+`} />
+
+| Code | Full Name | Role |
+|------|-----------|------|
+| **JOE** | AstroJOE | Agent claiming the task |
+| **API** | hermes-optx-api | Task orchestration API |
+| **AAR** | AARON Router | Gaze verification on Jetson |
+| **USR** | User (Mobile) | Human performing gaze sequence |
+| **DB** | SpacetimeDB | Edge database for attestations |
 
 ## AGT Tensor Classification
 

@@ -1,0 +1,117 @@
+---
+icon: Globe
+title: XRPL via Wormhole
+description: XRPL to Solana pipeline — Wormhole NTT, native USDC burn/mint, TraderJoe Swarm, and xSPECTAR agent NFTs.
+---
+
+import { Mermaid } from "@/components/mermaid";
+
+The **XRPL bridge** connects the XRP Ledger to Solana through **Wormhole NTT (Native Token Transfers)**. This path handles USDC flows, autonomous trading agents, and xSPECTAR NFTs for agent identity.
+
+## Pipeline
+
+<Mermaid chart={`flowchart TD
+    A["  r9  "] --> B["  Xaman  "]
+    B --> C["  TJ  "]
+    C --> D["  USDC  "]
+    D --> E["  Guards  "]
+    E --> F["  VAA  "]
+    F --> G["  NTT  "]
+    G --> H["  USDC  "]
+    H --> I["  AgenC  "]
+    I --> J["  SubJOE  "]
+
+    style A fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style B fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style C fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style D fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
+    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style F fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style G fill:#1a1a2e,stroke:#eab308,color:#eab308
+    style H fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style I fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+    style J fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
+`} />
+
+| Node | Zone | Description |
+|------|------|-------------|
+| **r9** | <span style={{color:"#f43f5e"}}>XRPL</span> | Primary wallet (`rq9mNYMK...`) |
+| **Xaman** | <span style={{color:"#f43f5e"}}>XRPL</span> | Payload signing (zero seed exposure) |
+| **TJ** | <span style={{color:"#f43f5e"}}>XRPL</span> | TraderJoe — 4 autonomous trading agents |
+| **USDC** | <span style={{color:"#f43f5e"}}>XRPL</span> | Circle USDC source |
+| **Guards** | <span style={{color:"#eab308"}}>Wormhole</span> | 19 guardian validator nodes |
+| **VAA** | <span style={{color:"#eab308"}}>Wormhole</span> | Verified Action Approval (13/19 quorum) |
+| **NTT** | <span style={{color:"#eab308"}}>Wormhole</span> | NTT Transceiver with `jett_vault` PDA |
+| **USDC** | <span style={{color:"#60a5fa"}}>Solana</span> | Circle USDC minted on Solana |
+| **AgenC** | <span style={{color:"#60a5fa"}}>Solana</span> | SubJOE agent coordination hub |
+| **SubJOE** | <span style={{color:"#60a5fa"}}>Solana</span> | Sub-agent executing DeFi ops |
+
+## Wormhole NTT
+
+Native Token Transfers burn on the source chain and mint on the destination — no wrapped tokens, no liquidity pools.
+
+| Parameter | Value |
+|-----------|-------|
+| **Guardian Nodes** | 19 |
+| **Quorum** | 13/19 |
+| **Transceiver** | Custom OPTX with `jett_vault` PDA |
+| **Asset** | Circle USDC (native burn/mint) |
+
+## TraderJoe Swarm
+
+Four autonomous agents operate on XRPL, managed through the Xaman wallet with zero seed exposure:
+
+| Agent | Strategy | Role |
+|-------|----------|------|
+| **TraderJoe1** | Passive LP | XRP/RLUSD liquidity provision, auto-compounding |
+| **TraderJoe2** | Lag Monitor | 30s oracle monitoring, latency arbitrage detection |
+| **TraderJoe3** | Hooks | Xahau Hooks rebalancing (paper mode) |
+| **TraderJoe4** | Grid | 6% range, 10-level grid RLUSD/XRP + USDC/XRP |
+
+### XRPL Wallet
+
+| Field | Value |
+|-------|-------|
+| **Address** | `rq9mNYMKhzy9EgmBmwfWKn6fs5qgPpVmk` |
+| **Domain** | `joe.agent` |
+| **Signing** | Xaman payload signing only (no seed exposure) |
+
+## xSPECTAR Agent NFTs
+
+xSPECTAR NFTs on XRPL serve as **agent soul tokens** — on-chain identity primitives for SubJOE agents.
+
+| Token ID | Purpose |
+|----------|---------|
+| `001822B0A74828D69FAA2496A8EB51C1` | Agent identity + staking |
+| `5EA0FBF4E90A345EC89FD09604732433` | Agent identity + staking |
+
+These NFTs represent the agent's on-chain presence on XRPL, complementing the Metaplex Core Asset registration on Solana. Together they form a **cross-chain agent identity** — XRPL for trading operations, Solana for verification and proofs.
+
+## Payment Loop (MPO Tempo x402)
+
+Revenue from TraderJoe operations flows through the full cycle:
+
+```text
+XRPL (TraderJoe earnings)
+  → Wormhole NTT (USDC burn/mint)
+    → Solana (AgenC Hub)
+      → SubJOE Agents (DeFi operations)
+        → MPO Tempo x402 (agent-to-agent payments)
+          → XRPL (back to r9 wallet)
+```
+
+## AARON Interaction
+
+AARON validates the **Solana side** of the bridge:
+
+- Verifies gaze attestations before authorizing outbound USDC transfers
+- Validates incoming Wormhole VAA signatures via the NTT Transceiver
+- Records bridge events as gaze attestations in SpacetimeDB
+
+AARON does **not** operate on XRPL. The TraderJoe Swarm and Xaman signing handle XRPL-side security independently.
+
+## Related
+
+- [Cross-Chain Bridge Flow](/docs/architecture/bridge-flow) — Full pipeline diagram
+- [Agent Identity](/docs/architecture/agent-identity) — Cross-chain identity model
+- [Solana Native](/docs/on-chain-bridge/solana-native) — Home chain operations

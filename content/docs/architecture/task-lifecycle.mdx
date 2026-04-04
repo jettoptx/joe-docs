@@ -4,41 +4,52 @@ title: Task Lifecycle
 description: Happy path sequence diagram — from task creation through HEDGEHOG execution to completion.
 ---
 
+import { Mermaid } from "@/components/mermaid";
+
 ## Task Lifecycle (Happy Path)
 
 The complete success workflow from user request through agent execution to result storage.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Workspace as Hermes Workspace
-    participant API as hermes-optx-api
-    participant STDB as SpacetimeDB
-    participant Agent as AstroJOE
-    participant HH as HEDGEHOG
-    participant Grok as Grok 4.20
+<Mermaid chart={`sequenceDiagram
+    participant USR
+    participant WS
+    participant API
+    participant DB
+    participant JOE
+    participant HH
+    participant GRK
 
-    User->>Workspace: Submit task
-    Workspace->>API: POST /api/tasks
-    API->>STDB: store_memory(category=task)
-    STDB-->>API: task_id
-    API-->>Workspace: {task_id, status: Open}
+    USR->>WS: Submit task
+    WS->>API: Create task
+    API->>DB: Store task
+    DB-->>API: task_id
+    API-->>WS: Open
 
-    Agent->>STDB: Subscribe to open tasks
-    STDB-->>Agent: New task notification
-    Agent->>API: POST /api/tasks/{id}/claim
-    API->>STDB: Update status → InProgress
+    JOE->>DB: Subscribe
+    DB-->>JOE: New task
+    JOE->>API: Claim
+    API->>DB: → InProgress
 
-    Agent->>HH: Execute via HEDGEHOG skill
-    HH->>Grok: /v1/chat/completions
-    Grok-->>HH: Result
-    HH-->>Agent: Response
+    JOE->>HH: Execute skill
+    HH->>GRK: Query
+    GRK-->>HH: Result
+    HH-->>JOE: Response
 
-    Agent->>API: POST /api/tasks/{id}/complete
-    API->>STDB: Update status → Completed
-    API->>API: Check DAG dependencies
-    API-->>Workspace: Task complete notification
-```
+    JOE->>API: Complete
+    API->>DB: → Completed
+    API->>API: Check DAG
+    API-->>WS: Done
+`} />
+
+| Code | Full Name | Role |
+|------|-----------|------|
+| **USR** | User | Task creator |
+| **WS** | Hermes Workspace | Agent workspace UI |
+| **API** | hermes-optx-api | Task orchestration API |
+| **DB** | SpacetimeDB | Edge database |
+| **JOE** | AstroJOE | Executing agent |
+| **HH** | HEDGEHOG | AI gateway (Grok proxy) |
+| **GRK** | Grok 4.20 | LLM inference |
 
 ## Key Concepts
 
