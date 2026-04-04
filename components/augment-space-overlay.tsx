@@ -9,11 +9,13 @@ const MoaVisual = dynamic(() => import("@/components/moa-visual").then(m => ({ d
 });
 
 export function AugmentSpaceOverlay() {
-  const [open, setOpen] = useState(true); // default ON
+  // Default ON for desktop, OFF for mobile so docs are readable
+  const [open, setOpen] = useState(false);
 
-  // Sync button glow on mount
   useEffect(() => {
-    if (open) {
+    const isDesktop = window.innerWidth >= 768;
+    if (isDesktop) {
+      setOpen(true);
       document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
     }
   }, []);

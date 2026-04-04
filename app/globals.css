@@ -730,9 +730,35 @@ aside#nd-sidebar a[data-active="true"]::before {
 
 /* ═══ Mobile sidebar rail — offset content so it isn't hidden behind the 52px icon rail ═══ */
 @media (max-width: 767px) {
+  /* Override fumadocs grid — give all space to main content, hide sidebar/toc columns */
+  #nd-docs-layout {
+    grid-template-columns: 0px 0px 1fr 0px 0px !important;
+  }
+
+  /* Hide fumadocs sidebar on mobile — we use our own mobile sidebar rail */
+  #nd-docs-layout [data-sidebar-placeholder],
+  #nd-docs-layout > div:has(> aside#nd-sidebar),
+  aside#nd-sidebar {
+    display: none !important;
+  }
+
   /* Push the entire DocsLayout content area to the right of the 52px rail */
   .mobile-docs-offset {
     margin-left: 52px;
+  }
+
+  /* Reduce content padding so text fills available space */
+  .mobile-docs-offset article {
+    padding-left: 0.75rem !important;
+    padding-right: 0.5rem !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Ensure tables scroll horizontally on mobile */
+  .mobile-docs-offset table {
+    display: block !important;
+    overflow-x: auto !important;
   }
 
   /* Keep the fixed header full-width (it already goes edge-to-edge) */
