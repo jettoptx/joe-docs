@@ -10,6 +10,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Pre } from "@/components/mdx-components";
 import { AgtBadge } from "@/components/agt-badge";
 import { CopyForAgentsBtn } from "@/components/copy-for-agents-btn";
+import { CopyForAgents } from "@/components/copy-for-agents";
 import type { Metadata } from "next";
 import { readFileSync } from "node:fs";
 
