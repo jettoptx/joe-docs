@@ -300,16 +300,31 @@ nav[aria-label="breadcrumb"] {
   overflow: visible !important;
 }
 
-/* Sidebar flush to left edge, tight & full height */
+/* Sidebar flush to left edge, tight & full height — always latched */
 aside[data-fd-sidebar] {
   display: flex !important;
   flex-direction: column !important;
   border-right: 1px solid var(--fd-border) !important;
+  position: sticky !important;
+  top: 3.5rem !important;
   left: 0 !important;
   padding-left: 0 !important;
   margin-left: 0 !important;
   width: 240px !important;
   min-width: 240px !important;
+  height: calc(100dvh - 3.5rem) !important;
+  align-self: flex-start !important;
+  flex-shrink: 0 !important;
+  overflow-y: auto !important;
+  z-index: 30 !important;
+}
+
+/* Remove any fumadocs wrapper gap/padding that pushes sidebar inward */
+#nd-docs-layout > div,
+#nd-docs-layout > div > div {
+  gap: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 aside[data-fd-sidebar] > div {
@@ -385,9 +400,9 @@ aside[data-fd-sidebar] [data-fd-sidebar-footer] {
 
 /* Architecture = COG (blue) — already default */
 
-/* DOJO = EMO (red) */
-[data-fd-sidebar] [data-fd-sidebar-group-label*="OJO"]::before,
-[data-fd-sidebar] [data-fd-sidebar-group-label*="ojo"]::before {
+/* Jett Optical Encryption = EMO (red) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="Jett"]::before,
+[data-fd-sidebar] [data-fd-sidebar-group-label*="Optical"]::before {
   background-color: #f43f5e !important;
 }
 
