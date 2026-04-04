@@ -1,19 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import Link from "next/link";
 
 type AGT = "COG" | "EMO" | "ENV";
 
-interface Node {
+interface DocNode {
   id: string;
   label: string;
   group: string;
   agt: AGT;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
   href: string;
   description: string;
 }
@@ -23,116 +19,88 @@ interface Edge {
   target: string;
 }
 
-// AGT tensor colors — these are the primary visual system
-export const AGT_COLORS: Record<AGT, { color: string; glow: string; label: string }> = {
-  COG: { color: "#60a5fa", glow: "rgba(96,165,250,0.45)", label: "Cognitive" },
-  EMO: { color: "#f43f5e", glow: "rgba(244,63,94,0.45)", label: "Emotional" },
-  ENV: { color: "#4ade80", glow: "rgba(74,222,128,0.45)", label: "Environmental" },
+export const AGT_COLORS: Record<AGT, { color: string; label: string; dim: string }> = {
+  COG: { color: "#60a5fa", label: "Cognitive", dim: "rgba(96,165,250,0.12)" },
+  EMO: { color: "#f43f5e", label: "Emotional", dim: "rgba(244,63,94,0.12)" },
+  ENV: { color: "#4ade80", label: "Environmental", dim: "rgba(74,222,128,0.12)" },
 };
 
-// Section colors (subtle ring, secondary to AGT)
-const SECTION_RING: Record<string, string> = {
-  root: "#ff6900",
-  "getting-started": "#22d3ee",
-  authentication: "#a855f7",
-  protocol: "#f43f5e",
-  astrojoe: "#4ade80",
-  cockpit: "#facc15",
-  architecture: "#60a5fa",
-  infrastructure: "#f97316",
-  reference: "#e879f9",
-  dojo: "#34d399",
+const GROUPS: Record<string, { label: string; order: number }> = {
+  "getting-started": { label: "Getting Started", order: 0 },
+  authentication: { label: "Authentication", order: 1 },
+  protocol: { label: "Protocol — AARON", order: 2 },
+  astrojoe: { label: "AstroJOE — Agent OS", order: 3 },
+  cockpit: { label: "Cockpit", order: 4 },
+  architecture: { label: "Architecture Flows", order: 5 },
+  infrastructure: { label: "Infrastructure", order: 6 },
+  reference: { label: "Reference", order: 7 },
+  dojo: { label: "DOJO", order: 8 },
 };
 
-// Every doc page tagged with its primary AGT tensor
-// COG = conceptual, architectural, how-things-work pages
-// EMO = identity, personality, agent-facing, human-interaction pages
-// ENV = infrastructure, network, spatial, environmental pages
-const DOC_NODES: Omit<Node, "x" | "y" | "vx" | "vy">[] = [
-  // Root
-  { id: "index", label: "OPTX Docs", group: "root", agt: "COG", radius: 30, href: "/docs", description: "Documentation home — conceptual entry point" },
-
+const DOC_NODES: DocNode[] = [
   // Getting Started
-  { id: "what-is-optx", label: "What is OPTX?", group: "getting-started", agt: "COG", radius: 20, href: "/docs/getting-started/what-is-optx", description: "Core concepts, naming hierarchy, protocol overview" },
-  { id: "architecture-overview", label: "Architecture", group: "getting-started", agt: "COG", radius: 18, href: "/docs/getting-started/architecture", description: "End-to-end system architecture from client to chain" },
-  { id: "on-chain", label: "On-Chain Addresses", group: "getting-started", agt: "ENV", radius: 16, href: "/docs/getting-started/on-chain-addresses", description: "Solana program addresses, token mints, wallets" },
+  { id: "what-is-optx", label: "What is OPTX?", group: "getting-started", agt: "COG", href: "/docs/getting-started/what-is-optx", description: "Core concepts, naming hierarchy, protocol overview" },
+  { id: "architecture-overview", label: "Architecture", group: "getting-started", agt: "COG", href: "/docs/getting-started/architecture", description: "End-to-end system architecture from client to chain" },
+  { id: "on-chain", label: "On-Chain Addresses", group: "getting-started", agt: "ENV", href: "/docs/getting-started/on-chain-addresses", description: "Solana program addresses, token mints, wallets" },
 
   // Authentication
-  { id: "gaze", label: "Gaze Verification", group: "authentication", agt: "EMO", radius: 20, href: "/docs/authentication/gaze", description: "AGT biometric auth — iris tracking, tensor classification" },
-  { id: "wallet", label: "Agent Wallet", group: "authentication", agt: "ENV", radius: 18, href: "/docs/authentication/wallet", description: "ERC-8004 soulbound wallet for computational identity" },
+  { id: "gaze", label: "Gaze Verification", group: "authentication", agt: "EMO", href: "/docs/authentication/gaze", description: "AGT biometric auth — iris tracking, tensor classification" },
+  { id: "wallet", label: "Agent Wallet", group: "authentication", agt: "ENV", href: "/docs/authentication/wallet", description: "ERC-8004 soulbound wallet for computational identity" },
 
-  // Protocol (AARON)
-  { id: "aaron-protocol", label: "AARON Protocol", group: "protocol", agt: "COG", radius: 20, href: "/docs/protocol", description: "Biometric proof protocol and edge router" },
-  { id: "biometric-proof", label: "Biometric Proof", group: "protocol", agt: "EMO", radius: 16, href: "/docs/protocol/biometric-proof", description: "Gaze-derived cryptographic proofs" },
-  { id: "how-it-works", label: "How It Works", group: "protocol", agt: "COG", radius: 16, href: "/docs/protocol/how-it-works", description: "AARON verification flow step-by-step" },
-  { id: "client-integration", label: "Client Integration", group: "protocol", agt: "ENV", radius: 14, href: "/docs/protocol/client-integration", description: "Integrating AARON into client applications" },
-  { id: "aaron-arch", label: "AARON Architecture", group: "protocol", agt: "COG", radius: 16, href: "/docs/protocol/architecture", description: "Internal architecture of the AARON router" },
+  // Protocol
+  { id: "aaron-protocol", label: "AARON Protocol", group: "protocol", agt: "COG", href: "/docs/protocol", description: "Biometric proof protocol and edge router" },
+  { id: "biometric-proof", label: "Biometric Proof", group: "protocol", agt: "EMO", href: "/docs/protocol/biometric-proof", description: "Gaze-derived cryptographic proofs" },
+  { id: "how-it-works", label: "How It Works", group: "protocol", agt: "COG", href: "/docs/protocol/how-it-works", description: "AARON verification flow step-by-step" },
+  { id: "client-integration", label: "Client Integration", group: "protocol", agt: "ENV", href: "/docs/protocol/client-integration", description: "Integrating AARON into client applications" },
+  { id: "aaron-arch", label: "AARON Architecture", group: "protocol", agt: "COG", href: "/docs/protocol/architecture", description: "Internal architecture of the AARON router" },
 
   // AstroJOE
-  { id: "astrojoe", label: "AstroJOE", group: "astrojoe", agt: "EMO", radius: 22, href: "/docs/astrojoe", description: "Intelligent agent orchestrating the OPTX ecosystem" },
-  { id: "skills", label: "Skills System", group: "astrojoe", agt: "COG", radius: 16, href: "/docs/astrojoe/skills", description: "SKILL.md format, progressive disclosure, augments" },
-  { id: "memory", label: "Memory", group: "astrojoe", agt: "COG", radius: 16, href: "/docs/astrojoe/memory", description: "SpacetimeDB memory — tables, reducers, API" },
-  { id: "orchestration", label: "Orchestration", group: "astrojoe", agt: "COG", radius: 16, href: "/docs/astrojoe/orchestration", description: "Task lifecycle, DAG swarm coordination" },
-  { id: "hedgehog-doc", label: "HEDGEHOG Gateway", group: "astrojoe", agt: "ENV", radius: 18, href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway on edge hardware" },
-  { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "ENV", radius: 16, href: "/docs/astrojoe/api", description: "hermes-optx-api endpoints and configuration" },
+  { id: "astrojoe", label: "AstroJOE", group: "astrojoe", agt: "EMO", href: "/docs/astrojoe", description: "Intelligent agent orchestrating the OPTX ecosystem" },
+  { id: "skills", label: "Skills System", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/skills", description: "SKILL.md format, progressive disclosure, augments" },
+  { id: "memory", label: "Memory", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/memory", description: "SpacetimeDB memory — tables, reducers, API" },
+  { id: "orchestration", label: "Orchestration", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/orchestration", description: "Task lifecycle, DAG swarm coordination" },
+  { id: "hedgehog-doc", label: "HEDGEHOG Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway on edge hardware" },
+  { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/api", description: "Hermes OPTX API endpoints and configuration" },
 
   // Cockpit
-  { id: "cockpit", label: "OPTX Cockpit", group: "cockpit", agt: "EMO", radius: 18, href: "/docs/cockpit", description: "Interactive operator dashboard with live diagrams" },
+  { id: "cockpit", label: "OPTX Cockpit", group: "cockpit", agt: "EMO", href: "/docs/cockpit", description: "Interactive operator dashboard with live diagrams" },
 
   // Architecture Flows
-  { id: "arch-flows", label: "Architecture Flows", group: "architecture", agt: "COG", radius: 18, href: "/docs/architecture", description: "Mermaid diagrams for every major system flow" },
-  { id: "task-lifecycle", label: "Task Lifecycle", group: "architecture", agt: "COG", radius: 14, href: "/docs/architecture/task-lifecycle", description: "Happy path: task creation to completion" },
-  { id: "swarm-dag", label: "Swarm DAG", group: "architecture", agt: "COG", radius: 14, href: "/docs/architecture/swarm-dag", description: "Multi-agent DAG decomposition" },
-  { id: "gaze-policy", label: "Gaze Policy", group: "architecture", agt: "EMO", radius: 14, href: "/docs/architecture/gaze-policy", description: "Gaze-gated task authorization flow" },
-  { id: "bridge-flow", label: "Bridge Flow", group: "architecture", agt: "ENV", radius: 14, href: "/docs/architecture/bridge-flow", description: "XRPL → Wormhole → Solana pipeline" },
-  { id: "agent-identity", label: "Agent Identity", group: "architecture", agt: "EMO", radius: 14, href: "/docs/architecture/agent-identity", description: "Identity sources → on-chain registration" },
-  { id: "task-states", label: "Task States", group: "architecture", agt: "COG", radius: 14, href: "/docs/architecture/task-states", description: "State machine: Discovered → Completed/Failed" },
-  { id: "topology", label: "Topology", group: "architecture", agt: "ENV", radius: 14, href: "/docs/architecture/topology", description: "Full network map of all OPTX services" },
+  { id: "arch-flows", label: "Architecture Flows", group: "architecture", agt: "COG", href: "/docs/architecture", description: "Mermaid diagrams for every major system flow" },
+  { id: "task-lifecycle", label: "Task Lifecycle", group: "architecture", agt: "COG", href: "/docs/architecture/task-lifecycle", description: "Happy path: task creation to completion" },
+  { id: "swarm-dag", label: "Swarm DAG", group: "architecture", agt: "COG", href: "/docs/architecture/swarm-dag", description: "Multi-agent DAG decomposition" },
+  { id: "gaze-policy", label: "Gaze Policy", group: "architecture", agt: "EMO", href: "/docs/architecture/gaze-policy", description: "Gaze-gated task authorization flow" },
+  { id: "bridge-flow", label: "Bridge Flow", group: "architecture", agt: "ENV", href: "/docs/architecture/bridge-flow", description: "XRPL → Wormhole → Solana pipeline" },
+  { id: "agent-identity", label: "Agent Identity", group: "architecture", agt: "EMO", href: "/docs/architecture/agent-identity", description: "Identity sources → on-chain registration" },
+  { id: "task-states", label: "Task States", group: "architecture", agt: "COG", href: "/docs/architecture/task-states", description: "State machine: Discovered → Completed/Failed" },
+  { id: "topology", label: "Topology", group: "architecture", agt: "ENV", href: "/docs/architecture/topology", description: "Full network map of all OPTX services" },
 
   // Infrastructure
-  { id: "edge-mcp", label: "Edge MCP", group: "infrastructure", agt: "ENV", radius: 18, href: "/docs/infrastructure/edge", description: "HEDGEHOG on Jetson Orin Nano edge node" },
-  { id: "bridge", label: "Bridge", group: "infrastructure", agt: "ENV", radius: 16, href: "/docs/infrastructure/bridge", description: "Cross-chain bridging infrastructure" },
-  { id: "depin", label: "DePIN", group: "infrastructure", agt: "ENV", radius: 16, href: "/docs/infrastructure/depin", description: "CSTB Trust DePIN attestation on Solana" },
+  { id: "edge-mcp", label: "Edge MCP", group: "infrastructure", agt: "ENV", href: "/docs/infrastructure/edge", description: "HEDGEHOG on OPTX Validator Node edge compute" },
+  { id: "bridge", label: "Bridge", group: "infrastructure", agt: "ENV", href: "/docs/infrastructure/bridge", description: "Cross-chain bridging infrastructure" },
+  { id: "depin", label: "DePIN", group: "infrastructure", agt: "ENV", href: "/docs/infrastructure/depin", description: "CSTB Trust DePIN attestation on Solana" },
 
   // Reference
-  { id: "api-ref", label: "API Reference", group: "reference", agt: "COG", radius: 18, href: "/docs/reference/api", description: "WebSocket RPC, REST endpoints, capabilities" },
+  { id: "api-ref", label: "API Reference", group: "reference", agt: "COG", href: "/docs/reference/api", description: "WebSocket RPC, REST endpoints, capabilities" },
 
   // DOJO
-  { id: "dojo", label: "DOJO", group: "dojo", agt: "EMO", radius: 20, href: "/docs/dojo", description: "Training ground, augments, and gaze-navigable exploration" },
-  { id: "moa", label: "Map of Augments", group: "dojo", agt: "EMO", radius: 16, href: "/docs/dojo/moa", description: "Interactive force-directed documentation graph" },
+  { id: "dojo", label: "DOJO", group: "dojo", agt: "EMO", href: "/docs/dojo", description: "Training ground, augments, gaze-navigable exploration" },
+  { id: "moa", label: "Map of Augments", group: "dojo", agt: "EMO", href: "/docs/dojo/moa", description: "This page — semantic explorer for the documentation graph" },
 ];
 
 const DOC_EDGES: Edge[] = [
-  // Root -> sections
-  { source: "index", target: "what-is-optx" },
-  { source: "index", target: "astrojoe" },
-  { source: "index", target: "cockpit" },
-  { source: "index", target: "arch-flows" },
-  { source: "index", target: "gaze" },
-  { source: "index", target: "aaron-protocol" },
-  { source: "index", target: "edge-mcp" },
-  { source: "index", target: "api-ref" },
-  { source: "index", target: "dojo" },
-
-  // Getting Started
   { source: "what-is-optx", target: "architecture-overview" },
   { source: "what-is-optx", target: "on-chain" },
   { source: "architecture-overview", target: "on-chain" },
-
-  // Auth
   { source: "gaze", target: "aaron-protocol" },
   { source: "gaze", target: "biometric-proof" },
   { source: "wallet", target: "on-chain" },
   { source: "wallet", target: "agent-identity" },
-
-  // Protocol
   { source: "aaron-protocol", target: "biometric-proof" },
   { source: "aaron-protocol", target: "how-it-works" },
   { source: "aaron-protocol", target: "client-integration" },
   { source: "aaron-protocol", target: "aaron-arch" },
   { source: "biometric-proof", target: "gaze" },
-
-  // AstroJOE
   { source: "astrojoe", target: "skills" },
   { source: "astrojoe", target: "memory" },
   { source: "astrojoe", target: "orchestration" },
@@ -145,8 +113,6 @@ const DOC_EDGES: Edge[] = [
   { source: "orchestration", target: "swarm-dag" },
   { source: "hedgehog-doc", target: "edge-mcp" },
   { source: "hermes-api", target: "api-ref" },
-
-  // Architecture
   { source: "arch-flows", target: "task-lifecycle" },
   { source: "arch-flows", target: "swarm-dag" },
   { source: "arch-flows", target: "gaze-policy" },
@@ -159,330 +125,340 @@ const DOC_EDGES: Edge[] = [
   { source: "gaze-policy", target: "aaron-protocol" },
   { source: "bridge-flow", target: "bridge" },
   { source: "agent-identity", target: "on-chain" },
-
-  // Infrastructure
   { source: "edge-mcp", target: "topology" },
   { source: "bridge", target: "bridge-flow" },
   { source: "depin", target: "on-chain" },
-
-  // Cockpit
   { source: "cockpit", target: "arch-flows" },
   { source: "cockpit", target: "topology" },
-
-  // DOJO
   { source: "dojo", target: "skills" },
   { source: "dojo", target: "moa" },
 ];
 
-function initNodes(w: number, h: number): Node[] {
-  const cx = w / 2, cy = h / 2;
-  return DOC_NODES.map((n, i) => {
-    const angle = (i / DOC_NODES.length) * Math.PI * 2;
-    const r = 100 + Math.random() * 180;
-    return {
-      ...n,
-      x: cx + Math.cos(angle) * r,
-      y: cy + Math.sin(angle) * r,
-      vx: 0,
-      vy: 0,
-    };
-  });
+function getConnections(nodeId: string): string[] {
+  const ids: string[] = [];
+  for (const e of DOC_EDGES) {
+    if (e.source === nodeId) ids.push(e.target);
+    if (e.target === nodeId) ids.push(e.source);
+  }
+  return ids;
 }
 
 export function MoaGraph() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const nodesRef = useRef<Node[]>([]);
-  const [hovered, setHovered] = useState<Node | null>(null);
-  const [selected, setSelected] = useState<Node | null>(null);
-  const [dragging, setDragging] = useState<Node | null>(null);
-  const animRef = useRef<number>(0);
-  const [dims, setDims] = useState({ w: 800, h: 600 });
-  const initialized = useRef(false);
+  const [search, setSearch] = useState("");
+  const [activeAgt, setActiveAgt] = useState<AGT | null>(null);
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const getConnected = useCallback((nodeId: string) => {
-    const ids = new Set<string>();
-    DOC_EDGES.forEach((e) => {
-      if (e.source === nodeId) ids.add(e.target);
-      if (e.target === nodeId) ids.add(e.source);
-    });
-    return ids;
-  }, []);
-
+  // Keyboard shortcut: / to focus search
   useEffect(() => {
-    const resize = () => {
-      const el = canvasRef.current?.parentElement;
-      if (el) {
-        const w = el.clientWidth;
-        const h = Math.max(520, Math.min(720, window.innerHeight - 200));
-        setDims({ w, h });
-        if (!initialized.current) {
-          nodesRef.current = initNodes(w, h);
-          initialized.current = true;
-        }
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "/" && document.activeElement?.tagName !== "INPUT") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key === "Escape") {
+        setSearch("");
+        setActiveAgt(null);
+        setActiveGroup(null);
+        searchRef.current?.blur();
       }
     };
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const nodes = nodesRef.current;
-    if (nodes.length === 0) return;
-
-    const cx = dims.w / 2, cy = dims.h / 2;
-
-    function simulate() {
-      for (const n of nodes) {
-        n.vx += (cx - n.x) * 0.0008;
-        n.vy += (cy - n.y) * 0.0008;
-      }
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[j].x - nodes[i].x;
-          const dy = nodes[j].y - nodes[i].y;
-          const dist = Math.max(Math.sqrt(dx * dx + dy * dy), 1);
-          const force = 600 / (dist * dist);
-          nodes[i].vx -= (dx / dist) * force;
-          nodes[i].vy -= (dy / dist) * force;
-          nodes[j].vx += (dx / dist) * force;
-          nodes[j].vy += (dy / dist) * force;
-        }
-      }
-      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
-      for (const e of DOC_EDGES) {
-        const s = nodeMap.get(e.source);
-        const t = nodeMap.get(e.target);
-        if (!s || !t) continue;
-        const dx = t.x - s.x;
-        const dy = t.y - s.y;
-        const dist = Math.max(Math.sqrt(dx * dx + dy * dy), 1);
-        const force = (dist - 90) * 0.002;
-        s.vx += (dx / dist) * force;
-        s.vy += (dy / dist) * force;
-        t.vx -= (dx / dist) * force;
-        t.vy -= (dy / dist) * force;
-      }
-      for (const n of nodes) {
-        if (dragging && n.id === dragging.id) continue;
-        n.vx *= 0.82;
-        n.vy *= 0.82;
-        n.x += n.vx * 0.3;
-        n.y += n.vy * 0.3;
-        n.x = Math.max(n.radius + 4, Math.min(dims.w - n.radius - 4, n.x));
-        n.y = Math.max(n.radius + 4, Math.min(dims.h - n.radius - 4, n.y));
-      }
+  const grouped = useMemo(() => {
+    const map: Record<string, DocNode[]> = {};
+    for (const n of DOC_NODES) {
+      if (!map[n.group]) map[n.group] = [];
+      map[n.group].push(n);
     }
+    return Object.entries(map)
+      .sort(([a], [b]) => (GROUPS[a]?.order ?? 99) - (GROUPS[b]?.order ?? 99));
+  }, []);
 
-    function draw() {
-      if (!ctx || !canvas) return;
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = dims.w * dpr;
-      canvas.height = dims.h * dpr;
-      ctx.scale(dpr, dpr);
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return grouped.map(([group, nodes]) => {
+      const filteredNodes = nodes.filter((n) => {
+        if (activeAgt && n.agt !== activeAgt) return false;
+        if (activeGroup && n.group !== activeGroup) return false;
+        if (q && !n.label.toLowerCase().includes(q) && !n.description.toLowerCase().includes(q)) return false;
+        return true;
+      });
+      return [group, filteredNodes] as [string, DocNode[]];
+    }).filter(([, nodes]) => nodes.length > 0);
+  }, [grouped, search, activeAgt, activeGroup]);
 
-      const isDark = document.documentElement.classList.contains("dark");
-      ctx.fillStyle = isDark ? "#0a0a0a" : "#fafafa";
-      ctx.fillRect(0, 0, dims.w, dims.h);
+  const totalFiltered = useMemo(() => filtered.reduce((s, [, n]) => s + n.length, 0), [filtered]);
 
-      // Subtle grid dots
-      ctx.fillStyle = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
-      for (let gx = 0; gx < dims.w; gx += 40) {
-        for (let gy = 0; gy < dims.h; gy += 40) {
-          ctx.beginPath();
-          ctx.arc(gx, gy, 1, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
+  const connectedTo = useMemo(() => {
+    if (!hoveredNode) return new Set<string>();
+    return new Set(getConnections(hoveredNode));
+  }, [hoveredNode]);
 
-      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
-      const activeId = selected?.id || hovered?.id;
-      const connected = activeId ? getConnected(activeId) : new Set<string>();
+  const scrollToGroup = useCallback((group: string) => {
+    setActiveGroup(null);
+    sectionRefs.current[group]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
-      // Edges
-      for (const e of DOC_EDGES) {
-        const s = nodeMap.get(e.source);
-        const t = nodeMap.get(e.target);
-        if (!s || !t) continue;
-        const isActive = activeId && (e.source === activeId || e.target === activeId);
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(t.x, t.y);
-        if (isActive) {
-          const agtColor = AGT_COLORS[s.agt].color;
-          ctx.strokeStyle = agtColor;
-          ctx.lineWidth = 2;
-        } else {
-          ctx.strokeStyle = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
-          ctx.lineWidth = 0.5;
-        }
-        ctx.stroke();
-      }
+  // Count nodes per group and AGT
+  const groupCounts = useMemo(() => {
+    const c: Record<string, number> = {};
+    for (const n of DOC_NODES) c[n.group] = (c[n.group] || 0) + 1;
+    return c;
+  }, []);
 
-      // Nodes
-      for (const n of nodes) {
-        const agt = AGT_COLORS[n.agt];
-        const sectionColor = SECTION_RING[n.group] || "#666";
-        const isActive = n.id === activeId;
-        const isConnected = connected.has(n.id);
-        const dimmed = activeId && !isActive && !isConnected;
-
-        // Outer glow for active node
-        if (isActive) {
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, n.radius + 12, 0, Math.PI * 2);
-          const grad = ctx.createRadialGradient(n.x, n.y, n.radius, n.x, n.y, n.radius + 16);
-          grad.addColorStop(0, agt.glow);
-          grad.addColorStop(1, "transparent");
-          ctx.fillStyle = grad;
-          ctx.fill();
-        }
-
-        // Node fill — AGT color
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-        ctx.fillStyle = dimmed
-          ? isDark ? "rgba(20,20,20,0.5)" : "rgba(230,230,230,0.5)"
-          : isActive ? agt.color : `${agt.color}bb`;
-        ctx.fill();
-
-        // Section ring (thin outer border)
-        ctx.strokeStyle = dimmed
-          ? isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"
-          : `${sectionColor}66`;
-        ctx.lineWidth = isActive ? 3 : 1.5;
-        ctx.stroke();
-
-        // AGT indicator dot (bottom-right)
-        if (!dimmed && n.radius >= 14) {
-          const dotX = n.x + n.radius * 0.65;
-          const dotY = n.y + n.radius * 0.65;
-          ctx.beginPath();
-          ctx.arc(dotX, dotY, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = agt.color;
-          ctx.fill();
-          ctx.strokeStyle = isDark ? "#0a0a0a" : "#fafafa";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        }
-
-        // Label
-        const fontSize = n.radius > 24 ? 11 : n.radius > 18 ? 9 : n.radius > 14 ? 8 : 7;
-        ctx.font = `600 ${fontSize}px ui-monospace, monospace`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = dimmed
-          ? isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
-          : "#fff";
-        ctx.fillText(n.label, n.x, n.y);
-      }
-
-      simulate();
-      animRef.current = requestAnimationFrame(draw);
-    }
-
-    draw();
-    return () => cancelAnimationFrame(animRef.current);
-  }, [dims, hovered, selected, dragging, getConnected]);
-
-  const findNode = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return null;
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      for (const n of nodesRef.current) {
-        const dx = n.x - x, dy = n.y - y;
-        if (dx * dx + dy * dy < n.radius * n.radius) return n;
-      }
-      return null;
-    },
-    []
-  );
+  const agtCounts = useMemo(() => {
+    const c: Record<AGT, number> = { COG: 0, EMO: 0, ENV: 0 };
+    for (const n of DOC_NODES) c[n.agt]++;
+    return c;
+  }, []);
 
   return (
-    <div className="relative w-full">
-      <canvas
-        ref={canvasRef}
-        width={dims.w}
-        height={dims.h}
-        className="w-full rounded-lg border border-fd-border cursor-crosshair"
-        style={{ height: dims.h }}
-        onMouseMove={(e) => {
-          const n = findNode(e);
-          setHovered(n);
-          if (dragging) {
-            const rect = canvasRef.current?.getBoundingClientRect();
-            if (rect) {
-              dragging.x = e.clientX - rect.left;
-              dragging.y = e.clientY - rect.top;
-              dragging.vx = 0;
-              dragging.vy = 0;
-            }
-          }
-        }}
-        onClick={(e) => {
-          const n = findNode(e);
-          if (n && selected?.id === n.id) {
-            window.location.href = n.href;
-          } else {
-            setSelected(n);
-          }
-        }}
-        onDoubleClick={(e) => {
-          const n = findNode(e);
-          if (n) window.location.href = n.href;
-        }}
-        onMouseDown={(e) => {
-          const n = findNode(e);
-          if (n) setDragging(n);
-        }}
-        onMouseUp={() => setDragging(null)}
-        onMouseLeave={() => {
-          setHovered(null);
-          setDragging(null);
-        }}
-      />
-
-      {/* AGT Legend */}
-      <div className="flex items-center gap-5 mt-4 font-[family-name:var(--font-geist-mono)]">
-        <span className="text-[10px] uppercase tracking-widest text-fd-muted-foreground/60 mr-1">AGT</span>
-        {(Object.entries(AGT_COLORS) as [AGT, typeof AGT_COLORS[AGT]][]).map(([key, agt]) => (
-          <span key={key} className="flex items-center gap-1.5 text-xs">
-            <span className="inline-block w-3 h-3 rounded-full border-2" style={{ backgroundColor: agt.color, borderColor: `${agt.color}66` }} />
-            <span style={{ color: agt.color }} className="font-bold">{key}</span>
-            <span className="text-fd-muted-foreground">{agt.label}</span>
-          </span>
-        ))}
-      </div>
-
-      {/* Info Panel */}
-      {(selected || hovered) && (() => {
-        const node = (selected || hovered)!;
-        const agt = AGT_COLORS[node.agt];
-        return (
-          <div className="absolute top-3 right-3 max-w-[260px] bg-fd-background/90 backdrop-blur-sm border border-fd-border rounded-lg p-3 font-[family-name:var(--font-geist-mono)]">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="inline-block w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: agt.color }} />
-              <span className="font-bold text-fd-foreground text-xs">{node.label}</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${agt.color}22`, color: agt.color }}>
-                {node.agt}
+    <div className="flex w-full min-h-[600px] font-[family-name:var(--font-geist-mono)] text-sm border border-fd-border rounded-lg overflow-hidden bg-fd-background">
+      {/* ── Sidebar ── */}
+      {sidebarOpen && (
+        <aside className="w-[220px] min-w-[220px] border-r border-fd-border flex flex-col bg-fd-card/50">
+          {/* Sidebar header */}
+          <div className="px-3 pt-3 pb-2 border-b border-fd-border/50">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] uppercase tracking-[0.12em] text-fd-muted-foreground/60 font-semibold">
+                Knowledge Map
               </span>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="text-fd-muted-foreground/40 hover:text-fd-muted-foreground text-xs transition-colors p-0.5"
+                aria-label="Collapse sidebar"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg>
+              </button>
             </div>
-            <p className="text-fd-muted-foreground text-[11px] leading-relaxed mb-2">
-              {node.description}
-            </p>
-            <div className="flex items-center justify-between">
-              <span className="text-fd-muted-foreground/50 text-[10px]">{node.group}</span>
-              <span className="text-[10px]" style={{ color: agt.color }}>click again to navigate</span>
+            {/* Search */}
+            <div className="relative">
+              <input
+                ref={searchRef}
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search nodes..."
+                className="w-full bg-fd-background border border-fd-border/60 rounded px-2.5 py-1.5 text-xs text-fd-foreground placeholder:text-fd-muted-foreground/40 focus:outline-none focus:border-fd-muted-foreground/30 transition-colors"
+              />
+              <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-fd-muted-foreground/30 border border-fd-border/40 rounded px-1 py-0.5">/</kbd>
             </div>
           </div>
-        );
-      })()}
+
+          {/* AGT Filter */}
+          <div className="px-3 py-2 border-b border-fd-border/50">
+            <span className="text-[10px] uppercase tracking-[0.1em] text-fd-muted-foreground/40 block mb-1.5">Tensor Filter</span>
+            <div className="flex flex-col gap-0.5">
+              {(["COG", "EMO", "ENV"] as AGT[]).map((agt) => {
+                const isActive = activeAgt === agt;
+                const c = AGT_COLORS[agt];
+                return (
+                  <button
+                    key={agt}
+                    onClick={() => setActiveAgt(isActive ? null : agt)}
+                    className="flex items-center gap-2 px-1.5 py-1 rounded text-left transition-colors group"
+                    style={{
+                      backgroundColor: isActive ? c.dim : "transparent",
+                    }}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={{ backgroundColor: c.color, opacity: isActive ? 1 : 0.5 }}
+                    />
+                    <span
+                      className="text-[11px] font-semibold transition-colors"
+                      style={{ color: isActive ? c.color : undefined }}
+                    >
+                      {agt}
+                    </span>
+                    <span className="text-[10px] text-fd-muted-foreground/40 ml-auto">{agtCounts[agt]}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section Nav */}
+          <div className="flex-1 overflow-y-auto px-3 py-2">
+            <span className="text-[10px] uppercase tracking-[0.1em] text-fd-muted-foreground/40 block mb-1.5">Sections</span>
+            <nav className="flex flex-col gap-0.5">
+              {grouped.map(([group]) => {
+                const g = GROUPS[group];
+                if (!g) return null;
+                return (
+                  <button
+                    key={group}
+                    onClick={() => scrollToGroup(group)}
+                    className="flex items-center justify-between px-1.5 py-1 rounded text-left text-[11px] text-fd-muted-foreground hover:text-fd-foreground hover:bg-fd-accent/30 transition-colors"
+                  >
+                    <span className="truncate">{g.label}</span>
+                    <span className="text-[10px] text-fd-muted-foreground/30 tabular-nums">{groupCounts[group]}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Sidebar footer */}
+          <div className="px-3 py-2 border-t border-fd-border/50 text-[10px] text-fd-muted-foreground/30">
+            {DOC_NODES.length} nodes &middot; {DOC_EDGES.length} edges
+          </div>
+        </aside>
+      )}
+
+      {/* ── Main Pane ── */}
+      <main className="flex-1 min-w-0 flex flex-col">
+        {/* Top bar */}
+        <div className="sticky top-0 z-10 bg-fd-background/95 backdrop-blur-sm border-b border-fd-border/50 px-5 py-3 flex items-center gap-3">
+          {!sidebarOpen && (
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="text-fd-muted-foreground/40 hover:text-fd-muted-foreground transition-colors mr-1"
+              aria-label="Open sidebar"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+            </button>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="text-fd-foreground font-semibold text-sm">jettoptx/optx-docs</span>
+              <span className="text-fd-muted-foreground/30">/</span>
+              <span className="text-fd-muted-foreground text-xs">Map of Augments</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 text-[11px] text-fd-muted-foreground/40 tabular-nums">
+            <span>{totalFiltered} visible</span>
+            <span className="text-fd-muted-foreground/20">&middot;</span>
+            {(["COG", "EMO", "ENV"] as AGT[]).map((agt) => (
+              <span key={agt} className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: AGT_COLORS[agt].color, opacity: 0.6 }} />
+                <span>{agt}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-5 py-4">
+          {filtered.length === 0 && (
+            <div className="text-fd-muted-foreground/40 text-xs py-12 text-center">
+              No nodes match the current filter.
+            </div>
+          )}
+
+          {filtered.map(([group, nodes]) => {
+            const g = GROUPS[group];
+            if (!g) return null;
+            return (
+              <section
+                key={group}
+                ref={(el) => { sectionRefs.current[group] = el; }}
+                className="mb-6 last:mb-0"
+              >
+                {/* Section header */}
+                <div className="flex items-baseline gap-2 mb-2 pb-1.5 border-b border-fd-border/30">
+                  <h3 className="text-[13px] font-semibold text-fd-foreground tracking-wide uppercase">
+                    {g.label}
+                  </h3>
+                  <span className="text-[10px] text-fd-muted-foreground/30 tabular-nums">{nodes.length}</span>
+                </div>
+
+                {/* Node list — dense chain */}
+                <div className="flex flex-col">
+                  {nodes.map((node) => {
+                    const agt = AGT_COLORS[node.agt];
+                    const isHovered = hoveredNode === node.id;
+                    const isConnected = connectedTo.has(node.id);
+                    const isDimmed = hoveredNode !== null && !isHovered && !isConnected;
+                    const connections = getConnections(node.id);
+                    const connectedNodes = connections.map((id) => DOC_NODES.find((n) => n.id === id)).filter(Boolean) as DocNode[];
+
+                    return (
+                      <div
+                        key={node.id}
+                        className="group relative"
+                        onMouseEnter={() => setHoveredNode(node.id)}
+                        onMouseLeave={() => setHoveredNode(null)}
+                      >
+                        <div
+                          className="flex items-start gap-2.5 py-2 px-2 -mx-2 rounded transition-all duration-150"
+                          style={{
+                            opacity: isDimmed ? 0.25 : 1,
+                            backgroundColor: isHovered ? agt.dim : "transparent",
+                          }}
+                        >
+                          {/* AGT dot */}
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-[7px] shrink-0 transition-transform duration-150"
+                            style={{
+                              backgroundColor: agt.color,
+                              opacity: isHovered ? 1 : 0.5,
+                              transform: isHovered ? "scale(1.4)" : "scale(1)",
+                            }}
+                          />
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-baseline gap-2 flex-wrap">
+                              <Link
+                                href={node.href}
+                                className="text-[13px] font-medium transition-colors hover:underline underline-offset-2 decoration-1"
+                                style={{
+                                  color: isHovered ? agt.color : undefined,
+                                  textDecorationColor: isHovered ? `${agt.color}44` : undefined,
+                                }}
+                              >
+                                {node.label}
+                              </Link>
+                              <span
+                                className="text-[9px] font-bold px-1 py-px rounded uppercase tracking-wider shrink-0"
+                                style={{
+                                  color: agt.color,
+                                  backgroundColor: agt.dim,
+                                  opacity: isHovered ? 1 : 0.6,
+                                }}
+                              >
+                                {node.agt}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-fd-muted-foreground/60 leading-relaxed mt-0.5">
+                              {node.description}
+                            </p>
+                            {/* Connected nodes — show on hover */}
+                            {isHovered && connectedNodes.length > 0 && (
+                              <div className="flex flex-wrap gap-x-2 gap-y-0.5 mt-1.5">
+                                <span className="text-[9px] text-fd-muted-foreground/30 uppercase tracking-wider mr-0.5">links</span>
+                                {connectedNodes.map((cn) => (
+                                  <Link
+                                    key={cn.id}
+                                    href={cn.href}
+                                    className="text-[10px] text-fd-muted-foreground/50 hover:text-fd-muted-foreground transition-colors"
+                                  >
+                                    {cn.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          {/* Edge count */}
+                          <span className="text-[10px] text-fd-muted-foreground/20 tabular-nums mt-[3px] shrink-0">
+                            {connections.length}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      </main>
     </div>
   );
 }
