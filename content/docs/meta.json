@@ -1,14 +1,13 @@
 {
   "title": "OPTX Docs",
   "pages": [
-    "index",
+    "dojo",
     "getting-started",
     "authentication",
     "protocol",
     "astrojoe",
     "cockpit",
     "architecture",
-    "dojo",
     "infrastructure",
     "reference"
   ]
