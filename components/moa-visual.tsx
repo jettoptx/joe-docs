@@ -661,6 +661,29 @@ function MoaVisualInner() {
           panStartRef.current = null;
           setPanning(false);
         }}
+        onTouchStart={(e) => {
+          if (e.touches.length !== 1) return;
+          e.preventDefault();
+          const touch = e.touches[0];
+          panStartRef.current = { mx: touch.clientX, my: touch.clientY, px: panRef.current.x, py: panRef.current.y };
+        }}
+        onTouchMove={(e) => {
+          if (e.touches.length !== 1 || !panStartRef.current) return;
+          e.preventDefault();
+          const touch = e.touches[0];
+          const dx = touch.clientX - panStartRef.current.mx;
+          const dy = touch.clientY - panStartRef.current.my;
+          panRef.current = { x: panStartRef.current.px + dx, y: panStartRef.current.py + dy };
+          if (!panning && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) setPanning(true);
+        }}
+        onTouchEnd={() => {
+          panStartRef.current = null;
+          setPanning(false);
+        }}
+        onTouchCancel={() => {
+          panStartRef.current = null;
+          setPanning(false);
+        }}
         onWheel={(e) => {
           e.preventDefault();
           const delta = e.deltaY > 0 ? 0.92 : 1.08;
@@ -760,15 +783,8 @@ function MoaVisualInner() {
         </div>
       )}
 
-      {/* ═══ Bottom bar: Legend + Index toggle ═══ */}
+      {/* ═══ Bottom bar: Index toggle (AGT pills moved to header) ═══ */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 font-[family-name:var(--font-geist-mono)] bg-fd-background/60 backdrop-blur-md rounded-full px-4 py-1.5 border border-fd-border/50 z-50">
-        {(["COG", "EMO", "ENV"] as const).map((key) => (
-          <span key={key} className="flex items-center gap-1.5 text-[9px]">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: AGT[key].color }} />
-            <span style={{ color: AGT[key].color }} className="font-bold opacity-80">{key}</span>
-          </span>
-        ))}
-        <span className="w-px h-3 bg-fd-border/50" />
         <button
           onClick={() => setShowIndex(v => !v)}
           className="text-[9px] font-bold text-[rgb(255,105,0)] opacity-70 hover:opacity-100 transition-opacity uppercase tracking-wider"
