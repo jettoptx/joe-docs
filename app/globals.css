@@ -300,65 +300,89 @@ nav[aria-label="breadcrumb"] {
   overflow: visible !important;
 }
 
-/* Force fumadocs sidebar width + height via CSS grid variable */
+/* Force fumadocs layout vars */
 #nd-docs-layout {
-  --fd-sidebar-width: 240px !important;
+  --fd-sidebar-width: 220px !important;
   --fd-docs-height: calc(100dvh - 3.5rem) !important;
 }
 
-/* ═══ Sidebar: flush left, no gap ═══ */
-
-/* The aside — override items-end to items-stretch so content fills left edge */
-aside#nd-sidebar {
-  align-items: stretch !important;
-  border-right: 1px solid var(--fd-border) !important;
+/* ═══ MOA fullscreen — bleeds behind sidebar ═══ */
+.moa-fullscreen {
+  position: fixed !important;
+  top: 3.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
 }
 
-/* Inner sidebar card — flush left, no rounded corners */
-aside#nd-sidebar > * {
-  border-radius: 0 !important;
+/* When MOA is on screen, let sidebar float over it */
+:has(.moa-fullscreen) [data-sidebar-placeholder] {
+  z-index: 25 !important;
+}
+
+/* ═══ Sidebar: glass morphism, flush left ═══ */
+aside#nd-sidebar {
+  align-items: stretch !important;
   border-right: none !important;
 }
 
-/* Footer area: theme toggle + Augment Space in a single row */
+aside#nd-sidebar > * {
+  border-radius: 0 !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(8,8,8,0.75) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* Sidebar header — tighter */
+aside#nd-sidebar > * > :first-child {
+  padding: 0.5rem 0.75rem !important;
+  gap: 0.5rem !important;
+}
+
+/* Search bar — minimal */
+aside#nd-sidebar [data-search] {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+  border-radius: 6px !important;
+  font-size: 0.8rem !important;
+  padding: 0.35rem 0.6rem !important;
+}
+
+/* Sidebar items — compact, more room for text */
+[data-fd-sidebar] a,
+[data-fd-sidebar] button {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.82rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Sidebar group labels — tight */
+[data-fd-sidebar] [data-fd-sidebar-group-label],
+[data-fd-sidebar] .fd-sidebar-group-label {
+  padding-left: 0.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.15rem !important;
+  font-size: 0.72rem !important;
+}
+
+/* Footer: row layout, Augment Space + theme toggle */
 aside#nd-sidebar > * > :last-child {
   flex-direction: row !important;
   align-items: center !important;
   gap: 0.25rem !important;
-  padding: 0.5rem 0.75rem !important;
-  border-top: 1px solid var(--fd-border) !important;
+  padding: 0.4rem 0.6rem !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(8,8,8,0.85) !important;
 }
 
-/* Augment Space button: ordered first (left side) */
 aside#nd-sidebar .augment-space-btn {
   order: -1 !important;
 }
 
-/* Theme toggle pill: push to right */
 aside#nd-sidebar > * > :last-child > :not(.augment-space-btn) {
   margin-left: auto !important;
-  flex-shrink: 0 !important;
-}
-
-/* Sidebar items — tighter spacing */
-[data-fd-sidebar] a,
-[data-fd-sidebar] button {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-  padding-left: 0.5rem !important;
-}
-
-/* Sidebar group labels — compact */
-[data-fd-sidebar] [data-fd-sidebar-group-label],
-[data-fd-sidebar] .fd-sidebar-group-label {
-  padding-left: 0.5rem !important;
-  margin-top: 0.75rem !important;
-  margin-bottom: 0.25rem !important;
-}
-
-/* Sidebar footer pinned to bottom */
-aside[data-fd-sidebar] [data-fd-sidebar-footer] {
-  margin-top: auto !important;
   flex-shrink: 0 !important;
 }
 
