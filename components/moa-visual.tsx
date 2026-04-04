@@ -124,15 +124,15 @@ function initNodes(w: number, h: number): Node[] {
 
 function initParticles(): Particle[] {
   const particles: Particle[] = [];
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 15; i++) {
     const ei = Math.floor(Math.random() * EDGES.length);
     const agtKey = NODES_DATA[Math.floor(Math.random() * NODES_DATA.length)].agt;
     particles.push({
       edge: ei,
       t: Math.random(),
-      speed: 0.002 + Math.random() * 0.004,
+      speed: 0.001 + Math.random() * 0.002,
       color: AGT[agtKey].color,
-      size: 1 + Math.random() * 1.5,
+      size: 0.8 + Math.random() * 0.8,
     });
   }
   return particles;
@@ -270,7 +270,7 @@ export function MoaVisual() {
           ctx.strokeStyle = grad;
           ctx.lineWidth = 1.5;
           ctx.setLineDash([4, 4]);
-          ctx.lineDashOffset = -t * 30;
+          ctx.lineDashOffset = -t * 15;
         } else {
           ctx.strokeStyle = "rgba(255,255,255,0.035)";
           ctx.lineWidth = 0.5;
@@ -298,7 +298,7 @@ export function MoaVisual() {
 
         ctx.beginPath();
         ctx.arc(px, py, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + "66";
+        ctx.fillStyle = p.color + "44";
         ctx.fill();
       }
 
@@ -309,15 +309,15 @@ export function MoaVisual() {
         const isConnected = connected.has(n.id);
         const dimmed = activeId && !isActive && !isConnected;
 
-        // Breathing pulse
-        const pulse = Math.sin(t * 1.5 + n.pulse) * 0.15 + 1;
-        const r = n.radius * (isActive ? 1.08 : pulse * (dimmed ? 0.95 : 1));
+        // Gentle breathing pulse — slow, subtle
+        const pulse = Math.sin(t * 0.6 + n.pulse) * 0.04 + 1;
+        const r = n.radius * (isActive ? 1.04 : pulse * (dimmed ? 0.97 : 1));
 
-        // Outer glow ring (always, subtle)
+        // Soft ambient glow (always, very subtle)
         if (!dimmed) {
-          const glowR = r + 8 + Math.sin(t * 2 + n.pulse) * 3;
-          const grad = ctx.createRadialGradient(n.x, n.y, r * 0.8, n.x, n.y, glowR);
-          grad.addColorStop(0, agt.glow.replace("0.35", isActive ? "0.5" : "0.12"));
+          const glowR = r + 5 + Math.sin(t * 0.8 + n.pulse) * 1.5;
+          const grad = ctx.createRadialGradient(n.x, n.y, r * 0.9, n.x, n.y, glowR);
+          grad.addColorStop(0, agt.glow.replace("0.35", isActive ? "0.3" : "0.06"));
           grad.addColorStop(1, "transparent");
           ctx.beginPath();
           ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
@@ -325,15 +325,15 @@ export function MoaVisual() {
           ctx.fill();
         }
 
-        // Pulse ring (expands outward, fades) — on active node
+        // Gentle pulse ring on active — slower, smaller, more transparent
         if (isActive) {
-          const ringPhase = (t * 0.8) % 1;
-          const ringR = r + ringPhase * 30;
-          const ringAlpha = (1 - ringPhase) * 0.3;
+          const ringPhase = (t * 0.4) % 1;
+          const ringR = r + ringPhase * 18;
+          const ringAlpha = (1 - ringPhase) * 0.15;
           ctx.beginPath();
           ctx.arc(n.x, n.y, ringR, 0, Math.PI * 2);
           ctx.strokeStyle = agt.color + Math.round(ringAlpha * 255).toString(16).padStart(2, "0");
-          ctx.lineWidth = 1.5 * (1 - ringPhase);
+          ctx.lineWidth = 1 * (1 - ringPhase);
           ctx.stroke();
         }
 

@@ -300,13 +300,13 @@ nav[aria-label="breadcrumb"] {
   overflow: visible !important;
 }
 
-/* Force fumadocs layout vars */
+/* ═══ Layout ═══ */
 #nd-docs-layout {
-  --fd-sidebar-width: 220px !important;
+  --fd-sidebar-width: 210px !important;
   --fd-docs-height: calc(100dvh - 3.5rem) !important;
 }
 
-/* ═══ MOA fullscreen — bleeds behind sidebar ═══ */
+/* ═══ MOA fullscreen — bleeds behind everything ═══ */
 .moa-fullscreen {
   position: fixed !important;
   top: 3.5rem;
@@ -316,74 +316,119 @@ nav[aria-label="breadcrumb"] {
   z-index: 0;
 }
 
-/* When MOA is on screen, let sidebar float over it */
 :has(.moa-fullscreen) [data-sidebar-placeholder] {
   z-index: 25 !important;
 }
 
-/* ═══ Sidebar: glass morphism, flush left ═══ */
+/* ═══ "On this page" TOC — sticky below header ═══ */
+[data-toc],
+nav[aria-label="Table of Contents"],
+[class*="[grid-area:toc]"] {
+  position: sticky !important;
+  top: 3.5rem !important;
+  max-height: calc(100vh - 3.5rem) !important;
+  overflow-y: auto !important;
+}
+
+/* ═══ Sidebar: glass, flush left ═══ */
+
+/* Placeholder cell — hard left */
+[data-sidebar-placeholder] {
+  left: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Aside — stretch children to fill, not align-end */
 aside#nd-sidebar {
   align-items: stretch !important;
-  border-right: none !important;
+  border: none !important;
 }
 
-aside#nd-sidebar > * {
+/* Inner card — glass morphism, flush, no radius, right gradient fade */
+aside#nd-sidebar > div {
   border-radius: 0 !important;
-  border-right: 1px solid rgba(255,255,255,0.06) !important;
-  background: rgba(8,8,8,0.75) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
+  border-right: 1px solid rgba(255,255,255,0.05) !important;
+  border-left: none !important;
+  background: linear-gradient(to right, rgba(10,10,10,0.88) 0%, rgba(10,10,10,0.82) 85%, rgba(10,10,10,0.4) 100%) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
 }
 
-/* Sidebar header — tighter */
-aside#nd-sidebar > * > :first-child {
-  padding: 0.5rem 0.75rem !important;
-  gap: 0.5rem !important;
+/* Header area — compact */
+aside#nd-sidebar > div > div:first-child {
+  padding: 0.4rem 0.65rem !important;
+  gap: 0.4rem !important;
 }
 
-/* Search bar — minimal */
+/* Hide the fumadocs logo/title link in sidebar header (we have our own in the top bar) */
+aside#nd-sidebar > div > div:first-child > div:first-child > a {
+  display: none !important;
+}
+
+/* Search input — sleek pill */
 aside#nd-sidebar [data-search] {
-  background: rgba(255,255,255,0.04) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-  border-radius: 6px !important;
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 8px !important;
+  font-size: 0.78rem !important;
+  padding: 0.3rem 0.55rem !important;
+}
+
+/* ═══ Sidebar nav items — compact, readable ═══ */
+aside#nd-sidebar a,
+aside#nd-sidebar button:not([data-theme-toggle] *):not([aria-label="Collapse Sidebar"]) {
+  padding: 0.15rem 0.4rem !important;
   font-size: 0.8rem !important;
-  padding: 0.35rem 0.6rem !important;
+  line-height: 1.35 !important;
+  border-radius: 4px !important;
 }
 
-/* Sidebar items — compact, more room for text */
-[data-fd-sidebar] a,
-[data-fd-sidebar] button {
-  padding: 0.2rem 0.5rem !important;
-  font-size: 0.82rem !important;
-  line-height: 1.4 !important;
+/* Group section labels */
+aside#nd-sidebar [role="separator"],
+aside#nd-sidebar [data-sidebar-group-label],
+aside#nd-sidebar .fd-sidebar-group-label {
+  padding-left: 0.4rem !important;
+  margin-top: 0.6rem !important;
+  margin-bottom: 0.1rem !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.08em !important;
 }
 
-/* Sidebar group labels — tight */
-[data-fd-sidebar] [data-fd-sidebar-group-label],
-[data-fd-sidebar] .fd-sidebar-group-label {
-  padding-left: 0.5rem !important;
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.15rem !important;
-  font-size: 0.72rem !important;
+/* Scroll area padding */
+aside#nd-sidebar [data-radix-scroll-area-viewport] > div {
+  padding: 0.25rem 0.5rem !important;
 }
 
-/* Footer: row layout, Augment Space + theme toggle */
-aside#nd-sidebar > * > :last-child {
+/* ═══ Sidebar footer: Augment Space fills gap, theme toggle right ═══ */
+aside#nd-sidebar > div > div:last-child {
+  display: flex !important;
   flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: center !important;
-  gap: 0.25rem !important;
-  padding: 0.4rem 0.6rem !important;
-  border-top: 1px solid rgba(255,255,255,0.06) !important;
-  background: rgba(8,8,8,0.85) !important;
+  gap: 0.4rem !important;
+  padding: 0.4rem 0.5rem !important;
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  margin-top: auto !important;
 }
 
+/* Augment Space: ordered first, fills remaining space */
 aside#nd-sidebar .augment-space-btn {
   order: -1 !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
 }
 
-aside#nd-sidebar > * > :last-child > :not(.augment-space-btn) {
-  margin-left: auto !important;
+/* Theme toggle container: compact, right side */
+aside#nd-sidebar > div > div:last-child > div {
   flex-shrink: 0 !important;
+  order: 1 !important;
+}
+
+/* Hide the empty inner box that fumadocs renders */
+aside#nd-sidebar > div > div:last-child > div:empty,
+aside#nd-sidebar > div > div:last-child > div > :empty:not(button) {
+  display: none !important;
 }
 
 /* ═══ AGT Color Indicators on Sidebar Section Labels ═══ */
