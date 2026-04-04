@@ -4,8 +4,8 @@ import Image from "next/image";
 export function SiteFooter() {
   return (
     <footer className="border-t border-fd-border bg-fd-card">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-x-10 gap-y-8">
           {/* Brand Column */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
@@ -130,19 +130,19 @@ export function SiteFooter() {
             <ul className="space-y-2.5">
               {[
                 {
-                  label: "joe-optx-hermes-api",
+                  label: "Hermes API",
                   href: "https://github.com/jettoptx/joe-optx-hermes-api",
                 },
                 {
-                  label: "joe-aaron-router",
+                  label: "AARON Router",
                   href: "https://github.com/jettoptx/joe-aaron-router",
                 },
                 {
-                  label: "joe-JTX-CSTB.TRUST.DEPIN",
+                  label: "CSTB DePIN",
                   href: "https://github.com/jettoptx/joe-JTX-CSTB.TRUST.DEPIN",
                 },
                 {
-                  label: "joe-docs",
+                  label: "Docs",
                   href: "https://github.com/jettoptx/joe-docs",
                 },
               ].map((link) => (
@@ -151,7 +151,7 @@ export function SiteFooter() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-orange-400 transition-colors"
+                    className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-orange-400 transition-colors whitespace-nowrap"
                   >
                     {link.label}
                   </a>
