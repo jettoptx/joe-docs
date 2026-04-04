@@ -43,19 +43,24 @@ export default function Layout({ children }: { children: ReactNode }) {
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             {/* AGT Tensor Legend */}
-            <div className="flex items-center gap-3 mr-2 border-r border-fd-border pr-4">
-              <span className="text-[9px] uppercase tracking-widest text-fd-muted-foreground/50 font-[family-name:var(--font-orbitron)]">AGT</span>
-              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1 group">
-                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#60a5fa" }} />
-                <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)] text-[#60a5fa] group-hover:opacity-80">COG</span>
+            <div className="flex items-center gap-3.5 mr-2 border-r border-fd-border pr-5">
+              <Link
+                href="/docs/dojo/moa"
+                className="text-[11px] uppercase tracking-widest font-[family-name:var(--font-orbitron)] font-bold text-fd-muted-foreground hover:text-[#ff6900] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(255,105,0,0.6)]"
+              >
+                AGT
               </Link>
-              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1 group">
-                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#f43f5e" }} />
-                <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)] text-[#f43f5e] group-hover:opacity-80">EMO</span>
+              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
+                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(96,165,250,0.5)]" style={{ backgroundColor: "#60a5fa" }} />
+                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#60a5fa] group-hover:text-[#93bbfc] transition-colors">COG</span>
               </Link>
-              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1 group">
-                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#4ade80" }} />
-                <span className="text-[10px] font-bold font-[family-name:var(--font-geist-mono)] text-[#4ade80] group-hover:opacity-80">ENV</span>
+              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
+                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(244,63,94,0.5)]" style={{ backgroundColor: "#f43f5e" }} />
+                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#f43f5e] group-hover:text-[#f76d8a] transition-colors">EMO</span>
+              </Link>
+              <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
+                <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(74,222,128,0.5)]" style={{ backgroundColor: "#4ade80" }} />
+                <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#4ade80] group-hover:text-[#76e8a2] transition-colors">ENV</span>
               </Link>
             </div>
             {navLinks.map((link) => (
