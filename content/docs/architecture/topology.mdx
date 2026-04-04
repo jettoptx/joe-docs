@@ -1,7 +1,7 @@
 ---
 icon: Server
 title: Infrastructure Topology
-description: Full network map of all OPTX services across Jetson edge, CorsairOne Docker, and cloud deployments.
+description: Full network map of all OPTX services across validator nodes, orchestration clusters, and cloud deployments.
 ---
 
 ## Infrastructure Topology
@@ -50,7 +50,7 @@ flowchart TD
     HH --> XAI
 ```
 
-## Jetson Orin Nano — Edge Services
+## OPTX Validator Node — Edge Services
 
 | Port | Service | Description |
 |------|---------|-------------|
@@ -60,7 +60,7 @@ flowchart TD
 | 8765 | JOE WebSocket | Matrix relay for mobile tasking |
 | 6167 | Conduit | Matrix homeserver (jettoptics.ai) |
 
-## CorsairOne Docker — Agent Services
+## Orchestration Cluster — Agent Services
 
 | Port | Service | Container |
 |------|---------|-----------|
@@ -87,4 +87,4 @@ All internal communication flows through **Tailscale** mesh networking with Wire
 
 ## Related
 - [System Architecture](/docs/getting-started/architecture) — High-level overview
-- [Edge MCP](/docs/infrastructure/edge) — HEDGEHOG on Jetson details
+- [Edge MCP](/docs/infrastructure/edge) — HEDGEHOG on validator node details

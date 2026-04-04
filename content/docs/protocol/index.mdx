@@ -22,7 +22,7 @@ curl https://api.astroknots.space/aaron \
 
 | Name | Full Form | Description |
 |------|-----------|-------------|
-| **JETT Auth** | Joule Encryption Temporal Template Auth | Biometric gaze signature + SSO system on Jetson. The identity layer. |
+| **JETT Auth** | Joule Encryption Temporal Template Auth | Biometric gaze signature + SSO system on the validator node. The identity layer. |
 | **OPT&#x1D54F;** | Optical Program Technologic &#x1D54F;tension | The secure bridge that turns JETT Auth into verifiable on-chain proofs. |
 | **AARON** | Asynchronous Audit RAG Optical Node | The on-chain protocol + private edge router. DePIN node that validates and routes. |
 | **OPTX** | The Public Blockchain & Token Network | The public-facing Solana mainnet token and protocol. What the world sees. |
@@ -34,7 +34,7 @@ curl https://api.astroknots.space/aaron \
 - **A** — **Audit**: Every gaze proof, wallet signature, and token action is cryptographically logged. Immutable trail from eye to chain.
 - **R** — **RAG**: Retrieval-Augmented Generation. Aaron enriches AI responses with real-time context from SpacetimeDB, Solana state, and gaze history.
 - **O** — **Optical**: Gaze biometrics via iris tracking. The camera becomes the key. MediaPipe FaceLandmarker captures COG/EMO/ENV tensor regions.
-- **N** — **Node**: Runs on a physical edge node (Jetson Orin Nano). Private compute that never exposes raw biometric data to the network.
+- **N** — **Node**: Runs on OPTX Validator Nodes across the Solana mainnet. Private compute that never exposes raw biometric data to the network.
 
 > **DePIN** = Decentralized Physical Infrastructure Network. AARON is a DePIN node that validates human identity through gaze via **JETT Auth**, bridges proofs through **OPT&#x1D54F;**, and earns $OPTX on the public network.
 
@@ -63,7 +63,7 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
 | Component | Role | Description |
 |-----------|------|-------------|
 | **AARON** | The Router | Validates gaze proofs, manages auth sessions, bridges to Solana. The front door for all authentication. |
-| **JOE** | The Agent | JETT Optical Engine. Autonomous AI agent on the edge node. Executes tools, manages services, talks via Matrix chat. |
+| **JOE** | The Agent | JETT Optical Engine. Autonomous AI agent on the validator node. Executes tools, manages services, talks via Matrix chat. |
 | **HEDGEHOG** | The Brain | MCP context bridge. Routes AI queries to Grok 4.1, stores gaze data in SpacetimeDB, tracks API usage. The memory layer. |
 
 ```text
@@ -100,14 +100,14 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
   to wallet        stored on-chain
 
   ---------------------------------------------------
-  All three run on a single Jetson Orin Nano (edge).
-  Raw biometric data never leaves this device.
+  All three run on OPTX Validator Nodes across the Solana mainnet.
+  Raw biometric data never leaves the validator node.
   Only 32-byte opaque proofs reach the blockchain.
 ```
 
 ## Core Principles
 
-- **Privacy First** — Raw biometric data never leaves the edge node. Only opaque 32-byte proofs go on-chain.
+- **Privacy First** — Raw biometric data never leaves the validator node. Only opaque 32-byte proofs go on-chain.
 - **Quantum Resistant** — Agentive Gaze Tensor (AGT) sequences encoded as knot invariants — resistant to quantum attacks.
 - **x402 Native** — Micropayment attestation built-in. Pay-per-action with $OPTX staking tiers.
 

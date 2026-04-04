@@ -9,13 +9,13 @@ description: The primary intelligent agent in the OPTX Agentic OS — orchestrat
 ## Architecture
 
 ```
-User → Hermes Workspace UI (:5555)
+User → Hermes Workspace UI
          ↓
-    hermes-optx-api (:8643)
-         ↓                    ↕ SpacetimeDB (Jetson :3000)
-    Hermes Agent (:8642)      ↕ SKILL.md tools
-         ↓                    ↕ AARON Router (:8888)
-    HEDGEHOG (:8811)          ↕ Matrix/Conduit (:6167)
+    hermes-optx-api
+         ↓                    ↕ SpacetimeDB (Validator Node)
+    Hermes Agent              ↕ SKILL.md tools
+         ↓                    ↕ AARON Router
+    HEDGEHOG Gateway          ↕ Matrix/Conduit
          ↓
     Grok 4.20 (xAI)
 ```

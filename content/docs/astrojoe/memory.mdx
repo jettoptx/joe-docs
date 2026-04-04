@@ -4,7 +4,7 @@ title: Memory System
 description: SpacetimeDB-backed persistent memory with categories, importance scoring, and real-time subscriptions.
 ---
 
-AstroJOE's memory is backed by **SpacetimeDB** running on the Jetson Orin Nano edge node. The `optx-cortex` database provides real-time reducers and subscriptions for persistent agent state.
+AstroJOE's memory is backed by **SpacetimeDB** running on OPTX Validator Nodes. The `optx-cortex` database provides real-time reducers and subscriptions for persistent agent state.
 
 ## Database: optx-cortex
 
@@ -57,7 +57,7 @@ The hermes-optx-api supports pluggable memory backends:
 | Backend | Description | Default |
 |---------|-------------|---------|
 | **holographic** | SQLite + FTS5 full-text search (local) | Yes |
-| **spacetimedb** | SpacetimeDB on Jetson (real-time, shared) | Production |
+| **spacetimedb** | SpacetimeDB on validator node (real-time, shared) | Production |
 | **custom** | Implement your own `MemoryBackend` interface | — |
 
 ## SpacetimeDB Limitations

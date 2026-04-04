@@ -300,17 +300,40 @@ nav[aria-label="breadcrumb"] {
   overflow: visible !important;
 }
 
-/* Sidebar flush to left edge */
+/* Sidebar flush to left edge, tight & full height */
 aside[data-fd-sidebar] {
   display: flex !important;
   flex-direction: column !important;
   border-right: 1px solid var(--fd-border) !important;
+  left: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  width: 240px !important;
+  min-width: 240px !important;
 }
 
 aside[data-fd-sidebar] > div {
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.5rem !important;
+}
+
+/* Sidebar items — tighter spacing */
+[data-fd-sidebar] a,
+[data-fd-sidebar] button {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  padding-left: 0.5rem !important;
+}
+
+/* Sidebar group labels — compact */
+[data-fd-sidebar] [data-fd-sidebar-group-label],
+[data-fd-sidebar] .fd-sidebar-group-label {
+  padding-left: 0.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.25rem !important;
 }
 
 /* Adjust docs layout for custom top header */
@@ -323,6 +346,57 @@ aside[data-fd-sidebar] [data-fd-sidebar-footer] {
   margin-top: auto !important;
   flex-shrink: 0 !important;
 }
+
+/* ═══ AGT Color Indicators on Sidebar Section Labels ═══ */
+/* Each sidebar group label gets a colored dot matching its AGT classification */
+/* COG = blue #60a5fa | EMO = red #f43f5e | ENV = green #4ade80 */
+
+[data-fd-sidebar] [data-fd-sidebar-group-label]::before,
+[data-fd-sidebar] .fd-sidebar-group-label::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  background-color: #60a5fa; /* default COG */
+}
+
+/* Getting Started = COG (blue) — already default */
+/* Authentication = EMO (red) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="uthentication"]::before,
+[data-fd-sidebar] [data-fd-sidebar-group-label*="Auth"]::before {
+  background-color: #f43f5e !important;
+}
+
+/* Protocol = COG (blue) — already default */
+
+/* AstroJOE = EMO (red) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="stro"]::before,
+[data-fd-sidebar] [data-fd-sidebar-group-label*="Agent"]::before {
+  background-color: #f43f5e !important;
+}
+
+/* Cockpit = EMO (red) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="ockpit"]::before {
+  background-color: #f43f5e !important;
+}
+
+/* Architecture = COG (blue) — already default */
+
+/* DOJO = EMO (red) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="OJO"]::before,
+[data-fd-sidebar] [data-fd-sidebar-group-label*="ojo"]::before {
+  background-color: #f43f5e !important;
+}
+
+/* Infrastructure = ENV (green) */
+[data-fd-sidebar] [data-fd-sidebar-group-label*="nfra"]::before {
+  background-color: #4ade80 !important;
+}
+
+/* Reference = COG (blue) — already default */
 
 /* Callout/admonition styling */
 .fd-callout {
