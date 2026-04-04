@@ -50,15 +50,15 @@ export function CopyForAgents() {
                 {copied ? (
                                   <>
                                               <Check className="h-4 w-4" />
-                                              <span>Copied!</span>span>
-                                  </>>
+                                              <span>Copied!</span>
+                                  </>
                                 ) : (
                                   <>
                                               <ClipboardCopy className="h-4 w-4" />
-                                              <span>Copy for Agents</span>span>
-                                  </>>
+                                              <span>Copy for Agents</span>
+                                  </>
                                 )}
-              </button>button>
-        </div>div>
+              </button>
+        </div>
       );
-}</></></div>
+}
