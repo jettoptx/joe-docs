@@ -173,11 +173,6 @@ export function SiteFooter() {
                   ext: true,
                 },
                 {
-                  label: "X / Twitter",
-                  href: "https://x.com/jettoptx",
-                  ext: true,
-                },
-                {
                   label: "GitHub",
                   href: "https://github.com/jettoptx",
                   ext: true,
@@ -185,6 +180,11 @@ export function SiteFooter() {
                 {
                   label: "Astro Knots",
                   href: "https://astroknots.space",
+                  ext: true,
+                },
+                {
+                  label: "@jettopt\u{1D54F}",
+                  href: "https://x.com/jettoptx",
                   ext: true,
                 },
               ].map((link) => (
