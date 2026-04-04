@@ -1,10 +1,10 @@
 ---
 title: API Reference
-description: WebSocket RPC, REST endpoints, and platform capabilities for OPTX integration.
+description: WebSocket RPC, REST endpoints, Tempo Wallet billing, and platform capabilities for OPTX integration.
 icon: Code2
 ---
 
-The OPTX platform exposes a **WebSocket API** for real-time agent communication and **REST endpoints** for frontend integration.
+The OPTX platform exposes a **WebSocket API** for real-time agent communication, **REST endpoints** for frontend integration, and a **Tempo Wallet** for metered HEDGEHOG API billing.
 
 ## WebSocket RPC (JOE Agent)
 
@@ -38,12 +38,14 @@ Core platform capabilities available to integrated applications:
 ```json
 {
   "capabilities": [
-    "gaze_data_storage",        // Store COG/ENV/EMO gaze tensors
-    "gaze_data_retrieval",      // Retrieve gaze tracking history
-    "gaze_pattern_analysis",    // AI-powered gaze pattern insights
-    "context_awareness",        // Spatial workspace state management
-    "ai_chat",                  // Multi-model AI assistant
-    "usage_analytics"           // API usage and audit trail
+    "gaze_data_storage",
+    "gaze_data_retrieval",
+    "gaze_pattern_analysis",
+    "context_awareness",
+    "ai_chat",
+    "usage_analytics",
+    "tempo_billing",
+    "task_escrow"
   ]
 }
 ```
@@ -56,3 +58,153 @@ Core platform capabilities available to integrated applications:
 | **GET** | `/api/gaze/history` | Retrieve gaze session history |
 | **POST** | `/api/verify-session` | Verify subscription and access tier |
 | **GET** | `/api/attestation/status` | Check CSTB attestation progress |
+
+## Hermes OPTX API (v0.2.0)
+
+The enhanced API bridge for Hermes Agent and Workspace. All endpoints are payment-gated via MPP when enabled.
+
+### Sessions
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/sessions` | List all agent sessions |
+| **GET** | `/api/sessions/{id}` | Get specific session |
+| **GET** | `/api/sessions/{id}/messages` | Get session messages |
+| **DELETE** | `/api/sessions/{id}` | Delete session |
+
+### Skills
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/skills` | List installed skills (filter by category/search) |
+| **GET** | `/api/skills/{id}` | Get skill with SKILL.md metadata |
+
+### Memory
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/memory` | List all memories |
+| **POST** | `/api/memory` | Store new memory |
+| **POST** | `/api/memory/search` | Search memories with query/filters |
+| **GET** | `/api/memory/recall` | Quick recall |
+| **DELETE** | `/api/memory/{id}` | Delete memory |
+| **GET** | `/api/memory/stats` | Memory backend statistics |
+
+### Tasks
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/tasks` | Create task with reward and capabilities |
+| **GET** | `/api/tasks` | List tasks (filter by status/agent) |
+| **GET** | `/api/tasks/{id}` | Get specific task |
+| **POST** | `/api/tasks/{id}/claim` | Claim task (gaze verification if flagged) |
+| **POST** | `/api/tasks/{id}/complete` | Complete task with result |
+| **DELETE** | `/api/tasks/{id}` | Cancel task |
+| **POST** | `/api/tasks/swarm` | Decompose goal into DAG subtasks via HEDGEHOG |
+| **GET** | `/api/tasks/stats` | Task statistics by status |
+
+### Config
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/config` | Get config.yaml + .env (secrets redacted) |
+| **POST** | `/api/config` | Update config (dot-notation keys) |
+| **GET** | `/api/config/model` | Get model/provider config |
+| **POST** | `/api/config/model` | Update model configuration |
+
+---
+
+## Tempo Wallet
+
+The **Tempo Wallet** is the OPTX payment and billing layer. Every HEDGEHOG API call (Grok inference) is metered — the caller pays the xAI inference cost plus a **$0.08 OPTX margin** per call.
+
+### Metered API Billing
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/wallet/tempo/call` | Metered HEDGEHOG call — pay-per-inference |
+| **GET** | `/api/wallet/tempo/usage` | Billing history and totals (per caller) |
+| **GET** | `/api/wallet/tempo/pricing` | Current pricing and supported models |
+
+#### Tempo Call Example
+
+```typescript
+const response = await fetch("/api/wallet/tempo/call", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    caller_id: "EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk",
+    model: "grok-4.20-multi-agent-beta-0309",
+    prompt: "Analyze this gaze pattern for authentication",
+    max_tokens: 2048,
+    tools: ["web_search"],
+  }),
+});
+
+// Response includes billing receipt
+{
+  "call_id": "tempo-a1b2c3d4",
+  "result": { "role": "assistant", "content": "..." },
+  "usage": { "prompt_tokens": 150, "completion_tokens": 420, "total_tokens": 570 },
+  "billing": {
+    "xai_cost_usd": 0.00171,
+    "optx_margin_usd": 0.08,
+    "total_usd": 0.08171,
+    "token": "OPTX"
+  },
+  "latency_ms": 1240.5
+}
+```
+
+### Wallet Status
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/wallet` | Agent wallet overview — balances across all chains |
+| **GET** | `/api/wallet/balances` | Live SOL + SPL token balances via Helius RPC |
+
+### Escrow (Task Rewards)
+
+Escrow locks funds when a task is created and releases them on completion. Settlement requires **gaze verification** via AARON Router.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/wallet/escrow` | Lock funds for a task reward |
+| **GET** | `/api/wallet/escrow` | List escrows (filter by status/task) |
+| **GET** | `/api/wallet/escrow/{id}` | Get specific escrow |
+| **POST** | `/api/wallet/escrow/release` | Release escrow to recipient (gaze-gated) |
+| **POST** | `/api/wallet/escrow/{id}/refund` | Refund locked/expired escrow |
+
+#### Escrow Lifecycle
+
+```
+Create (locked) → Task Completed → Release (gaze-verified) → On-chain settlement
+                → Task Failed    → Refund
+                → TTL expired    → Expired → Refund
+```
+
+### Pricing
+
+| Item | Cost |
+|------|------|
+| **xAI inference** | ~$0.003 per 1K tokens (Grok 4.20) |
+| **OPTX margin** | $0.08 per call (flat) |
+| **Payment token** | $OPTX (Solana devnet) |
+| **Supported models** | `grok-4.20-multi-agent-beta-0309`, `grok-4.20-0309-reasoning`, `grok-4-1-fast-reasoning` |
+
+---
+
+## System Endpoints
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| **GET** | `/health` | None | Health check + upstream connectivity |
+| **GET** | `/api/gateway-status` | None | Feature flags and enhanced mode status |
+| **ALL** | `/v1/*` | MPP | Passthrough proxy to Hermes Agent |
+
+## Related
+
+- [AstroJOE](/docs/astrojoe) — Agent architecture
+- [Hermes API](/docs/astrojoe/api) — Hermes Agent sessions, skills, memory
+- [HEDGEHOG](/docs/astrojoe/hedgehog) — Edge AI gateway
+- [On-Chain Addresses](/docs/getting-started/on-chain-addresses) — Token addresses
