@@ -1,32 +1,33 @@
 ---
 icon: Code
-title: hermes-optx-api
-description: Enhanced API bridge for Hermes Agent — unlocks Memory, Skills, Sessions, Config, and Task Orchestration.
+title: Hermes OPTX API
+description: Enhanced API bridge for Hermes Agent — Sessions, Skills, Memory, Config, Task Orchestration, and Gateway proxy.
 ---
 
-**hermes-optx-api** is a FastAPI sidecar that extends Hermes Agent v0.7.0+ with enhanced endpoints for the Hermes Workspace UI. It's open source and published at [github.com/jettoptx/optx-hermes-api](https://github.com/jettoptx/optx-hermes-api).
+The **Hermes OPTX API** is a FastAPI sidecar that extends Hermes Agent v0.7.0+ with enhanced endpoints for the Hermes Workspace UI. Open source at [joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api).
 
 ## Why It Exists
 
-Hermes Workspace expects `/api/sessions`, `/api/skills`, `/api/memory`, and `/api/config` endpoints that upstream Hermes Agent doesn't provide. Rather than forking the agent, hermes-optx-api sits alongside it as a sidecar.
+Hermes Workspace expects `/api/sessions`, `/api/skills`, `/api/memory`, and `/api/config` endpoints that upstream Hermes Agent doesn't provide. Rather than forking the agent, the Hermes OPTX API sits alongside it as a sidecar — extending capabilities without modifying the core.
 
 ## Architecture
 
 ```
-Hermes Workspace (:5555)
+Hermes Workspace
     ↓
-hermes-optx-api (:8643)
+Hermes OPTX API
     ├── /api/sessions    → reads Hermes state.db
     ├── /api/skills      → scans SKILL.md files
-    ├── /api/memory      → pluggable backend (holographic/spacetimedb)
+    ├── /api/memory      → pluggable backend (holographic / SpacetimeDB)
     ├── /api/config      → reads/writes Hermes config.yaml
     ├── /api/tasks       → SpacetimeDB task orchestration
-    └── /v1/*            → proxy passthrough to Hermes Agent (:8642)
+    └── /v1/*            → proxy passthrough to Hermes Agent
 ```
 
 ## Endpoints
 
 ### Sessions
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/sessions` | List all sessions |
@@ -35,11 +36,13 @@ hermes-optx-api (:8643)
 | `DELETE` | `/api/sessions/{id}` | Delete a session |
 
 ### Skills
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/skills` | List all skills (with category/search filtering) |
 
 ### Memory
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `POST` | `/api/memory` | Store a memory |
@@ -47,32 +50,35 @@ hermes-optx-api (:8643)
 | `GET` | `/api/memory/{id}` | Get specific memory |
 | `DELETE` | `/api/memory/{id}` | Delete a memory |
 | `GET` | `/api/memory/stats` | Memory statistics |
-| `GET` | `/api/memory/health` | Backend health |
+| `GET` | `/api/memory/health` | Backend health check |
 
 ### Config
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/config` | Read config (sensitive values redacted) |
 | `PATCH` | `/api/config` | Update config with dot-notation keys |
 
 ### Tasks (Orchestration)
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `POST` | `/api/tasks` | Create a task |
-| `GET` | `/api/tasks` | List tasks |
+| `GET` | `/api/tasks` | List tasks (filterable by status, agent, capabilities) |
 | `GET` | `/api/tasks/{id}` | Get task details |
-| `POST` | `/api/tasks/{id}/claim` | Claim for an agent |
-| `POST` | `/api/tasks/{id}/complete` | Complete with result |
+| `POST` | `/api/tasks/{id}/claim` | Claim task for an agent |
+| `POST` | `/api/tasks/{id}/complete` | Complete with result data |
 | `DELETE` | `/api/tasks/{id}` | Cancel a task |
-| `POST` | `/api/tasks/swarm` | Decompose goal into DAG |
-| `GET` | `/api/tasks/stats` | Task statistics |
+| `POST` | `/api/tasks/swarm` | Decompose a goal into a DAG of subtasks |
+| `GET` | `/api/tasks/stats` | Task statistics and queue depth |
 
 ### Gateway
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/health` | Health check + upstream status |
 | `GET` | `/api/gateway-status` | Feature flags and connection mode |
-| `*` | `/v1/*` | Proxy all to Hermes Agent |
+| `*` | `/v1/*` | Proxy all requests to Hermes Agent |
 
 ## Configuration
 
@@ -80,21 +86,21 @@ Set via environment variables or `.env` file:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `HERMES_AGENT_URL` | `http://localhost:8642` | Hermes Agent gateway URL |
+| `HERMES_AGENT_URL` | `http://localhost:8642` | Hermes Agent upstream URL |
 | `HERMES_HOME` | `~/.hermes` | Path to Hermes config directory |
 | `OPTX_API_PORT` | `8643` | API server port |
-| `MEMORY_BACKEND` | `holographic` | Memory backend: holographic, spacetimedb, custom |
+| `MEMORY_BACKEND` | `holographic` | Memory backend: `holographic`, `spacetimedb`, or custom |
 
 ## Installation
 
 ```bash
 pip install -e .
-hermes-optx-api --port 8643 --hermes-url http://localhost:8642
+hermes-optx-api
 ```
 
 Or with Docker:
 
 ```bash
-docker build -t hermes-optx-api -f docker/Dockerfile .
-docker run -p 8643:8643 -e HERMES_AGENT_URL=http://hermes-agent:8642 hermes-optx-api
+docker build -t hermes-optx-api .
+docker run -p 8643:8643 hermes-optx-api
 ```
