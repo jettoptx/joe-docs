@@ -1,0 +1,52 @@
+---
+icon: Network
+title: Map of Augments
+description: Interactive AGT-colored documentation graph — a demo of gaze-navigable spatial interfaces.
+---
+
+import { MoaGraph } from "@/components/moa-graph";
+
+## Map of Augments (MOA)
+
+Every node is a documentation page. Every edge is a cross-reference. Every node is colored by its primary **AGT tensor** — the cognitive dimension it engages.
+
+- **Hover** a node to highlight its connections
+- **Click** to select and inspect (shows AGT tag + description)
+- **Double-click** to navigate to that page
+- **Drag** nodes to rearrange the layout
+
+<MoaGraph />
+
+## Jett Cursor: Gaze Navigation
+
+Right now you're using a mouse. But this graph is designed for something better.
+
+The **Jett Cursor** replaces your mouse pointer with your gaze. Using the [AGT tensor system](/docs/authentication/gaze#agt-tensors) and AARON's iris tracking, the OPTX DOJO lets you navigate spatial interfaces like this one with your eyes:
+
+| Input | Mouse (current) | Jett Cursor (DOJO) |
+|-------|-----------------|---------------------|
+| **Hover** | Mouse position | Gaze fixation point |
+| **Select** | Click | Sustained dwell (500ms) |
+| **Navigate** | Double-click | Intentional blink or dwell + COG activation |
+| **Drag** | Click + drag | EMO tensor shift (engagement lock) |
+| **Scan** | Scroll | ENV tensor sweep (peripheral scanning) |
+
+The three tensors map directly to interaction modes:
+
+- **COG (Blue)** — Focused selection. When your cognitive tensor activates (sustained fixation on a node), it registers as intent to inspect or navigate.
+- **EMO (Red)** — Engagement lock. Emotional engagement with a node (pupil dilation, micro-saccades) locks it for dragging or extended interaction.
+- **ENV (Green)** — Spatial scanning. Environmental scanning sweeps the viewport, letting you explore the full graph without selecting individual nodes.
+
+## AGT Tagging
+
+Every page in the OPTX documentation is tagged with its primary AGT tensor. This isn't arbitrary — it reflects the cognitive dimension the content primarily engages:
+
+| AGT | Color | Tagged Content | Why |
+|-----|-------|---------------|-----|
+| **COG** | Blue | Architecture, Protocol, Reference, How-it-works | Analytical — requires sustained focus and reasoning |
+| **EMO** | Red | AstroJOE, Cockpit, DOJO, Identity, Gaze | Relational — engages identity, personality, interaction |
+| **ENV** | Green | Infrastructure, Topology, Bridge, On-chain, Edge | Spatial — maps networks, addresses, physical systems |
+
+## Inspiration
+
+Built on the [arscontexta](https://www.arscontexta.org/explore) methodology — a Claude Code plugin that generates interactive knowledge graphs from conversation. The OPTX fork ([arscontexta-OPTX](https://github.com/jett22JOE/arscontexta-OPTX)) adapts this for the DOJO: documentation pages become knowledge nodes, cross-references become semantic edges, and AGT tensors become the navigation layer.

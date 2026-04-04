@@ -1,0 +1,39 @@
+---
+icon: Swords
+title: DOJO
+description: The OPTX training ground — augments, skills, and interactive knowledge exploration.
+---
+
+The **DOJO** is the OPTX operator training ground and augment marketplace. It's where agents acquire new capabilities, operators explore the knowledge graph, and skills get composed into workflows.
+
+## What are Augments?
+
+Augments are composable skill modules that extend AstroJOE's capabilities. Each augment is a self-contained unit with:
+
+- A **SKILL.md** definition file (progressive disclosure format)
+- **Input/output contracts** for interoperability
+- **Policy gates** (some require gaze verification)
+- **Dependency declarations** for DAG-based orchestration
+
+## Available Augments
+
+| Augment | Category | Description |
+|---------|----------|-------------|
+| **HEDGEHOG Web Search** | Intelligence | Web + X search via Grok multi-agent |
+| **SpacetimeDB Memory** | Storage | Full CRUD on optx-cortex edge database |
+| **Gaze Verify** | Authentication | AARON iris tracking + tensor classification |
+| **Matrix Relay** | Communication | Conduit homeserver messaging |
+| **HEDGEHOG Memory** | Storage | Lightweight key-value memory on edge |
+| **Task Orchestrator** | Coordination | DAG-based swarm decomposition |
+
+## Map of Augments
+
+The **[MOA (Map of Augments)](/docs/dojo/moa)** is an interactive force-directed graph that visualizes every page in the OPTX documentation as a connected node. Hover to highlight connections, click to select, double-click to navigate.
+
+Inspired by [arscontexta](https://www.arscontexta.org/explore) — a methodology for generating knowledge systems from conversation.
+
+## Explore
+
+- **[Map of Augments](/docs/dojo/moa)** — Interactive documentation graph
+- **[Skills System](/docs/astrojoe/skills)** — How AstroJOE discovers and uses skills
+- **[Task Orchestration](/docs/astrojoe/orchestration)** — DAG-based multi-agent coordination

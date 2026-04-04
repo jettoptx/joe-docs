@@ -8,19 +8,58 @@ The **Agentive Gaze Tensor (AGT)** system classifies eye movement into three bio
 
 ## AGT Tensors
 
-The three biometric tensor zones that power JETT Auth:
+The three biometric tensor zones that power JETT Auth. Each tensor captures a distinct dimension of human cognition through iris movement analysis, forming a 3-dimensional biometric signature that is unique to every individual.
+
+Every page in the OPTX documentation is tagged with its primary AGT tensor — visible in the [Map of Augments](/docs/dojo/moa) and the header legend.
 
 ### COG — Cognitive Tensor
 
-Upper gaze zone. Analytical focus, reading, problem-solving patterns.
+**Color:** Blue (`#60a5fa`) | **Gaze Zone:** Upper field | **Iris landmarks:** 468, 473 (upper arc)
+
+The Cognitive tensor captures **analytical attention** — the patterns your eyes make when processing structured information, reading, reasoning, and solving problems. COG activation correlates with:
+
+- **Sustained fixation** on text or data (long dwell times)
+- **Systematic scanning** patterns (left-to-right, top-to-bottom)
+- **Saccade precision** during focused reading
+- **Pupil constriction** indicating concentrated focus
+
+In the OPTX documentation, COG-tagged pages are conceptual and architectural: protocol specs, system architecture, how-things-work explanations, and API references.
 
 ### EMO — Emotional Tensor
 
-Lower-left zone. Emotional processing, social engagement, empathy.
+**Color:** Red (`#f43f5e`) | **Gaze Zone:** Lower-left field | **Iris landmarks:** 468, 473 (lower-left arc)
+
+The Emotional tensor captures **affective processing** — the involuntary eye movements associated with emotional engagement, social cognition, and identity recognition. EMO activation correlates with:
+
+- **Rapid micro-saccades** during emotional processing
+- **Pupil dilation** responding to arousal or surprise
+- **Gaze aversion** patterns (looking away during discomfort)
+- **Face-tracking fixations** during social engagement
+
+In the OPTX documentation, EMO-tagged pages relate to identity, personality, agent behavior, and human-facing interfaces: AstroJOE, the Cockpit, gaze verification, and the DOJO.
 
 ### ENV — Environmental Tensor
 
-Lower-right zone. Spatial awareness, environmental scanning, navigation.
+**Color:** Green (`#4ade80`) | **Gaze Zone:** Lower-right field | **Iris landmarks:** 468, 473 (lower-right arc)
+
+The Environmental tensor captures **spatial awareness** — how your eyes map physical and digital space, navigate interfaces, and track movement. ENV activation correlates with:
+
+- **Peripheral scanning** (wide-field sweeps)
+- **Depth-of-field shifts** (near-far accommodation changes)
+- **Motion tracking** saccades following moving targets
+- **Spatial mapping** patterns (building mental models of layouts)
+
+In the OPTX documentation, ENV-tagged pages cover infrastructure, networking, on-chain addresses, edge hardware, and cross-chain bridging — the spatial fabric of the system.
+
+### Tensor Weights
+
+Authentication uses the **weighted combination** of all three tensors, not any single one. The weight vector `[COG, EMO, ENV]` is normalized to sum to 1.0 and forms the basis for gaze-derived encryption seeds.
+
+| Tensor | Weight Range | Primary Signal | Documentation Tag |
+|--------|-------------|----------------|-------------------|
+| **COG** | 0.0 — 1.0 | Analytical attention | Architecture, Protocol, Reference |
+| **EMO** | 0.0 — 1.0 | Affective engagement | Identity, Agent, Cockpit, DOJO |
+| **ENV** | 0.0 — 1.0 | Spatial awareness | Infrastructure, Chain, Topology |
 
 ## Integration Example
 
