@@ -82,13 +82,13 @@ export default async function Page(props: {
                           footer: <CopyForAgents />,
                 }}
               >
-              <DocsTitle>{data.title}</DocsTitle>DocsTitle>
+              <DocsTitle>{data.title}</DocsTitle>
           {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
-              <DocsDescription>{data.description}</DocsDescription>DocsDescription>
+              <DocsDescription>{data.description}</DocsDescription>
               <DocsBody>
                       <MDX components={{ ...defaultMdxComponents, pre: Pre }} />
-              </DocsBody>DocsBody>
-        </DocsPage>DocsPage>
+              </DocsBody>
+        </DocsPage>
       );
 }
 
@@ -107,4 +107,4 @@ export async function generateMetadata(props: {
           title: page.data.title,
           description: page.data.description,
     };
-}</DocsPage>
+}
