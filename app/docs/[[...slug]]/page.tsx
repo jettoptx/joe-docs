@@ -9,7 +9,9 @@ import { notFound } from "next/navigation";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Pre } from "@/components/mdx-components";
 import { AgtBadge } from "@/components/agt-badge";
+import { CopyForAgentsBtn } from "@/components/copy-for-agents-btn";
 import type { Metadata } from "next";
+import { readFileSync } from "node:fs";
 
 /** AGT distribution for each doc page: [EMO%, ENV%, COG%] + primary tensor + MOA node */
 type AgtEntry = { tensor: "COG" | "EMO" | "ENV"; node: string; emo: number; env: number; cog: number };
@@ -74,8 +76,24 @@ export default async function Page(props: {
   const slugPath = params.slug?.join("/") ?? "";
   const agt = PAGE_AGT[slugPath];
 
+  // Read raw MDX source for the "Copy for Agents" button
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const absolutePath = (page as any).absolutePath as string | undefined;
+  let rawContent = "";
+  if (absolutePath) {
+    try {
+      rawContent = readFileSync(absolutePath, "utf-8");
+    } catch {
+      rawContent = "";
+    }
+  }
+
   return (
-    <DocsPage toc={data.toc} full={data.full}>
+    <DocsPage
+      toc={data.toc}
+      full={data.full}
+      tableOfContent={{ footer: <CopyForAgentsBtn content={rawContent} /> }}
+    >
       <DocsTitle>{data.title}</DocsTitle>
       {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
       <DocsDescription>{data.description}</DocsDescription>
