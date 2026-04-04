@@ -207,7 +207,7 @@ export function SiteFooter() {
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 4, 2026 &mdash; v1.5.0
+              Last updated: April 4, 2026 &mdash; v1.6.0
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -215,6 +215,14 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.6.0</span> &mdash; April 4, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Copy for Agents: one-click clipboard copy button in TOC sidebar footer for LLM/agent page content extraction</li>
+                      <li>&#x2022; Polished README: ecosystem repos table, Next.js project structure guide, MDX content docs, 5-step template fork guide</li>
+                      <li>&#x2022; Mobile sidebar: slim 52px collapsible icon-rail for mobile viewports (9 section icons, expands to 200px with labels)</li>
+                      <li>&#x2022; Build fixes: repaired corrupted JSX closing tags in page.tsx and copy-for-agents.tsx</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v1.5.0</span> &mdash; Final DevSecOps audit, IP review, AGT reclassification, MOA augment overlay, favicon + logo update</li>
                   <li><span className="text-orange-400">v1.4.0</span> &mdash; On-Chain Bridge section, Mermaid diagrams + legends, DevSecOps audit</li>
                   <li><span className="text-orange-400">v1.3.0</span> &mdash; Architecture Flows: task lifecycle, state machine, swarm DAG, gaze-gated policy</li>

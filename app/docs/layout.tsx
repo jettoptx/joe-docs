@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/footer";
 import { AugmentSpaceBtn } from "@/components/augment-space-btn";
 import { AugmentSpaceOverlay } from "@/components/augment-space-overlay";
 import { NavLink } from "@/components/nav-link";
+import { MobileSidebar } from "@/components/mobile-sidebar";
 
 const navLinks = [
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx" },
@@ -93,16 +94,22 @@ export default function Layout({ children }: { children: ReactNode }) {
       {/* Spacer for fixed header */}
       <div className="h-14" />
 
-      <DocsLayout
-        tree={source.pageTree}
-        nav={{ enabled: false }}
-        sidebar={{
-          defaultOpenLevel: 1,
-          footer: <AugmentSpaceBtn key="augment-space" />,
-        }}
-      >
-        {children}
-      </DocsLayout>
+      {/* Mobile icon-rail sidebar — hidden on md+ where the DocsLayout sidebar takes over */}
+      <MobileSidebar />
+
+      {/* Offset wrapper so content clears the 52px mobile rail on small screens */}
+      <div className="md:contents mobile-docs-offset">
+        <DocsLayout
+          tree={source.pageTree}
+          nav={{ enabled: false }}
+          sidebar={{
+            defaultOpenLevel: 1,
+            footer: <AugmentSpaceBtn key="augment-space" />,
+          }}
+        >
+          {children}
+        </DocsLayout>
+      </div>
       <AugmentSpaceOverlay />
       <SiteFooter />
     </>
