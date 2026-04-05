@@ -306,7 +306,7 @@ nav[data-fd-sidebar] {
   }
 
   #nd-docs-layout[data-sidebar-collapsed="true"] {
-    grid-template-columns: 0px 0px 1fr 220px 0px !important;
+    grid-template-columns: 40px 0px 1fr 220px 0px !important;
   }
 }
 
@@ -520,8 +520,15 @@ aside#nd-sidebar {
   width: var(--fd-sidebar-width) !important;
 }
 
-/* Collapsed sidebar — compact floating panel with expand + search buttons */
+/* Collapsed sidebar — force visibility via animation (beats Tailwind v4 cascade layers) */
+@keyframes fd-panel-show {
+  from, to {
+    opacity: 0.5;
+    pointer-events: auto;
+  }
+}
 #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
+  animation: fd-panel-show 0s both !important;
   width: fit-content !important;
   max-width: 80px !important;
   flex-direction: column !important;
@@ -531,14 +538,7 @@ aside#nd-sidebar {
   box-shadow: none !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   background: rgba(10, 10, 10, 0.6) !important;
-  opacity: 0.5 !important;
-  transition: opacity 0.2s ease, background 0.2s ease !important;
-}
-
-#nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel]:hover {
-  opacity: 1 !important;
-  background: rgba(10, 10, 10, 0.9) !important;
-  border-color: rgba(255, 105, 0, 0.15) !important;
+  top: 5rem !important;
 }
 
 #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] button {
@@ -550,9 +550,6 @@ aside#nd-sidebar {
 :root:not(.dark) #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
   background: rgba(240, 240, 240, 0.7) !important;
   border-color: rgba(0, 0, 0, 0.08) !important;
-}
-:root:not(.dark) #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel]:hover {
-  background: rgba(255, 255, 255, 0.95) !important;
 }
 
 #nd-docs-layout [data-sidebar-placeholder] {

@@ -15,7 +15,9 @@ export function AgtHeaderLink() {
       setTimeout(() => {
         const graph = document.getElementById("moa-knowledge-graph");
         if (graph) {
-          graph.scrollIntoView({ behavior: "smooth", block: "start" });
+          const rect = graph.getBoundingClientRect();
+          const offset = window.scrollY + rect.top - 80;
+          window.scrollTo({ top: offset, behavior: "smooth" });
         }
       }, 150);
     } else {

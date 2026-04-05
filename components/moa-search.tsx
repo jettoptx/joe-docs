@@ -46,6 +46,8 @@ export function MoaSearch() {
     const node = matches[idx];
     if (!node) return;
     window.dispatchEvent(new CustomEvent("moa-search-select", { detail: node.id }));
+    // Close augment overlay so sidebar + docs come back
+    window.dispatchEvent(new CustomEvent("augment-space-close"));
   }, [matches]);
 
   // Keyboard: / to open, Escape to close, arrows to navigate, Enter to select
@@ -87,7 +89,7 @@ export function MoaSearch() {
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         Search MOA
-        <kbd className="text-[9px] border border-fd-border/40 rounded px-1 py-0.5 text-fd-muted-foreground/30">/</kbd>
+        <kbd className="text-[9px] border border-fd-border/40 rounded px-1 py-0.5 text-fd-muted-foreground/30 group-hover:text-orange-400/40 transition-colors">/</kbd>
       </button>
     );
   }
@@ -153,9 +155,9 @@ export function MoaSearch() {
 
         {/* Footer hint */}
         <div className="px-3 py-1.5 border-t border-fd-border/30 flex items-center gap-3 text-[9px] text-fd-muted-foreground/30">
-          <span>&#x2191;&#x2193; navigate</span>
-          <span>&#x23CE; select</span>
-          <span>esc close</span>
+          <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x2191;&#x2193; navigate</span>
+          <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x23CE; select</span>
+          <span className="hover:text-orange-400/60 transition-colors cursor-default">esc close</span>
         </div>
       </div>
     </div>

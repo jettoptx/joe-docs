@@ -239,6 +239,15 @@ curl http://localhost:8888/health
 ```
 ```
 
+## Current Version
+
+**v1.8.1** — April 5, 2026
+
+- Collapsed sidebar panel visibility fix (Tailwind v4 cascade layer override via CSS animation)
+- AGT header link scroll offset correction
+- Jett Cursor documentation accuracy update (barycentric simplex widget)
+- MOA Search: node selection closes augment overlay, orange hover on footer hints
+
 ## License
 
 MIT — use it, fork it, ship it.
