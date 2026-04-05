@@ -5,7 +5,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-fd-border bg-fd-card">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-x-10 gap-y-8">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-x-6 gap-y-8">
           {/* Brand Column */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
@@ -143,7 +143,7 @@ export function SiteFooter() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-orange-400 transition-colors whitespace-nowrap"
+                    className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground hover:text-orange-400 transition-colors break-all"
                   >
                     {link.label}
                   </a>
