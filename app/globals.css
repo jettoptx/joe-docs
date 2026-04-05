@@ -368,6 +368,10 @@ aside#nd-sidebar {
   body .moa-fullscreen {
     left: var(--fd-sidebar-width, 340px) !important;
   }
+  /* When sidebar collapsed, MOA fills full width */
+  body:has(#nd-docs-layout[data-sidebar-collapsed="true"]) .moa-fullscreen {
+    left: 0 !important;
+  }
 }
 
 /* Lock page scroll when MOA is visible — only sidebar should scroll */
@@ -416,6 +420,9 @@ body:has(.moa-fullscreen) > div > footer {
 @media (min-width: 768px) {
   .augment-overlay {
     left: var(--fd-sidebar-width, 340px);
+  }
+  body:has(#nd-docs-layout[data-sidebar-collapsed="true"]) .augment-overlay {
+    left: 0;
   }
 }
 
@@ -481,6 +488,11 @@ aside#nd-sidebar {
   width: 0 !important;
   min-width: 0 !important;
   overflow: hidden !important;
+}
+
+/* Hide the floating sidebar panel when collapsed */
+#nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
+  display: none !important;
 }
 
 #nd-docs-layout [data-sidebar-placeholder] {

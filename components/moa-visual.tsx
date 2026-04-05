@@ -401,20 +401,35 @@ function MoaVisualInner() {
       const pan = panRef.current;
 
       // Background
+      ctx.clearRect(0, 0, dims.w, dims.h);
       if (isDark) {
-        const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(dims.w, dims.h) * 0.7);
-        bgGrad.addColorStop(0, "#0d0d0d");
-        bgGrad.addColorStop(0.5, "#080808");
-        bgGrad.addColorStop(1, "#050505");
-        ctx.fillStyle = bgGrad;
+        ctx.fillStyle = "#050505";
       } else {
-        const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(dims.w, dims.h) * 0.7);
-        bgGrad.addColorStop(0, "#f8f8f8");
-        bgGrad.addColorStop(0.5, "#f0f0f0");
-        bgGrad.addColorStop(1, "#e8e8e8");
-        ctx.fillStyle = bgGrad;
+        ctx.fillStyle = "#f5f5f5";
       }
       ctx.fillRect(0, 0, dims.w, dims.h);
+
+      // Aceternity-style dot grid background
+      const dotSpacing = 28;
+      const dotBase = 1;
+      const dotCols = Math.ceil(dims.w / dotSpacing) + 1;
+      const dotRows = Math.ceil(dims.h / dotSpacing) + 1;
+      const dotOffX = (dims.w % dotSpacing) / 2;
+      const dotOffY = (dims.h % dotSpacing) / 2;
+      for (let row = 0; row < dotRows; row++) {
+        for (let col = 0; col < dotCols; col++) {
+          const dx = dotOffX + col * dotSpacing;
+          const dy = dotOffY + row * dotSpacing;
+          const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.04;
+          const alpha = Math.max(0, (isDark ? 0.12 : 0.08) + wave);
+          ctx.beginPath();
+          ctx.arc(dx, dy, dotBase, 0, Math.PI * 2);
+          ctx.fillStyle = isDark
+            ? `rgba(255,255,255,${alpha})`
+            : `rgba(80,80,80,${alpha})`;
+          ctx.fill();
+        }
+      }
 
       // Apply pan + zoom transform
       const zoom = zoomRef.current;
@@ -825,12 +840,12 @@ function MoaVisualInner() {
 
       {/* ═══ Index Panel (toggleable) ═══ */}
       {showIndex && (
-        <div className="fixed top-14 left-[56px] right-0 bottom-0 md:left-auto md:bottom-auto md:top-16 md:right-4 md:w-[320px] md:max-h-[calc(100vh-6rem)] md:rounded-xl overflow-y-auto bg-fd-background/95 backdrop-blur-xl border-l md:border border-fd-border font-[family-name:var(--font-geist-mono)] z-50 shadow-lg shadow-black/20">
-          <div className="sticky top-0 px-3.5 py-2.5 border-b border-fd-border bg-fd-background/95 backdrop-blur-xl flex items-center justify-between z-10">
-            <span className="text-[11px] font-bold text-fd-foreground uppercase tracking-widest font-[family-name:var(--font-orbitron)]">Index - Node</span>
+        <div className="fixed top-14 left-[56px] right-0 bottom-0 md:left-auto md:bottom-auto md:top-16 md:right-4 md:w-[380px] md:max-h-[calc(100vh-6rem)] md:rounded-xl overflow-y-auto bg-fd-background/95 backdrop-blur-xl border-l md:border border-fd-border font-[family-name:var(--font-geist-mono)] z-50 shadow-lg shadow-black/20">
+          <div className="sticky top-0 px-4 py-3 border-b border-fd-border bg-fd-background/95 backdrop-blur-xl flex items-center justify-between z-10">
+            <span className="text-sm font-bold text-fd-foreground uppercase tracking-widest font-[family-name:var(--font-orbitron)]">Index — Nodes</span>
             <button
               onClick={() => setShowIndex(false)}
-              className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors px-2 py-1 rounded-md hover:bg-[rgba(255,105,0,0.08)]"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors px-2.5 py-1 rounded-md hover:bg-[rgba(255,105,0,0.08)]"
             >
               Close
             </button>
@@ -840,11 +855,11 @@ function MoaVisualInner() {
             if (groupNodes.length === 0) return null;
             return (
               <div key={groupKey} className="border-b border-fd-border/30 last:border-b-0">
-                <div className="px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-widest text-[rgb(255,105,0)] font-[family-name:var(--font-orbitron)]">{groupName}</div>
+                <div className="px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-[rgb(255,105,0)] font-[family-name:var(--font-orbitron)]">{groupName}</div>
                 {groupNodes.map(n => (
                   <button
                     key={n.id}
-                    className="w-full px-3.5 py-1.5 grid grid-cols-[8px_1fr_auto_auto] items-center gap-2 text-left hover:bg-fd-accent/30 transition-colors"
+                    className="w-full px-4 py-2 grid grid-cols-[10px_1fr_auto_auto] items-center gap-2.5 text-left hover:bg-fd-accent/30 transition-colors"
                     onClick={() => {
                       const live = nodesRef.current.find(ln => ln.id === n.id);
                       if (live) {
@@ -853,15 +868,15 @@ function MoaVisualInner() {
                       }
                     }}
                   >
-                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: AGT[n.agt].color, boxShadow: `0 0 4px ${AGT[n.agt].glow}` }} />
-                    <span className="text-[10px] text-fd-foreground truncate">{n.label}</span>
-                    <span className="text-[7px] font-bold px-1 py-0.5 rounded" style={{ color: AGT[n.agt].color, backgroundColor: AGT[n.agt].color + "15" }}>{n.agt}</span>
-                    <div className="flex items-center gap-1 min-w-[72px] justify-end">
-                      <span className="text-[7px] font-bold" style={{ color: "#f43f5e" }}>{n.emo}</span>
-                      <span className="text-[7px] text-fd-muted-foreground/30">/</span>
-                      <span className="text-[7px] font-bold" style={{ color: "#60a5fa" }}>{n.env}</span>
-                      <span className="text-[7px] text-fd-muted-foreground/30">/</span>
-                      <span className="text-[7px] font-bold" style={{ color: "#eab308" }}>{n.cog}</span>
+                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: AGT[n.agt].color, boxShadow: `0 0 4px ${AGT[n.agt].glow}` }} />
+                    <span className="text-[13px] text-fd-foreground truncate">{n.label}</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ color: AGT[n.agt].color, backgroundColor: AGT[n.agt].color + "15" }}>{n.agt}</span>
+                    <div className="flex items-center gap-1.5 min-w-[84px] justify-end">
+                      <span className="text-[9px] font-bold" style={{ color: "#f43f5e" }}>{n.emo}</span>
+                      <span className="text-[9px] text-fd-muted-foreground/30">/</span>
+                      <span className="text-[9px] font-bold" style={{ color: "#60a5fa" }}>{n.env}</span>
+                      <span className="text-[9px] text-fd-muted-foreground/30">/</span>
+                      <span className="text-[9px] font-bold" style={{ color: "#eab308" }}>{n.cog}</span>
                     </div>
                   </button>
                 ))}
