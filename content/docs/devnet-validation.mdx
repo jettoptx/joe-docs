@@ -1,0 +1,80 @@
+---
+icon: ShieldCheck
+title: Devnet Validation
+description: Validation procedures and attestation protocol for the OPTX devnet deployment — DePIN node operators, gaze attestation proofs, and on-chain verification.
+---
+
+## Devnet Validation
+
+OPTX runs a devnet validation environment for testing DePIN attestation flows, gaze biometric proofs, and cross-chain bridging before mainnet deployment.
+
+### Validation Overview
+
+| Component | Network | Status |
+|-----------|---------|--------|
+| $OPTX Token | Solana Devnet | Active |
+| DePIN Program | Solana Devnet | Active |
+| CSTB Trust | Solana Devnet | Active |
+| AARON Router | Edge (Jetson) | Active |
+| Gaze Attestation | Edge + Devnet | Active |
+
+### Program Addresses
+
+| Program | Address |
+|---------|---------|
+| $OPTX Token | `4r9WxVWBNMphYfSyGBuMFYRLsLEnzUNquJPnpFessXRH` |
+| DePIN Program | `91SqPNGRFrTgwSM3S7grZK8A6TCqn5STFGK4mAfqWMbQ` |
+| $CSTB Token | `4waAimBGeubfVBp4MX9vRh7iTWxoR2RYYqiuChqCH7rX` |
+
+### Attestation Flow
+
+1. **Gaze Capture** — MediaPipe FaceLandmarker extracts iris landmarks (468/473) on-device
+2. **AGT Classification** — Raw gaze vectors classified into COG/EMO/ENV tensor weights
+3. **Proof Generation** — AARON Router on Jetson edge node generates a biometric attestation proof
+4. **On-Chain Submit** — Proof submitted to the DePIN program on Solana devnet
+5. **Verification** — Validators confirm the attestation against the CSTB trust anchor
+
+### Running a Validator Node
+
+Validator nodes run on edge hardware (Jetson Orin recommended) connected via Tailscale mesh:
+
+```bash
+# Install SpacetimeDB
+curl -sSf https://install.spacetimedb.com | sh
+
+# Clone the OPTX core module
+git clone https://github.com/jettoptx/joe-core.git
+cd joe-core/optx-cortex-module
+
+# Build and publish to local SpacetimeDB
+spacetime publish optx-cortex --project-path .
+
+# Start the AARON Router
+cd ../tools
+python3 aaron_router.py --network devnet
+```
+
+### Devnet RPC
+
+Connect to the OPTX devnet via Helius RPC:
+
+```
+https://devnet.helius-rpc.com/?api-key=<your-api-key>
+```
+
+### Validation Criteria
+
+Attestation proofs must satisfy:
+
+- **Liveness** — Gaze sequence must contain at least 3 saccadic movements within the capture window
+- **Uniqueness** — AGT tensor fingerprint must not match any existing attestation within the cooldown period
+- **Freshness** — Proof timestamp must be within 30 seconds of submission
+- **Integrity** — AARON signature must validate against the registered edge node identity
+
+### Reporting Issues
+
+If you encounter validation failures or inconsistencies on devnet, report them via:
+
+- GitHub Issues: [jettoptx/joe-core](https://github.com/jettoptx/joe-core/issues)
+- Matrix: `#optx:jettoptics.ai`
+- Email: joe@jettoptics.ai

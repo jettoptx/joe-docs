@@ -260,10 +260,27 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* TOC — right sidebar */
+/* TOC — right sidebar "On this page" */
 [data-fd-toc] a[data-active="true"] {
   color: rgb(255, 105, 0) !important;
   border-left-color: rgb(255, 105, 0) !important;
+}
+
+/* TocThumb — scroll-tracking indicator bar */
+#nd-toc [style*="clip-path"] {
+  width: 2px !important;
+  background: rgb(255, 105, 0) !important;
+  box-shadow: 0 0 8px rgba(255, 105, 0, 0.5), 0 0 2px rgba(255, 105, 0, 0.8) !important;
+  transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* TOC link hover + active transitions */
+#nd-toc a {
+  transition: color 0.2s ease, border-left-color 0.2s ease !important;
+}
+
+#nd-toc a:hover {
+  color: rgb(255, 140, 50) !important;
 }
 
 /* Breadcrumb styling */
@@ -490,9 +507,11 @@ aside#nd-sidebar {
   overflow: hidden !important;
 }
 
-/* Hide the floating sidebar panel when collapsed */
+/* Style the floating sidebar panel when collapsed — hide grey background */
 #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
-  display: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 #nd-docs-layout [data-sidebar-placeholder] {

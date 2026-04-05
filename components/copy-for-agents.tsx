@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { ClipboardCopy, Check } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 
 function useCopyPageContent() {
   const [copied, setCopied] = useState(false);
@@ -61,7 +61,7 @@ export function CopyForAgents() {
           </>
         ) : (
           <>
-            <ClipboardCopy className="h-4 w-4" />
+            <Copy className="h-4 w-4" />
             <span>Copy for Agents</span>
           </>
         )}
@@ -88,7 +88,7 @@ export function CopyForAgentsFAB() {
       {copied ? (
         <Check className="h-5 w-5" />
       ) : (
-        <ClipboardCopy className="h-5 w-5" />
+        <Copy className="h-5 w-5" />
       )}
     </button>
   );

@@ -208,8 +208,8 @@ export function SiteFooter() {
                 },
                 {
                   label: "Devnet Validation",
-                  href: "https://docs.agenc.tech/docs/deployment/devnet-validation/",
-                  ext: true,
+                  href: "/docs/devnet-validation",
+                  ext: false,
                 },
                 {
                   label: "USPTO Patent",
