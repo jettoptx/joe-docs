@@ -409,9 +409,23 @@ function MoaVisualInner() {
       }
       ctx.fillRect(0, 0, dims.w, dims.h);
 
+      // Subtle radial vignette glow from center
+      const vigGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(dims.w, dims.h) * 0.6);
+      if (isDark) {
+        vigGrad.addColorStop(0, "rgba(255,105,0,0.03)");
+        vigGrad.addColorStop(0.4, "rgba(255,105,0,0.01)");
+        vigGrad.addColorStop(1, "transparent");
+      } else {
+        vigGrad.addColorStop(0, "rgba(255,105,0,0.05)");
+        vigGrad.addColorStop(0.4, "rgba(255,105,0,0.02)");
+        vigGrad.addColorStop(1, "transparent");
+      }
+      ctx.fillStyle = vigGrad;
+      ctx.fillRect(0, 0, dims.w, dims.h);
+
       // Aceternity-style dot grid background
-      const dotSpacing = 28;
-      const dotBase = 1;
+      const dotSpacing = 26;
+      const dotBase = 1.2;
       const dotCols = Math.ceil(dims.w / dotSpacing) + 1;
       const dotRows = Math.ceil(dims.h / dotSpacing) + 1;
       const dotOffX = (dims.w % dotSpacing) / 2;
@@ -420,13 +434,16 @@ function MoaVisualInner() {
         for (let col = 0; col < dotCols; col++) {
           const dx = dotOffX + col * dotSpacing;
           const dy = dotOffY + row * dotSpacing;
-          const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.04;
-          const alpha = Math.max(0, (isDark ? 0.12 : 0.08) + wave);
+          const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.06;
+          const distFromCenter = Math.sqrt((dx - cx) ** 2 + (dy - cy) ** 2);
+          const centerBoost = Math.max(0, 1 - distFromCenter / (Math.max(dims.w, dims.h) * 0.5)) * 0.08;
+          const alpha = Math.max(0, (isDark ? 0.15 : 0.1) + wave + centerBoost);
+          const radius = dotBase + centerBoost * 2;
           ctx.beginPath();
-          ctx.arc(dx, dy, dotBase, 0, Math.PI * 2);
+          ctx.arc(dx, dy, radius, 0, Math.PI * 2);
           ctx.fillStyle = isDark
             ? `rgba(255,255,255,${alpha})`
-            : `rgba(80,80,80,${alpha})`;
+            : `rgba(60,60,60,${alpha})`;
           ctx.fill();
         }
       }
