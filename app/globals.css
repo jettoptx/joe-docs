@@ -266,74 +266,77 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* TocThumb — scroll-tracking indicator bar (circuit trace glow) */
+/* ═══ TOC — Circuit trace with node dots ═══ */
+
+/* Scroll-tracking thumb — thick bar on the trace */
 #nd-toc [style*="clip-path"] {
-  width: 2px !important;
+  width: 3px !important;
   background: rgb(255, 105, 0) !important;
-  box-shadow: 0 0 8px rgba(255, 105, 0, 0.5), 0 0 2px rgba(255, 105, 0, 0.8) !important;
-  transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: clip-path 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* TOC circuit trace — vertical line */
+/* Trace line */
 #nd-toc .border-s {
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-/* TOC links — circuit node dots */
+/* All links — position for dots */
 #nd-toc a {
-  transition: color 0.2s ease, padding-left 0.15s ease !important;
   position: relative !important;
+  transition: color 0.15s ease !important;
 }
 
-#nd-toc a::before {
-  content: "" !important;
-  position: absolute !important;
-  left: -4px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: 6px !important;
-  height: 6px !important;
-  border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.2s ease !important;
-  z-index: 1 !important;
-}
-
-/* Active node — orange glow dot */
-#nd-toc a[data-active="true"]::before {
-  background: rgb(255, 105, 0) !important;
-  border-color: rgb(255, 105, 0) !important;
-  box-shadow: 0 0 6px rgba(255, 105, 0, 0.6), 0 0 12px rgba(255, 105, 0, 0.3) !important;
-  width: 8px !important;
-  height: 8px !important;
-  left: -5px !important;
-}
-
-/* Active link style */
+/* Active text — bold orange */
 #nd-toc a[data-active="true"] {
   color: rgb(255, 105, 0) !important;
   font-weight: 600 !important;
-  padding-left: 1rem !important;
 }
 
-/* Hover — subtle orange */
+/* Hover */
 #nd-toc a:hover {
   color: rgb(255, 140, 50) !important;
 }
 
-#nd-toc a:hover::before {
-  background: rgba(255, 105, 0, 0.4) !important;
-  border-color: rgba(255, 105, 0, 0.5) !important;
-}
-
-/* Light mode circuit dots */
-:root:not(.dark) #nd-toc a::before {
-  background: rgba(0, 0, 0, 0.1) !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
-}
+/* Light mode */
 :root:not(.dark) #nd-toc .border-s {
   border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* TOC circuit dots — must be in @layer base to beat Tailwind v4 cascade */
+@layer base {
+  #nd-toc a::before {
+    content: "" !important;
+    position: absolute !important;
+    left: -4.5px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+    transition: all 0.2s ease !important;
+    z-index: 2 !important;
+  }
+
+  #nd-toc a[data-active="true"]::before {
+    background: rgb(255, 105, 0) !important;
+    border-color: rgb(255, 105, 0) !important;
+    width: 7px !important;
+    height: 7px !important;
+    left: -5.5px !important;
+    box-shadow: 0 0 4px rgba(255, 105, 0, 0.5) !important;
+  }
+
+  #nd-toc a:hover::before {
+    background: rgba(255, 105, 0, 0.3) !important;
+    border-color: rgba(255, 105, 0, 0.4) !important;
+  }
+
+  :root:not(.dark) #nd-toc a::before {
+    background: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+  }
 }
 
 /* Hide TOC popover trigger on md+ — redundant when sidebar TOC is visible */
