@@ -88,7 +88,7 @@ export function SiteFooter() {
           </div>
 
           {/* Infrastructure Column */}
-          <div>
+          <div className="pr-4">
             <h3 className="font-[family-name:var(--font-orbitron)] text-sm font-semibold tracking-widest uppercase text-fd-foreground mb-4">
               Infrastructure
             </h3>
