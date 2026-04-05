@@ -493,7 +493,11 @@ aside#nd-sidebar {
   width: var(--fd-sidebar-width) !important;
 }
 
-/* When collapsed, shrink the placeholder so content reclaims the space */
+/* When collapsed, shrink the placeholder AND grid column so content fills the space */
+#nd-docs-layout[data-sidebar-collapsed="true"] {
+  grid-template-columns: 0px 0px 1fr auto 0px !important;
+}
+
 #nd-docs-layout:has([data-collapsed="true"]) [data-sidebar-placeholder] {
   width: 0 !important;
   min-width: 0 !important;
@@ -507,11 +511,23 @@ aside#nd-sidebar {
   overflow: hidden !important;
 }
 
-/* Style the floating sidebar panel when collapsed — hide grey background */
+/* Floating sidebar panel when collapsed — keep buttons visible with subtle styling */
 #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: rgba(10, 10, 10, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 105, 0, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  top: calc(var(--fd-docs-row-3, 3.5rem) + 0.5rem) !important;
+  left: 0.5rem !important;
+  z-index: 50 !important;
+}
+
+/* Light mode panel styling */
+:root:not(.dark) #nd-docs-layout[data-sidebar-collapsed="true"] [data-sidebar-panel] {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 105, 0, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 #nd-docs-layout [data-sidebar-placeholder] {

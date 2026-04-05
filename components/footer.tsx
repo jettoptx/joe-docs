@@ -130,8 +130,8 @@ export function SiteFooter() {
                   href: "https://github.com/jettoptx/joe-aaron-router",
                 },
                 {
-                  label: "joe-JTX-CSTB.TRUST.DEPIN",
-                  href: "https://github.com/jettoptx/joe-JTX-CSTB.TRUST.DEPIN",
+                  label: "joe-jtx-cstb-depin",
+                  href: "https://github.com/jettoptx/joe-jtx-cstb-depin",
                 },
                 {
                   label: "joe-docs",
