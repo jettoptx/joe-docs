@@ -7,6 +7,7 @@ const MoaVisual = dynamic(() => import("@/components/moa-visual").then(m => ({ d
   ssr: false,
   loading: () => <div className="augment-overlay animate-pulse" />,
 });
+const MoaSearch = dynamic(() => import("@/components/moa-search").then(m => ({ default: m.MoaSearch })), { ssr: false });
 
 export function AugmentSpaceOverlay() {
   // Default ON for desktop, OFF for mobile so docs are readable
@@ -77,6 +78,7 @@ export function AugmentSpaceOverlay() {
   return (
     <div className="augment-overlay">
       <MoaVisual />
+      <MoaSearch />
     </div>
   );
 }

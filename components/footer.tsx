@@ -245,7 +245,7 @@ export function SiteFooter() {
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 4, 2026 &mdash; v1.7.0
+              Last updated: April 5, 2026 &mdash; v1.8.0
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -253,6 +253,20 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.8.0</span> &mdash; April 5, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; JETT Cursor: AGT simplex widget showing cursor position by COG/EMO/ENV weights, color-matched to dominant tensor</li>
+                      <li>&#x2022; MOA Search: floating graph-specific search with keyboard nav, hidden on mobile</li>
+                      <li>&#x2022; Knowledge Map: /cog /emo /env slash filter commands replace text search</li>
+                      <li>&#x2022; AGT header link: smart scroll-to-graph when on MOA page, navigate otherwise</li>
+                      <li>&#x2022; TOC scroll-spy: visible at md+ breakpoint (768px), hidden on mobile</li>
+                      <li>&#x2022; TOC popover: hidden on desktop where sidebar TOC is visible</li>
+                      <li>&#x2022; Collapsed sidebar: compact floating panel with expand/search buttons</li>
+                      <li>&#x2022; MOA flashlight: tuned spotlight radius, AGT tri-color sectors, glow gradient</li>
+                      <li>&#x2022; Selected node: purple glow on card + sidebar link highlight</li>
+                      <li>&#x2022; AGT naming: Adaptive v1 → Agentive v2 → Augmentive v3 (SDK for agentic Map of Context)</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v1.7.0</span> &mdash; April 4, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Mobile sidebar: Augment Space toggle + theme switch in sidebar footer, pixelation dissolve on footer scroll</li>

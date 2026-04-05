@@ -212,26 +212,18 @@ function getConnections(nodeId: string): string[] {
 }
 
 export function MoaGraph() {
-  const [search, setSearch] = useState("");
   const [activeAgt, setActiveAgt] = useState<AGT | null>(null);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const searchRef = useRef<HTMLInputElement>(null);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  // Keyboard shortcut: / to focus search
+  // Keyboard shortcut: Escape clears filters
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "/" && document.activeElement?.tagName !== "INPUT") {
-        e.preventDefault();
-        searchRef.current?.focus();
-      }
       if (e.key === "Escape") {
-        setSearch("");
         setActiveAgt(null);
         setActiveGroup(null);
-        searchRef.current?.blur();
       }
     };
     window.addEventListener("keydown", handler);
@@ -249,17 +241,15 @@ export function MoaGraph() {
   }, []);
 
   const filtered = useMemo(() => {
-    const q = search.toLowerCase().trim();
     return grouped.map(([group, nodes]) => {
       const filteredNodes = nodes.filter((n) => {
         if (activeAgt && n.agt !== activeAgt) return false;
         if (activeGroup && n.group !== activeGroup) return false;
-        if (q && !n.label.toLowerCase().includes(q) && !n.description.toLowerCase().includes(q)) return false;
         return true;
       });
       return [group, filteredNodes] as [string, DocNode[]];
     }).filter(([, nodes]) => nodes.length > 0);
-  }, [grouped, search, activeAgt, activeGroup]);
+  }, [grouped, activeAgt, activeGroup]);
 
   const totalFiltered = useMemo(() => filtered.reduce((s, [, n]) => s + n.length, 0), [filtered]);
 
@@ -287,7 +277,7 @@ export function MoaGraph() {
   }, []);
 
   return (
-    <div className="flex w-full min-h-[600px] font-[family-name:var(--font-geist-mono)] text-sm border border-fd-border rounded-lg overflow-hidden bg-fd-background">
+    <div id="moa-knowledge-graph" className="flex w-full min-h-[600px] font-[family-name:var(--font-geist-mono)] text-sm border border-fd-border rounded-lg overflow-hidden bg-fd-background">
       {/* ── Sidebar ── */}
       {sidebarOpen && (
         <aside className="w-[220px] min-w-[220px] border-r border-fd-border flex flex-col bg-fd-card/50">
@@ -305,24 +295,8 @@ export function MoaGraph() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg>
               </button>
             </div>
-            {/* Search */}
-            <div className="relative">
-              <input
-                ref={searchRef}
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search nodes..."
-                className="w-full bg-fd-background border border-fd-border/60 rounded px-2.5 py-1.5 text-xs text-fd-foreground placeholder:text-fd-muted-foreground/40 focus:outline-none focus:border-fd-muted-foreground/30 transition-colors"
-              />
-              <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-fd-muted-foreground/30 border border-fd-border/40 rounded px-1 py-0.5">/</kbd>
-            </div>
-          </div>
-
-          {/* AGT Filter */}
-          <div className="px-3 py-2 border-b border-fd-border/50">
-            <span className="text-[10px] uppercase tracking-[0.1em] text-fd-muted-foreground/40 block mb-1.5">Tensor Filter</span>
-            <div className="flex flex-col gap-0.5">
+            {/* AGT Slash Filter */}
+            <div className="flex gap-1">
               {(["COG", "EMO", "ENV"] as AGT[]).map((agt) => {
                 const isActive = activeAgt === agt;
                 const c = AGT_COLORS[agt];
@@ -330,27 +304,25 @@ export function MoaGraph() {
                   <button
                     key={agt}
                     onClick={() => setActiveAgt(isActive ? null : agt)}
-                    className="flex items-center gap-2 px-1.5 py-1 rounded text-left transition-colors group"
+                    className="flex-1 flex items-center justify-center gap-1.5 px-1.5 py-1.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all border"
                     style={{
                       backgroundColor: isActive ? c.dim : "transparent",
+                      borderColor: isActive ? c.color + "44" : "rgba(255,255,255,0.06)",
+                      color: isActive ? c.color : undefined,
+                      opacity: isActive ? 1 : 0.5,
                     }}
                   >
                     <span
                       className="w-1.5 h-1.5 rounded-full shrink-0"
-                      style={{ backgroundColor: c.color, opacity: isActive ? 1 : 0.5 }}
+                      style={{ backgroundColor: c.color }}
                     />
-                    <span
-                      className="text-[11px] font-semibold transition-colors"
-                      style={{ color: isActive ? c.color : undefined }}
-                    >
-                      {agt}
-                    </span>
-                    <span className="text-[10px] text-fd-muted-foreground/40 ml-auto">{agtCounts[agt]}</span>
+                    /{agt.toLowerCase()}
                   </button>
                 );
               })}
             </div>
           </div>
+
 
           {/* Section Nav */}
           <div className="flex-1 overflow-y-auto px-3 py-2">

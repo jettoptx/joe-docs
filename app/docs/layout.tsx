@@ -14,6 +14,9 @@ import { AgentBanner } from "@/components/agent-banner";
 import { DocsRulesPanel } from "@/components/docs-rules-panel";
 import { DocsRulesBtn } from "@/components/docs-rules-btn";
 import { JoeAiIndicator } from "@/components/joe-ai-indicator";
+import { JettCursorBtn } from "@/components/jett-cursor-btn";
+import { AgtHeaderLink } from "@/components/agt-header-link";
+import { JettCursor } from "@/components/jett-cursor";
 
 const navLinks = [
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx" },
@@ -62,12 +65,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-3.5 mr-2 border-r border-fd-border pr-5">
               <JoeAiIndicator />
               <span className="w-px h-4 bg-fd-border" />
-              <Link
-                href="/docs/dojo/moa"
-                className="text-[11px] uppercase tracking-widest font-[family-name:var(--font-orbitron)] font-bold text-fd-muted-foreground hover:text-[#ff6900] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(255,105,0,0.6)]"
-              >
-                AGT
-              </Link>
+              <AgtHeaderLink />
               <Link href="/docs/authentication/gaze#agt-tensors" className="flex items-center gap-1.5 group">
                 <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(234,179,8,0.5)]" style={{ backgroundColor: "#eab308" }} />
                 <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#eab308] group-hover:text-[#fbbf24] transition-colors">COG</span>
@@ -80,6 +78,8 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <span className="inline-block w-2.5 h-2.5 rounded-full shadow-[0_0_6px_rgba(96,165,250,0.5)]" style={{ backgroundColor: "#60a5fa" }} />
                 <span className="text-[11px] font-bold font-[family-name:var(--font-geist-mono)] text-[#60a5fa] group-hover:text-[#93bbfc] transition-colors">ENV</span>
               </Link>
+              <span className="w-px h-4 bg-fd-border/30" />
+              <JettCursorBtn />
             </div>
             {navLinks.map((link) => (
               <NavLink
@@ -131,6 +131,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       </div>
       <MobileCopyBtn />
       <AugmentSpaceOverlay />
+      <JettCursor />
       <DocsRulesPanel />
       <SiteFooter />
     </>

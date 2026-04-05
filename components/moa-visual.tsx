@@ -44,7 +44,7 @@ const GROUP_LABELS: Record<string, string> = {
   dojo: "Jett Optical Encryption",
 };
 
-const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
+export const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "index", label: "OPTX", group: "root", agt: "COG", radius: 34, href: "/docs", description: "Documentation home — full system overview", subLabels: ["Augment Space", "Knowledge Graph", "All Sections"], emo: 10, env: 10, cog: 80 },
   { id: "what-is-optx", label: "What is OPTX?", group: "getting-started", agt: "COG", radius: 19, href: "/docs/getting-started/what-is-optx", description: "Core concepts and naming hierarchy for the OPTX ecosystem", subLabels: ["Naming Hierarchy", "JETT Auth", "AARON", "$OPTX Token"], emo: 25, env: 20, cog: 55 },
   { id: "architecture-overview", label: "Architecture", group: "getting-started", agt: "COG", radius: 17, href: "/docs/getting-started/architecture", description: "End-to-end system architecture from edge to chain", subLabels: ["Jetson Edge", "Tailscale Mesh", "K3s Cluster"], emo: 15, env: 30, cog: 55 },
@@ -232,6 +232,45 @@ function MoaVisualInner() {
     return () => window.removeEventListener("moa-show-index", handler);
   }, []);
 
+  // Dispatch AGT weights to JETT Cursor widget
+  useEffect(() => {
+    const node = hovered || selected;
+    if (node) {
+      window.dispatchEvent(new CustomEvent("jett-cursor-update", {
+        detail: { cog: node.cog, emo: node.emo, env: node.env, label: node.label },
+      }));
+    } else {
+      window.dispatchEvent(new CustomEvent("jett-cursor-reset"));
+    }
+  }, [hovered, selected]);
+
+  // Highlight matching sidebar link with purple glow when a node is selected
+  useEffect(() => {
+    const styleId = "moa-sidebar-highlight";
+    let style = document.getElementById(styleId) as HTMLStyleElement | null;
+    if (!style) {
+      style = document.createElement("style");
+      style.id = styleId;
+      document.head.appendChild(style);
+    }
+    if (selected) {
+      style.textContent = `
+        #nd-docs-layout aside a[href="${selected.href}"] {
+          background: rgba(168,85,247,0.1) !important;
+          box-shadow: 0 0 12px rgba(168,85,247,0.15), inset 0 0 8px rgba(168,85,247,0.05) !important;
+          border-radius: 6px !important;
+          color: rgb(192,132,252) !important;
+          transition: all 0.3s ease !important;
+        }
+      `;
+    } else {
+      style.textContent = "";
+    }
+    return () => {
+      if (style) style.textContent = "";
+    };
+  }, [selected]);
+
   const rawMouseRef = useRef({ x: -1000, y: -1000 });
   const cardDragRef = useRef<{ idx: number; ox: number; oy: number } | null>(null);
   const preSelectedRef = useRef(false);
@@ -247,6 +286,31 @@ function MoaVisualInner() {
   const [panning, setPanning] = useState(false);
   const zoomRef = useRef(1);
   const [zoomLevel, setZoomLevel] = useState(1);
+
+  // MOA search highlight — set of matching node IDs (null = show all)
+  const searchMatchRef = useRef<Set<string> | null>(null);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const ids = (e as CustomEvent<string[] | null>).detail;
+      searchMatchRef.current = ids ? new Set(ids) : null;
+    };
+    const selectHandler = (e: Event) => {
+      const nodeId = (e as CustomEvent<string>).detail;
+      if (!nodeId) return;
+      const nodes = nodesRef.current;
+      const node = nodes.find((n) => n.id === nodeId);
+      if (node) {
+        setSelected(node);
+        panRef.current = { x: dims.w / 2 - node.x, y: dims.h / 2 - node.y };
+      }
+    };
+    window.addEventListener("moa-search-highlight", handler);
+    window.addEventListener("moa-search-select", selectHandler);
+    return () => {
+      window.removeEventListener("moa-search-highlight", handler);
+      window.removeEventListener("moa-search-select", selectHandler);
+    };
+  }, [dims.w, dims.h]);
 
   const getConnected = useCallback((nodeId: string) => {
     const ids = new Set<string>();
@@ -439,7 +503,7 @@ function MoaVisualInner() {
           const dx = dotOffX + col * dotSpacing;
           const dy = dotOffY + row * dotSpacing;
           const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.03;
-          let alpha = (isDark ? 0.08 : 0.1) + wave;
+          let alpha = (isDark ? 0.06 : 0.08) + wave;
           let radius = dotBase;
           let r = isDark ? 255 : 40, g = isDark ? 255 : 40, b = isDark ? 255 : 40;
 
@@ -459,7 +523,7 @@ function MoaVisualInner() {
             } else {
               r = 244; g = 63; b = 94;    // EMO — bottom-left 120° (rose)
             }
-            alpha = alpha + ease * 0.6;
+            alpha = alpha + ease * 0.55;
             radius = dotBase + ease * 3;
           }
 
@@ -473,7 +537,7 @@ function MoaVisualInner() {
 
       // Spotlight glow under cursor
       if (mx > 0 && my > 0) {
-        const glowGrad = ctx.createRadialGradient(mx, my, 0, mx, my, spotlightR * 0.6);
+        const glowGrad = ctx.createRadialGradient(mx, my, 0, mx, my, spotlightR * 0.5);
         glowGrad.addColorStop(0, isDark ? "rgba(255,105,0,0.06)" : "rgba(255,105,0,0.04)");
         glowGrad.addColorStop(1, "transparent");
         ctx.fillStyle = glowGrad;
@@ -540,7 +604,8 @@ function MoaVisualInner() {
         const agt = AGT[n.agt];
         const isActive = n.id === activeId;
         const isConnected = connected.has(n.id);
-        const dimmed = activeId && !isActive && !isConnected;
+        const searchDimmed = searchMatchRef.current !== null && !searchMatchRef.current.has(n.id);
+        const dimmed = searchDimmed || (activeId && !isActive && !isConnected);
 
         const pulse = Math.sin(t * 0.6 + n.pulse) * 0.04 + 1;
         const r = n.radius * (isActive ? 1.04 : pulse * (dimmed ? 0.97 : 1));
@@ -958,26 +1023,26 @@ function MoaVisualInner() {
       </div>
 
       {/* ═══ Desktop bottom bar: Legend + Nodes toggle ═══ */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-5 font-[family-name:var(--font-geist-mono)] bg-fd-background/60 backdrop-blur-md rounded-full px-4 py-1.5 border border-fd-border/50 z-50">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-6 font-[family-name:var(--font-geist-mono)] bg-fd-background/60 backdrop-blur-md rounded-full px-6 py-2.5 border border-fd-border/50 z-50">
         {(["COG", "EMO", "ENV"] as const).map((key) => (
-          <span key={key} className="flex items-center gap-1.5 text-[9px]">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: AGT[key].color }} />
+          <span key={key} className="flex items-center gap-1.5 text-[11px]">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: AGT[key].color }} />
             <span style={{ color: AGT[key].color }} className="font-bold opacity-80">{key}</span>
           </span>
         ))}
-        <span className="w-px h-3 bg-fd-border/50" />
+        <span className="w-px h-4 bg-fd-border/50" />
         <button
           onClick={() => setShowIndex(v => !v)}
-          className="text-[9px] font-bold text-[rgb(255,105,0)] opacity-70 hover:opacity-100 transition-opacity uppercase tracking-wider"
+          className="text-[11px] font-bold text-[rgb(255,105,0)] opacity-70 hover:opacity-100 transition-opacity uppercase tracking-wider"
         >
           {showIndex ? "Close" : "Nodes"}
         </button>
         {pinnedCards.length > 0 && (
           <>
-            <span className="w-px h-3 bg-fd-border/50" />
+            <span className="w-px h-4 bg-fd-border/50" />
             <button
               onClick={() => setPinnedCards([])}
-              className="text-[9px] font-bold text-fd-muted-foreground hover:text-fd-foreground transition-colors"
+              className="text-[11px] font-bold text-fd-muted-foreground hover:text-fd-foreground transition-colors"
             >
               Clear {pinnedCards.length} card{pinnedCards.length > 1 ? "s" : ""}
             </button>
@@ -1007,8 +1072,14 @@ function NodeCard({
 
   return (
     <div
-      className={`w-[320px] bg-fd-background/95 backdrop-blur-xl border border-fd-border rounded-xl overflow-hidden font-[family-name:var(--font-geist-mono)] shadow-lg shadow-black/20 ${className || ""}`}
-      style={style}
+      className={`w-[320px] bg-fd-background/95 backdrop-blur-xl border rounded-xl overflow-hidden font-[family-name:var(--font-geist-mono)] ${className || ""}`}
+      style={{
+        ...style,
+        borderColor: isSelected ? "rgba(168,85,247,0.4)" : undefined,
+        boxShadow: isSelected
+          ? "0 0 20px rgba(168,85,247,0.15), 0 0 40px rgba(168,85,247,0.08), 0 4px 20px rgba(0,0,0,0.2)"
+          : "0 4px 20px rgba(0,0,0,0.2)",
+      }}
     >
       {/* Header */}
       <div className="px-3.5 py-2.5 border-b border-fd-border/50" style={{ background: `linear-gradient(135deg, ${AGT[node.agt].color}11, transparent)` }}>
