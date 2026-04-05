@@ -448,12 +448,17 @@ function MoaVisualInner() {
           if (distToMouse < spotlightR) {
             const proximity = 1 - distToMouse / spotlightR;
             const ease = proximity * proximity;
-            // AGT color by angle sector
+            // AGT color by 2D simplex: COG top, ENV bottom-right, EMO bottom-left
             const angle = Math.atan2(dy - my, dx - mx);
-            const sector = ((angle + Math.PI) / (Math.PI * 2)) * 3;
-            if (sector < 1) { r = 234; g = 179; b = 8; }       // COG
-            else if (sector < 2) { r = 244; g = 63; b = 94; }  // EMO
-            else { r = 96; g = 165; b = 250; }                  // ENV
+            // Convert to clockwise-from-top (0 = up, increases clockwise)
+            const topAngle = ((angle + Math.PI * 0.5) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+            if (topAngle < Math.PI / 3 || topAngle >= Math.PI * 5 / 3) {
+              r = 234; g = 179; b = 8;    // COG — top 120° (gold)
+            } else if (topAngle < Math.PI) {
+              r = 96; g = 165; b = 250;   // ENV — bottom-right 120° (blue)
+            } else {
+              r = 244; g = 63; b = 94;    // EMO — bottom-left 120° (rose)
+            }
             alpha = alpha + ease * 0.6;
             radius = dotBase + ease * 3;
           }
