@@ -232,6 +232,7 @@ function MoaVisualInner() {
     return () => window.removeEventListener("moa-show-index", handler);
   }, []);
 
+  const rawMouseRef = useRef({ x: -1000, y: -1000 });
   const cardDragRef = useRef<{ idx: number; ox: number; oy: number } | null>(null);
   const preSelectedRef = useRef(false);
   const [dragging, setDragging] = useState<Node | null>(null);
@@ -423,29 +424,55 @@ function MoaVisualInner() {
       ctx.fillStyle = vigGrad;
       ctx.fillRect(0, 0, dims.w, dims.h);
 
-      // Aceternity-style dot grid background
+      // Aceternity-style dot grid background with mouse spotlight
       const dotSpacing = 26;
-      const dotBase = 1.2;
+      const dotBase = 1;
       const dotCols = Math.ceil(dims.w / dotSpacing) + 1;
       const dotRows = Math.ceil(dims.h / dotSpacing) + 1;
       const dotOffX = (dims.w % dotSpacing) / 2;
       const dotOffY = (dims.h % dotSpacing) / 2;
+      const mx = rawMouseRef.current.x;
+      const my = rawMouseRef.current.y;
+      const spotlightR = 200;
       for (let row = 0; row < dotRows; row++) {
         for (let col = 0; col < dotCols; col++) {
           const dx = dotOffX + col * dotSpacing;
           const dy = dotOffY + row * dotSpacing;
-          const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.06;
-          const distFromCenter = Math.sqrt((dx - cx) ** 2 + (dy - cy) ** 2);
-          const centerBoost = Math.max(0, 1 - distFromCenter / (Math.max(dims.w, dims.h) * 0.5)) * 0.08;
-          const alpha = Math.max(0, (isDark ? 0.15 : 0.18) + wave + centerBoost);
-          const radius = dotBase + centerBoost * 2;
+          const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.03;
+          let alpha = (isDark ? 0.08 : 0.1) + wave;
+          let radius = dotBase;
+          let r = isDark ? 255 : 40, g = isDark ? 255 : 40, b = isDark ? 255 : 40;
+
+          // Mouse spotlight — dots near cursor get brighter, larger, AGT-colored
+          const distToMouse = Math.sqrt((dx - mx) ** 2 + (dy - my) ** 2);
+          if (distToMouse < spotlightR) {
+            const proximity = 1 - distToMouse / spotlightR;
+            const ease = proximity * proximity;
+            // AGT color by angle sector
+            const angle = Math.atan2(dy - my, dx - mx);
+            const sector = ((angle + Math.PI) / (Math.PI * 2)) * 3;
+            if (sector < 1) { r = 234; g = 179; b = 8; }       // COG
+            else if (sector < 2) { r = 244; g = 63; b = 94; }  // EMO
+            else { r = 96; g = 165; b = 250; }                  // ENV
+            alpha = alpha + ease * 0.6;
+            radius = dotBase + ease * 3;
+          }
+
+          alpha = Math.max(0, alpha);
           ctx.beginPath();
           ctx.arc(dx, dy, radius, 0, Math.PI * 2);
-          ctx.fillStyle = isDark
-            ? `rgba(255,255,255,${alpha})`
-            : `rgba(40,40,40,${alpha})`;
+          ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
           ctx.fill();
         }
+      }
+
+      // Spotlight glow under cursor
+      if (mx > 0 && my > 0) {
+        const glowGrad = ctx.createRadialGradient(mx, my, 0, mx, my, spotlightR * 0.6);
+        glowGrad.addColorStop(0, isDark ? "rgba(255,105,0,0.06)" : "rgba(255,105,0,0.04)");
+        glowGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = glowGrad;
+        ctx.fillRect(mx - spotlightR, my - spotlightR, spotlightR * 2, spotlightR * 2);
       }
 
       // Apply pan + zoom transform
@@ -712,6 +739,9 @@ function MoaVisualInner() {
           setPanning(false);
         }}
         onMouseMove={(e) => {
+          // Track raw mouse for dot spotlight
+          const rect = canvasRef.current?.getBoundingClientRect();
+          if (rect) rawMouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
           // Pan: drag on empty space
           if (panStartRef.current && !dragging) {
             const dx = e.clientX - panStartRef.current.mx;
@@ -781,6 +811,7 @@ function MoaVisualInner() {
           setDragging(null);
           panStartRef.current = null;
           setPanning(false);
+          rawMouseRef.current = { x: -1000, y: -1000 };
         }}
         onWheel={(e) => {
           e.preventDefault();
