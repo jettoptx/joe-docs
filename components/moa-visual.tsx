@@ -437,13 +437,13 @@ function MoaVisualInner() {
           const wave = Math.sin(t * 2 + dx * 0.008 + dy * 0.006) * 0.06;
           const distFromCenter = Math.sqrt((dx - cx) ** 2 + (dy - cy) ** 2);
           const centerBoost = Math.max(0, 1 - distFromCenter / (Math.max(dims.w, dims.h) * 0.5)) * 0.08;
-          const alpha = Math.max(0, (isDark ? 0.15 : 0.1) + wave + centerBoost);
+          const alpha = Math.max(0, (isDark ? 0.15 : 0.18) + wave + centerBoost);
           const radius = dotBase + centerBoost * 2;
           ctx.beginPath();
           ctx.arc(dx, dy, radius, 0, Math.PI * 2);
           ctx.fillStyle = isDark
             ? `rgba(255,255,255,${alpha})`
-            : `rgba(60,60,60,${alpha})`;
+            : `rgba(40,40,40,${alpha})`;
           ctx.fill();
         }
       }
