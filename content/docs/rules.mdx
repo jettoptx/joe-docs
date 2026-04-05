@@ -1,0 +1,158 @@
+---
+title: DOCS Rules
+description: How to edit OPTX docs — for agents, LLMs, and human developers. AGT classification, MOA graph nodes, and the complete walkthrough.
+icon: BookOpen
+---
+
+## DOCS Rules
+
+This page teaches **agents** and **developers** how to correctly add, edit, and classify pages in the OPTX documentation system. Follow these rules to keep the MOA knowledge graph, AGT tensor classification, and navigation consistent.
+
+If you're using **joe-docs as a template** for your own project, this is your walkthrough for understanding the system and customizing it.
+
+---
+
+## For Agents & LLMs
+
+When you add or edit a documentation page, you **must** complete every step below. Skipping any step breaks the knowledge graph or navigation.
+
+### 1. MDX Page Structure
+
+Every doc page is an `.mdx` file in `content/docs/<section>/`. Each file **must** have frontmatter:
+
+```yaml
+---
+title: Your Page Title
+description: One-line summary of what this page covers
+icon: Rocket  # Lucide icon name for sidebar
+---
+```
+
+Fumadocs auto-discovers pages from the file tree — no manual route config needed for sub-pages.
+
+### 2. AGT Tensor Classification
+
+Every page **must** be classified with a primary AGT (Agentive Gaze Tensor):
+
+| Tensor | Color | Hex | Use For |
+|--------|-------|-----|---------|
+| <span style={{color: "#eab308"}}>**COG**</span> | Yellow | `#eab308` | Analytical pages: architecture, protocol internals, APIs, reference material |
+| <span style={{color: "#f43f5e"}}>**EMO**</span> | Pink | `#f43f5e` | Relational pages: identity, personality, agent interaction, human-facing systems |
+| <span style={{color: "#60a5fa"}}>**ENV**</span> | Blue | `#60a5fa` | Spatial pages: infrastructure, networks, addresses, physical topology |
+
+Assign `emo`, `env`, and `cog` scores that **sum to 100**. The highest score determines the primary tensor.
+
+### 3. Add MOA Graph Node
+
+Add a node to `NODES_DATA` in `components/moa-visual.tsx`:
+
+```typescript
+{
+  id: "your-page-id",        // kebab-case, unique
+  label: "Short Name",       // display label on graph
+  group: "section-key",      // matches GROUP_LABELS keys
+  agt: "COG",                // primary tensor
+  radius: 15,                // 11-22, larger = more important
+  href: "/docs/section/page",
+  description: "One sentence describing this page",
+  subLabels: ["Tag 1", "Tag 2", "Tag 3"],
+  emo: 20, env: 25, cog: 55  // must sum to 100
+}
+```
+
+### 4. Add MOA Graph Edges (MOC — Map of Context)
+
+Add edges to `EDGES` in `components/moa-visual.tsx` for every meaningful cross-reference:
+
+```typescript
+{ source: "your-page-id", target: "related-page-id" },
+{ source: "parent-section-id", target: "your-page-id" },
+```
+
+Every new page needs **at least 2 edges**: one to its section parent and one cross-section link. This is the **MOC (Map of Context)** — it defines how knowledge connects across the documentation.
+
+### 5. Register in Mobile Sidebar
+
+Add an entry to `SUB_PAGES` in `components/mobile-sidebar.tsx` under the parent section key:
+
+```typescript
+{ label: "Your Page Title", href: "/docs/section/page", agt: "COG" },
+```
+
+### 6. Add PATH_TO_NODE Mapping
+
+Add a mapping in `PATH_TO_NODE` in `components/augment-space-btn.tsx`:
+
+```typescript
+"/docs/section/page": "your-page-id",
+```
+
+### 7. Navigation Ordering
+
+Sub-pages are auto-discovered by Fumadocs. If adding a **new top-level section**, add its folder name to `content/docs/meta.json`:
+
+```json
+{
+  "pages": ["dojo", "getting-started", ..., "your-section"]
+}
+```
+
+### 8. Style & Naming
+
+- **Fonts**: Orbitron (`--font-orbitron`) for headings/labels, Geist Mono (`--font-geist-mono`) for body/code
+- **Colors**: OPTX orange `rgb(255, 105, 0)` for accents, AGT tensor colors for classification
+- **Icons**: Use [Lucide](https://lucide.dev) icon names in frontmatter
+- **Descriptions**: One sentence per concept, keep it concise
+
+---
+
+## For Human Developers
+
+### Adding a Page
+
+1. **Create** an `.mdx` file in `content/docs/<section>/`
+2. **Add frontmatter**: `title`, `description`, `icon`
+3. **Write** your content in Markdown (JSX components supported)
+
+### Classify Your Page
+
+Pick the dominant cognitive dimension:
+- **COG** — Technical, analytical, requires reasoning
+- **EMO** — About identity, social interaction, agent personality
+- **ENV** — Infrastructure, networks, spatial topology
+
+### Register the Page
+
+Update **3 files** after creating content:
+
+| File | What to Add |
+|------|-------------|
+| `components/moa-visual.tsx` | Graph node in `NODES_DATA` + edges in `EDGES` |
+| `components/mobile-sidebar.tsx` | Entry in `SUB_PAGES` under parent section |
+| `components/augment-space-btn.tsx` | Path-to-nodeId in `PATH_TO_NODE` |
+
+### Using joe-docs as a Template
+
+joe-docs is designed to be forked and customized:
+
+1. **Fork** — `git clone https://github.com/jettoptx/joe-docs.git my-docs`
+2. **Replace** — Swap MDX files in `content/docs/` with your own
+3. **Customize graph** — Edit MOA node data in `components/moa-visual.tsx`
+4. **Update nav** — Modify `lib/source.ts` for your structure
+5. **Deploy** — Push to GitHub, connect to Vercel, done
+
+The AGT tensor system, MOA knowledge graph, mobile sidebar, and augment space all adapt to your content automatically.
+
+---
+
+## Checklist
+
+When adding a new page, use this checklist:
+
+- [ ] Created `.mdx` file with frontmatter (title, description, icon)
+- [ ] Chose primary AGT tensor (COG/EMO/ENV)
+- [ ] Added node to `NODES_DATA` in `moa-visual.tsx`
+- [ ] Added edges to `EDGES` in `moa-visual.tsx` (min 2)
+- [ ] Added entry to `SUB_PAGES` in `mobile-sidebar.tsx`
+- [ ] Added path mapping to `PATH_TO_NODE` in `augment-space-btn.tsx`
+- [ ] (If new section) Updated `content/docs/meta.json`

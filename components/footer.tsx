@@ -5,24 +5,16 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-fd-border bg-fd-card">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-x-10 gap-y-8">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-x-10 gap-y-8">
           {/* Brand Column */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
               <Image
-                src="/optx-logo.png"
+                src="/techforce_OPTX.png"
                 alt="OPTX"
                 width={44}
                 height={44}
-                className="rounded-md shrink-0 dark:hidden"
-                style={{ objectFit: "contain" }}
-              />
-              <Image
-                src="/optx-logo-dark.png"
-                alt="OPTX"
-                width={44}
-                height={44}
-                className="rounded-md shrink-0 hidden dark:block"
+                className="rounded-md shrink-0"
                 style={{ objectFit: "contain" }}
               />
               <span className="font-[family-name:var(--font-orbitron)] font-bold text-lg tracking-wider">
@@ -130,19 +122,19 @@ export function SiteFooter() {
             <ul className="space-y-2.5">
               {[
                 {
-                  label: "Hermes API",
+                  label: "joe-optx-hermes-api",
                   href: "https://github.com/jettoptx/joe-optx-hermes-api",
                 },
                 {
-                  label: "AARON Router",
+                  label: "joe-aaron-router",
                   href: "https://github.com/jettoptx/joe-aaron-router",
                 },
                 {
-                  label: "CSTB DePIN",
+                  label: "joe-JTX-CSTB.TRUST.DEPIN",
                   href: "https://github.com/jettoptx/joe-JTX-CSTB.TRUST.DEPIN",
                 },
                 {
-                  label: "Docs",
+                  label: "joe-docs",
                   href: "https://github.com/jettoptx/joe-docs",
                 },
               ].map((link) => (
@@ -201,13 +193,59 @@ export function SiteFooter() {
               ))}
             </ul>
           </div>
+
+          {/* Legal Column */}
+          <div>
+            <h3 className="font-[family-name:var(--font-orbitron)] text-sm font-semibold tracking-widest uppercase text-fd-foreground mb-4">
+              Legal
+            </h3>
+            <ul className="space-y-2.5">
+              {[
+                {
+                  label: "Privacy Policy",
+                  href: "/privacy",
+                  ext: false,
+                },
+                {
+                  label: "Devnet Validation",
+                  href: "https://docs.agenc.tech/docs/deployment/devnet-validation/",
+                  ext: true,
+                },
+                {
+                  label: "USPTO Patent",
+                  href: "https://patents.google.com/patent/US20250392457A1",
+                  ext: true,
+                },
+              ].map((link) => (
+                <li key={link.label}>
+                  {link.ext ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-orange-400 transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground hover:text-orange-400 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Changelog / Last Updated */}
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 4, 2026 &mdash; v1.6.0
+              Last updated: April 4, 2026 &mdash; v1.7.0
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -215,6 +253,15 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.7.0</span> &mdash; April 4, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Mobile sidebar: Augment Space toggle + theme switch in sidebar footer, pixelation dissolve on footer scroll</li>
+                      <li>&#x2022; AGT TOC dots: per-page AGT tensor color on mobile TOC headings (COG/EMO/ENV)</li>
+                      <li>&#x2022; Mobile header: AGT tensor pills (COG/EMO/ENV) in top-right, MOA legend bar hidden on mobile</li>
+                      <li>&#x2022; Footer: full-screen height on mobile, techforce OPTX logo, sidebar auto-hides</li>
+                      <li>&#x2022; Hydration fix: useTheme SSR guard for theme toggle</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v1.6.0</span> &mdash; April 4, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Copy for Agents: one-click clipboard copy button in TOC sidebar footer for LLM/agent page content extraction</li>

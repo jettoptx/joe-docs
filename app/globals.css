@@ -9,6 +9,7 @@
   --fd-background: oklch(0.145 0 0);
   --color-orange-500: rgb(255, 105, 0);
   --accent: rgb(181, 82, 0);
+  font-size: 106%;
 }
 
 /* Override fumadocs defaults for OPTX brand */
@@ -335,7 +336,7 @@ aside#nd-sidebar > div:last-child {
 
 /* ═══ Layout ═══ */
 #nd-docs-layout {
-  --fd-sidebar-width: 300px !important;
+  --fd-sidebar-width: 340px !important;
   --fd-docs-height: calc(100dvh - 3.5rem) !important;
 }
 
@@ -355,11 +356,18 @@ aside#nd-sidebar {
 /* ═══ MOA fullscreen — bleeds behind everything ═══ */
 .moa-fullscreen {
   position: fixed !important;
-  top: 3.5rem;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
+  top: 3.5rem !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 2;
+}
+
+/* On desktop, MOA canvas leaves room for the sidebar */
+@media (min-width: 768px) {
+  body .moa-fullscreen {
+    left: var(--fd-sidebar-width, 340px) !important;
+  }
 }
 
 /* Lock page scroll when MOA is visible — only sidebar should scroll */
@@ -370,8 +378,15 @@ html:has(.moa-fullscreen) body {
   max-height: 100vh !important;
 }
 
+/* Sidebar stays above MOA canvas + background */
 :has(.moa-fullscreen) [data-sidebar-placeholder] {
-  z-index: 25 !important;
+  z-index: 28 !important;
+}
+
+body:has(.moa-fullscreen) aside#nd-sidebar {
+  z-index: 29 !important;
+  background: rgba(10,10,10,0.98) !important;
+  backdrop-filter: none !important;
 }
 
 /* On MOA page: hide footer so it can't be scrolled to */
@@ -400,7 +415,7 @@ body:has(.moa-fullscreen) > div > footer {
 /* On wider screens, leave room for the sidebar */
 @media (min-width: 768px) {
   .augment-overlay {
-    left: var(--fd-sidebar-width, 260px);
+    left: var(--fd-sidebar-width, 340px);
   }
 }
 
@@ -458,7 +473,14 @@ aside#nd-sidebar {
 #nd-docs-layout:has([data-collapsed="true"]) [data-sidebar-placeholder] {
   width: 0 !important;
   min-width: 0 !important;
+  overflow: hidden !important;
   transition: width 0.25s ease !important;
+}
+
+#nd-docs-layout:has([data-collapsed="true"]) [data-sidebar-placeholder] > div {
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
 }
 
 #nd-docs-layout [data-sidebar-placeholder] {
@@ -467,8 +489,9 @@ aside#nd-sidebar {
 
 .dark aside#nd-sidebar {
   border-right: 1px solid rgba(255,255,255,0.05) !important;
-  background: linear-gradient(to right, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.86) 85%, rgba(10,10,10,0.5) 100%) !important;
+  background: linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.92) 85%, rgba(10,10,10,0.75) 100%) !important;
 }
+
 
 :root:not(.dark) aside#nd-sidebar {
   border-right: 1px solid rgba(0,0,0,0.06) !important;
@@ -540,14 +563,12 @@ aside#nd-sidebar [data-radix-scroll-area-viewport] > div {
   padding: 0.25rem 0.65rem !important;
 }
 
-/* ═══ Sidebar footer: Augment Space + theme toggle row ═══ */
+/* ═══ Sidebar footer: DOCS Rules + Augment Space + theme toggle ═══ */
 aside#nd-sidebar > div:last-child {
   display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
+  flex-direction: column !important;
   gap: 0.35rem !important;
-  padding: 0.5rem 0.5rem !important;
+  padding: 0.5rem 0.65rem !important;
   flex-shrink: 0 !important;
   overflow: visible !important;
 }
@@ -560,36 +581,46 @@ aside#nd-sidebar > div:last-child {
   border-top: 1px solid rgba(0,0,0,0.06) !important;
 }
 
-/* Theme toggle wrapper inside footer: strip bg, sit right */
-aside#nd-sidebar > div:last-child > div {
+/* Footer wrapper div (contains DocsRulesBtn + AugmentSpaceBtn) */
+aside#nd-sidebar > div:last-child > div[class*="flex-col"] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+  width: 100% !important;
+  order: 2 !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
-  flex-shrink: 0 !important;
   border-radius: 0 !important;
-  order: 2 !important;
+}
+
+/* Theme toggle wrapper inside footer: strip bg, full width */
+aside#nd-sidebar > div:last-child > div:not([class*="flex-col"]) {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  order: 1 !important;
   overflow: visible !important;
-  min-width: 56px !important;
-  min-height: 28px !important;
 }
 
 /* Ensure theme toggle buttons aren't clipped */
-aside#nd-sidebar > div:last-child > div button,
-aside#nd-sidebar > div:last-child > div label,
-aside#nd-sidebar > div:last-child > div [role="group"],
-aside#nd-sidebar > div:last-child > div [data-theme-toggle] {
+aside#nd-sidebar > div:last-child > div:not([class*="flex-col"]) button,
+aside#nd-sidebar > div:last-child > div:not([class*="flex-col"]) label,
+aside#nd-sidebar > div:last-child > div:not([class*="flex-col"]) [role="group"],
+aside#nd-sidebar > div:last-child > div:not([class*="flex-col"]) [data-theme-toggle] {
   overflow: visible !important;
   min-width: 24px !important;
   min-height: 24px !important;
 }
 
-/* Augment Space button inside footer: fill space, sit left */
+/* Augment Space button inside footer: full width */
 aside#nd-sidebar > div:last-child > a,
-aside#nd-sidebar > div:last-child > button.augment-space-btn {
-  order: 1 !important;
-  flex: 1 1 0 !important;
+aside#nd-sidebar > div:last-child button.augment-space-btn {
+  flex: none !important;
+  width: 100% !important;
   min-width: 0 !important;
-  margin-right: 0.3rem !important;
+  margin-right: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
@@ -674,7 +705,8 @@ aside#nd-sidebar#nd-sidebar a[href="/docs/dojo/mojo"]::before,
 aside#nd-sidebar#nd-sidebar a[href="/docs/on-chain-bridge"]::before,
 aside#nd-sidebar#nd-sidebar a[href="/docs/on-chain-bridge/solana-native"]::before,
 aside#nd-sidebar#nd-sidebar a[href="/docs/on-chain-bridge/evm-layerzero"]::before,
-aside#nd-sidebar#nd-sidebar a[href="/docs/on-chain-bridge/xrpl-wormhole"]::before {
+aside#nd-sidebar#nd-sidebar a[href="/docs/on-chain-bridge/xrpl-wormhole"]::before,
+aside#nd-sidebar#nd-sidebar a[href="/docs/protocol/biometric-proof"]::before {
   background-color: #f43f5e !important;
   box-shadow: 0 0 4px rgba(244,63,94,0.3) !important;
 }
@@ -721,6 +753,11 @@ aside#nd-sidebar a[data-active="true"]::before {
 @keyframes augment-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes joe-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(2.2); opacity: 0; }
 }
 
 /* Callout/admonition styling */
@@ -779,5 +816,30 @@ aside#nd-sidebar a[data-active="true"]::before {
   [data-fd-sidebar-overlay] {
     display: none !important;
   }
+
+  /* Give footer full screen height on mobile so content clears the sidebar */
+  footer {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
 }
+
+/* When footer is visible, remove sidebar margin offset so footer is full-width */
+@media (max-width: 767px) {
+  body[data-footer-visible] .mobile-docs-offset {
+    margin-left: 0;
+    transition: margin-left 500ms ease-out;
+  }
+}
+
+/* ═══ MOA Background — canvas-based ambient animation ═══ */
+.moa-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
 

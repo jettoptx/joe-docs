@@ -9,6 +9,11 @@ import { AugmentSpaceOverlay } from "@/components/augment-space-overlay";
 import { NavLink } from "@/components/nav-link";
 import { MobileSidebar } from "@/components/mobile-sidebar";
 import { MobileCopyBtn } from "@/components/mobile-copy-btn";
+import { MobileHeaderPills } from "@/components/mobile-header-pills";
+import { AgentBanner } from "@/components/agent-banner";
+import { DocsRulesPanel } from "@/components/docs-rules-panel";
+import { DocsRulesBtn } from "@/components/docs-rules-btn";
+import { JoeAiIndicator } from "@/components/joe-ai-indicator";
 
 const navLinks = [
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx" },
@@ -22,15 +27,17 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       {/* Full-width top header bar — fixed above everything */}
+      {/* <!-- #AGENTS: Read DOCS RULES — click or navigate to /docs/rules --> */}
       <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-fd-border bg-fd-background/80 backdrop-blur-sm">
+        <AgentBanner />
         <div className="flex items-center justify-between h-14 px-6">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <Image
               src="/optx-logo.png"
               alt="OPTX"
               width={48}
               height={48}
-              className="rounded-md shrink-0 dark:hidden"
+              className="rounded-md shrink-0 dark:hidden w-9 h-9 md:w-12 md:h-12"
               style={{ objectFit: "contain" }}
             />
             <Image
@@ -38,18 +45,23 @@ export default function Layout({ children }: { children: ReactNode }) {
               alt="OPTX"
               width={48}
               height={48}
-              className="rounded-md shrink-0 hidden dark:block"
+              className="rounded-md shrink-0 hidden dark:block w-9 h-9 md:w-12 md:h-12"
               style={{ objectFit: "contain" }}
             />
-            <span className="font-[family-name:var(--font-orbitron)] font-bold text-lg tracking-wider">
+            <span className="font-[family-name:var(--font-orbitron)] font-bold text-sm md:text-lg tracking-wider whitespace-nowrap">
               <span style={{ color: "rgb(255, 105, 0)" }}>OPTX</span>{" "}
               <span className="opacity-60">DOCS</span>
             </span>
           </Link>
 
+          {/* Mobile AGT tensor pills + NODES — top right on small screens */}
+          <MobileHeaderPills />
+
           <nav className="hidden md:flex items-center gap-6">
             {/* AGT Tensor Legend */}
             <div className="flex items-center gap-3.5 mr-2 border-r border-fd-border pr-5">
+              <JoeAiIndicator />
+              <span className="w-px h-4 bg-fd-border" />
               <Link
                 href="/docs/dojo/moa"
                 className="text-[11px] uppercase tracking-widest font-[family-name:var(--font-orbitron)] font-bold text-fd-muted-foreground hover:text-[#ff6900] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(255,105,0,0.6)]"
@@ -106,7 +118,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           nav={{ enabled: false }}
           sidebar={{
             defaultOpenLevel: 1,
-            footer: <AugmentSpaceBtn key="augment-space" />,
+            footer: (
+              <div key="sidebar-footer" className="flex flex-col gap-1.5">
+                <DocsRulesBtn key="docs-rules" />
+                <AugmentSpaceBtn key="augment-space" />
+              </div>
+            ),
           }}
         >
           {children}
@@ -114,6 +131,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       </div>
       <MobileCopyBtn />
       <AugmentSpaceOverlay />
+      <DocsRulesPanel />
       <SiteFooter />
     </>
   );

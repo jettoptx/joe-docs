@@ -52,7 +52,7 @@ const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "gaze", label: "Gaze Auth", group: "authentication", agt: "EMO", radius: 22, href: "/docs/authentication/gaze", description: "AGT biometric authentication via iris tracking and gaze vectors", subLabels: ["MediaPipe FaceLandmarker", "COG/EMO/ENV Tensors", "Iris 468/473", "Gaze PIN"], emo: 55, env: 5, cog: 40 },
   { id: "wallet", label: "Agent Wallet", group: "authentication", agt: "EMO", radius: 17, href: "/docs/authentication/wallet", description: "ERC-8004 soulbound agent wallet with x402 payment support", subLabels: ["ERC-8004", "x402 Protocol", "Soulbound NFT", "Secure Enclave"], emo: 50, env: 40, cog: 10 },
   { id: "aaron-protocol", label: "AARON", group: "protocol", agt: "COG", radius: 22, href: "/docs/protocol", description: "Asynchronous Audit RAG Optical Node — biometric proof protocol", subLabels: ["Session Flow", "Gaze Verify", "SpacetimeDB Attestation", "Entropy Scoring"], emo: 20, env: 15, cog: 65 },
-  { id: "biometric-proof", label: "Bio Proof", group: "protocol", agt: "COG", radius: 15, href: "/docs/protocol/biometric-proof", description: "Gaze-derived cryptographic proofs for on-chain attestation", subLabels: ["Biometric Proofs", "On-Chain Attestation", "Quantum-Resistant", "ZK Proofs"], emo: 30, env: 15, cog: 55 },
+  { id: "biometric-proof", label: "Bio Proof", group: "protocol", agt: "EMO", radius: 15, href: "/docs/protocol/biometric-proof", description: "Gaze-derived cryptographic proofs for on-chain attestation", subLabels: ["Biometric Proofs", "On-Chain Attestation", "Quantum-Resistant", "ZK Proofs"], emo: 55, env: 15, cog: 30 },
   { id: "how-it-works", label: "How It Works", group: "protocol", agt: "COG", radius: 14, href: "/docs/protocol/how-it-works", description: "Step-by-step AARON verification flow from gaze to chain", subLabels: ["4-6 Gaze Points", "500ms Hold", "Entropy Check"], emo: 35, env: 10, cog: 55 },
   { id: "client-integration", label: "Client SDK", group: "protocol", agt: "COG", radius: 13, href: "/docs/protocol/client-integration", description: "Integration guide for connecting apps to AARON", subLabels: ["TypeScript SDK", "REST API", "WebSocket"], emo: 25, env: 30, cog: 45 },
   { id: "aaron-arch", label: "AARON Arch", group: "protocol", agt: "COG", radius: 14, href: "/docs/protocol/architecture", description: "Internal architecture of the AARON router and validator pipeline", subLabels: ["FastAPI Router", "Jetson :8888", "Validator Node"], emo: 15, env: 25, cog: 60 },
@@ -173,6 +173,7 @@ const EDGES: Edge[] = [
   { source: "wallet", target: "aaron-protocol" },
   { source: "gaze", target: "on-chain" },
   { source: "hedgehog-doc", target: "orchestration" },
+  { source: "architecture-overview", target: "biometric-proof" },
 ];
 
 interface Particle { edge: number; t: number; speed: number; color: string; size: number; }
@@ -223,6 +224,14 @@ function MoaVisualInner() {
   const [selected, setSelected] = useState<Node | null>(null);
   const [pinnedCards, setPinnedCards] = useState<{ node: Node; x: number; y: number }[]>([]);
   const [showIndex, setShowIndex] = useState(false);
+
+  // Listen for external "moa-show-index" events (e.g. from NODES header button)
+  useEffect(() => {
+    const handler = () => setShowIndex(true);
+    window.addEventListener("moa-show-index", handler);
+    return () => window.removeEventListener("moa-show-index", handler);
+  }, []);
+
   const cardDragRef = useRef<{ idx: number; ox: number; oy: number } | null>(null);
   const preSelectedRef = useRef(false);
   const [dragging, setDragging] = useState<Node | null>(null);
@@ -344,13 +353,6 @@ function MoaVisualInner() {
     const cx = dims.w / 2, cy = dims.h / 2;
 
     function simulate() {
-      const pan = panRef.current;
-      const centerX = cx - pan.x;
-      const centerY = cy - pan.y;
-      for (const n of nodes) {
-        n.vx += (centerX - n.x) * 0.0005;
-        n.vy += (centerY - n.y) * 0.0005;
-      }
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[j].x - nodes[i].x;
@@ -757,7 +759,22 @@ function MoaVisualInner() {
         }}
       />
 
-      {/* ═══ Hover/Select Info Card (bottom-right) ═══ */}
+      {/* ═══ Mobile: Auto-populated card at top ═══ */}
+      {activeNode && (
+        <div className="md:hidden fixed top-16 left-[56px] right-2 z-50 pointer-events-auto">
+          <NodeCard
+            node={activeNode}
+            getConnected={getConnected}
+            nodes={nodesRef.current}
+            isSelected={true}
+            onClose={() => { setSelected(null); setHovered(null); }}
+            onNavigate={() => navigateTo(activeNode.href)}
+            className="!w-full"
+          />
+        </div>
+      )}
+
+      {/* ═══ Desktop: Hover/Select Info Card (bottom-right) ═══ */}
       {activeNode && !pinnedCards.some(p => p.node.id === activeNode.id) && (
         <NodeCard
           node={activeNode}
@@ -765,13 +782,15 @@ function MoaVisualInner() {
           nodes={nodesRef.current}
           isSelected={selected?.id === activeNode.id}
           style={{ position: "fixed", bottom: 24, right: 24, pointerEvents: "none" }}
+          className="hidden md:block"
         />
       )}
 
-      {/* ═══ Pinned draggable cards ═══ */}
+      {/* ═══ Pinned draggable cards (desktop only) ═══ */}
       {pinnedCards.map((card, idx) => (
         <div
           key={card.node.id}
+          className="hidden md:block"
           style={{ position: "fixed", left: card.x, top: card.y, zIndex: 60, cursor: "move" }}
           onMouseDown={(e) => {
             e.stopPropagation();
@@ -806,10 +825,15 @@ function MoaVisualInner() {
 
       {/* ═══ Index Panel (toggleable) ═══ */}
       {showIndex && (
-        <div className="fixed top-16 right-4 w-[320px] max-h-[calc(100vh-6rem)] overflow-y-auto bg-fd-background/95 backdrop-blur-xl border border-fd-border rounded-xl font-[family-name:var(--font-geist-mono)] z-50 shadow-lg shadow-black/20">
-          <div className="sticky top-0 px-3.5 py-2.5 border-b border-fd-border bg-fd-background/95 backdrop-blur-xl flex items-center justify-between">
-            <span className="text-[11px] font-bold text-fd-foreground uppercase tracking-widest font-[family-name:var(--font-orbitron)]">Node Index</span>
-            <button onClick={() => setShowIndex(false)} className="text-fd-muted-foreground hover:text-fd-foreground text-[11px]">close</button>
+        <div className="fixed top-14 left-[56px] right-0 bottom-0 md:left-auto md:bottom-auto md:top-16 md:right-4 md:w-[320px] md:max-h-[calc(100vh-6rem)] md:rounded-xl overflow-y-auto bg-fd-background/95 backdrop-blur-xl border-l md:border border-fd-border font-[family-name:var(--font-geist-mono)] z-50 shadow-lg shadow-black/20">
+          <div className="sticky top-0 px-3.5 py-2.5 border-b border-fd-border bg-fd-background/95 backdrop-blur-xl flex items-center justify-between z-10">
+            <span className="text-[11px] font-bold text-fd-foreground uppercase tracking-widest font-[family-name:var(--font-orbitron)]">Index - Node</span>
+            <button
+              onClick={() => setShowIndex(false)}
+              className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors px-2 py-1 rounded-md hover:bg-[rgba(255,105,0,0.08)]"
+            >
+              Close
+            </button>
           </div>
           {Object.entries(GROUP_LABELS).filter(([k]) => k !== "root").map(([groupKey, groupName]) => {
             const groupNodes = NODES_DATA.filter(n => n.group === groupKey);
@@ -847,8 +871,26 @@ function MoaVisualInner() {
         </div>
       )}
 
-      {/* ═══ Bottom bar: Legend + Index toggle ═══ */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 font-[family-name:var(--font-geist-mono)] bg-fd-background/60 backdrop-blur-md rounded-full px-4 py-1.5 border border-fd-border/50 z-50">
+      {/* ═══ Mobile bottom: NODES pill ═══ */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <button
+          onClick={() => setShowIndex(v => !v)}
+          className="font-[family-name:var(--font-orbitron)] text-[11px] font-bold uppercase tracking-widest px-5 py-2 rounded-full border transition-all duration-200"
+          style={{
+            color: "rgb(255,105,0)",
+            backgroundColor: "rgba(255,105,0,0.08)",
+            borderColor: "rgba(255,105,0,0.25)",
+            backdropFilter: "blur(16px) saturate(1.3)",
+            WebkitBackdropFilter: "blur(16px) saturate(1.3)",
+            boxShadow: "0 0 20px rgba(255,105,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+          }}
+        >
+          {showIndex ? "Close" : "Nodes"}
+        </button>
+      </div>
+
+      {/* ═══ Desktop bottom bar: Legend + Nodes toggle ═══ */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-5 font-[family-name:var(--font-geist-mono)] bg-fd-background/60 backdrop-blur-md rounded-full px-4 py-1.5 border border-fd-border/50 z-50">
         {(["COG", "EMO", "ENV"] as const).map((key) => (
           <span key={key} className="flex items-center gap-1.5 text-[9px]">
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: AGT[key].color }} />
@@ -860,7 +902,7 @@ function MoaVisualInner() {
           onClick={() => setShowIndex(v => !v)}
           className="text-[9px] font-bold text-[rgb(255,105,0)] opacity-70 hover:opacity-100 transition-opacity uppercase tracking-wider"
         >
-          {showIndex ? "Close" : "Index"}
+          {showIndex ? "Close" : "Nodes"}
         </button>
         {pinnedCards.length > 0 && (
           <>
@@ -880,13 +922,14 @@ function MoaVisualInner() {
 
 /* ═══ NodeCard Component ═══ */
 function NodeCard({
-  node, getConnected, nodes, isSelected, style, onClose, onNavigate,
+  node, getConnected, nodes, isSelected, style, className, onClose, onNavigate,
 }: {
   node: Node;
   getConnected: (id: string) => Set<string>;
   nodes: Node[];
   isSelected: boolean;
   style?: React.CSSProperties;
+  className?: string;
   onClose?: () => void;
   onNavigate?: () => void;
 }) {
@@ -896,7 +939,7 @@ function NodeCard({
 
   return (
     <div
-      className="w-[320px] bg-fd-background/95 backdrop-blur-xl border border-fd-border rounded-xl overflow-hidden font-[family-name:var(--font-geist-mono)] shadow-lg shadow-black/20"
+      className={`w-[320px] bg-fd-background/95 backdrop-blur-xl border border-fd-border rounded-xl overflow-hidden font-[family-name:var(--font-geist-mono)] shadow-lg shadow-black/20 ${className || ""}`}
       style={style}
     >
       {/* Header */}
