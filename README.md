@@ -4,6 +4,8 @@ The official documentation engine for the **OPTX ecosystem** — built on [Next.
 
 Live at **[optxspace.dev](https://optxspace.dev)**
 
+> **[What is OPTX?](https://optxspace.dev/docs/getting-started/what-is-optx)** — Start here for the full overview of the OPTX protocol, gaze biometrics, and agentic architecture.
+
 ## Ecosystem Repos
 
 | Repo | Type | Description |
@@ -241,15 +243,16 @@ curl http://localhost:8888/health
 
 ## Current Version
 
-**v1.8.2** — April 5, 2026
+**v1.8.3** — April 5, 2026
 
-- MOA Search: node selection now selects in the visual graph instead of navigating away
-- MOA Search: click-outside-to-close for the search overlay
-- MOA Search: clicking "Search MOA" auto-expands collapsed sidebar
-- MOA Search: placeholder and footer hint show `/substrings` search mode
-- Augment Space: `#augment` URL hash opens the MOA visual overlay on page load
-- Collapsed sidebar: disabled hover-to-expand effect (click buttons instead)
+- Research Labs: standalone page with JEO Research and Knight Campus CBDS profiles
+- MOA Search: scored relevance ranking (key topics, connected nodes, AGT groups)
+- MOA node cards: AGT weight numbers (COG/EMO/ENV) in header
+- Augment Space: `#augment` and `#augment:nodeId` URL hash deep-linking
+- MOA Search: click-outside-to-close, auto-expand sidebar, keyboard navigation
+- Collapsed sidebar: disabled hover-to-expand effect (click buttons only)
 - Circuit-style TOC: dot nodes centered on trace line with `@layer base` cascade fix
+- Security: scrubbed specific edge device model references from public docs
 
 ## License
 
