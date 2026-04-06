@@ -88,7 +88,7 @@ export function SiteFooter() {
           </div>
 
           {/* Infrastructure Column */}
-          <div className="pr-4">
+          <div className="pr-8">
             <h3 className="font-[family-name:var(--font-orbitron)] text-sm font-semibold tracking-widest uppercase text-fd-foreground mb-4">
               Infrastructure
             </h3>
@@ -165,13 +165,13 @@ export function SiteFooter() {
                   ext: true,
                 },
                 {
-                  label: "GitHub",
-                  href: "https://github.com/jettoptx",
+                  label: "Astro Knots",
+                  href: "https://astroknots.space",
                   ext: true,
                 },
                 {
-                  label: "Astro Knots",
-                  href: "https://astroknots.space",
+                  label: "GitHub",
+                  href: "https://github.com/jettoptx",
                   ext: true,
                 },
                 {
@@ -215,6 +215,11 @@ export function SiteFooter() {
                   label: "USPTO Patent",
                   href: "https://patents.google.com/patent/US20250392457A1",
                   ext: true,
+                },
+                {
+                  label: "Research Labs",
+                  href: "/docs/research-labs",
+                  ext: false,
                 },
               ].map((link) => (
                 <li key={link.label}>

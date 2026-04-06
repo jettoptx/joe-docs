@@ -15,14 +15,38 @@ export function AugmentSpaceOverlay() {
 
   useEffect(() => {
     const isDesktop = window.innerWidth >= 768;
+    const hash = window.location.hash;
+
     if (isDesktop) {
       setOpen(true);
       document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
     }
-    // Open if URL has #augment hash
-    if (window.location.hash === "#augment") {
+
+    // Open if URL has #augment or #augment:nodeId hash
+    if (hash.startsWith("#augment")) {
       setOpen(true);
       document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
+
+      // Deep-link to a specific node: #augment:nodeId
+      const nodeId = hash.split(":")[1];
+      if (nodeId) {
+        // Retry until MoaVisual mounts and handles the event
+        let attempts = 0;
+        const interval = setInterval(() => {
+          window.dispatchEvent(new CustomEvent("moa-search-select", { detail: nodeId }));
+          attempts++;
+          if (attempts >= 10) clearInterval(interval);
+        }, 400);
+        // Stop retrying once a node card appears
+        const observer = new MutationObserver(() => {
+          clearInterval(interval);
+          observer.disconnect();
+        });
+        setTimeout(() => {
+          const overlay = document.querySelector(".augment-overlay");
+          if (overlay) observer.observe(overlay, { childList: true, subtree: true });
+        }, 500);
+      }
     }
   }, []);
 

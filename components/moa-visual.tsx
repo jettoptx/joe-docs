@@ -298,7 +298,11 @@ function MoaVisualInner() {
       const nodeId = (e as CustomEvent<string>).detail;
       if (!nodeId) return;
       const nodes = nodesRef.current;
-      const node = nodes.find((n) => n.id === nodeId);
+      const q = nodeId.toLowerCase();
+      // Exact ID match, then label match, then ID-contains fallback
+      const node = nodes.find((n) => n.id === nodeId)
+        || nodes.find((n) => n.label.toLowerCase() === q)
+        || nodes.find((n) => n.id.includes(q) || q.includes(n.id));
       if (node) {
         setSelected(node);
         panRef.current = { x: dims.w / 2 - node.x, y: dims.h / 2 - node.y };
