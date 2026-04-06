@@ -1,13 +1,30 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { NODES_DATA } from "./moa-visual";
+import { NODES_DATA, EDGES } from "./moa-visual";
 
 const AGT_COLORS: Record<string, string> = {
   COG: "#eab308",
   EMO: "#f43f5e",
   ENV: "#60a5fa",
 };
+
+// Build a map of nodeId → connected node labels for search
+const CONNECTED_LABELS = new Map<string, string[]>();
+NODES_DATA.forEach((n) => {
+  const connected = new Set<string>();
+  EDGES.forEach((e) => {
+    if (e.source === n.id) {
+      const target = NODES_DATA.find((t) => t.id === e.target);
+      if (target) connected.add(target.label.toLowerCase());
+    }
+    if (e.target === n.id) {
+      const source = NODES_DATA.find((s) => s.id === e.source);
+      if (source) connected.add(source.label.toLowerCase());
+    }
+  });
+  CONNECTED_LABELS.set(n.id, Array.from(connected));
+});
 
 export function MoaSearch() {
   const [open, setOpen] = useState(false);
@@ -32,13 +49,39 @@ export function MoaSearch() {
   const matches = useMemo(() => {
     const q = query.toLowerCase().trim();
     if (!q) return [];
-    return NODES_DATA.filter((n) =>
-      n.label.toLowerCase().includes(q) ||
-      n.description.toLowerCase().includes(q) ||
-      n.subLabels.some((s) => s.toLowerCase().includes(q)) ||
-      n.group.toLowerCase().includes(q) ||
-      n.agt.toLowerCase().includes(q)
-    );
+
+    // Score each node — higher = better match
+    const scored = NODES_DATA.map((n) => {
+      let score = 0;
+      const label = n.label.toLowerCase();
+      const connected = CONNECTED_LABELS.get(n.id) || [];
+
+      // Exact label match (strongest)
+      if (label === q) score += 100;
+      else if (label.includes(q)) score += 50;
+
+      // Key topics (subLabels)
+      if (n.subLabels.some((s) => s.toLowerCase() === q)) score += 40;
+      else if (n.subLabels.some((s) => s.toLowerCase().includes(q))) score += 20;
+
+      // Connected node labels
+      if (connected.some((c) => c === q)) score += 15;
+      else if (connected.some((c) => c.includes(q))) score += 8;
+
+      // AGT / group
+      if (n.agt.toLowerCase() === q) score += 10;
+      if (n.group.toLowerCase().includes(q)) score += 5;
+
+      // Description (weakest)
+      if (n.description.toLowerCase().includes(q)) score += 3;
+
+      return { node: n, score };
+    });
+
+    return scored
+      .filter((s) => s.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map((s) => s.node);
   }, [query]);
 
   // Dispatch highlights to moa-visual
@@ -127,7 +170,7 @@ export function MoaSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search nodes ... /substrings"
+            placeholder="Search nodes ... /topics"
             className="flex-1 bg-transparent text-xs text-fd-foreground placeholder:text-fd-muted-foreground/40 focus:outline-none"
             autoFocus
           />
@@ -181,7 +224,7 @@ export function MoaSearch() {
             <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x23CE; select</span>
             <span className="hover:text-orange-400/60 transition-colors cursor-default">esc close</span>
           </div>
-          <span className="text-orange-400/25 hover:text-orange-400/70 hover:drop-shadow-[0_0_4px_rgba(255,105,0,0.4)] transition-all cursor-default font-semibold tracking-wide">SUBSTRINGS</span>
+          <span className="text-orange-400/25 hover:text-orange-400/70 hover:drop-shadow-[0_0_4px_rgba(255,105,0,0.4)] transition-all cursor-default font-semibold tracking-wide">KEY TOPICS</span>
         </div>
       </div>
     </div>

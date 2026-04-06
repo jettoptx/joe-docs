@@ -218,7 +218,7 @@ export function SiteFooter() {
                 },
                 {
                   label: "Research Labs",
-                  href: "/docs/research-labs",
+                  href: "/research-labs",
                   ext: false,
                 },
               ].map((link) => (
@@ -250,7 +250,7 @@ export function SiteFooter() {
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 5, 2026 &mdash; v1.8.2
+              Last updated: April 5, 2026 &mdash; v1.8.3
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -258,6 +258,14 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.8.3</span> &mdash; April 5, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Research Labs: standalone page with JEO Research partner profile</li>
+                      <li>&#x2022; MOA Search: scored relevance ranking (key topics, connected nodes, AGT groups)</li>
+                      <li>&#x2022; MOA node cards: AGT weight numbers (COG/EMO/ENV) in header</li>
+                      <li>&#x2022; Security: scrubbed specific edge device model references from public docs</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v1.8.2</span> &mdash; April 5, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; MOA Search: node selection stays in visual graph, click-outside-to-close, auto-expand sidebar</li>

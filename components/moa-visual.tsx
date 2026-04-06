@@ -69,7 +69,7 @@ export const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "bridge-flow", label: "Bridge Flow", group: "architecture", agt: "EMO", radius: 12, href: "/docs/architecture/bridge-flow", description: "Cross-chain pipeline from XRPL to Solana via LayerZero", subLabels: ["XRPL → Solana", "LayerZero", "USDC Bridge"], emo: 55, env: 35, cog: 10 },
   { id: "agent-identity", label: "Identity", group: "architecture", agt: "EMO", radius: 13, href: "/docs/architecture/agent-identity", description: "On-chain agent identity with Metaplex NFT and ERC-8004", subLabels: ["Metaplex NFT", "DID Resolution", "Owner Authority"], emo: 65, env: 25, cog: 10 },
   { id: "task-states", label: "States", group: "architecture", agt: "COG", radius: 11, href: "/docs/architecture/task-states", description: "Finite state machine for task lifecycle management", subLabels: ["Pending → Active", "Failed/Retry", "Completed"], emo: 10, env: 10, cog: 80 },
-  { id: "topology", label: "Topology", group: "architecture", agt: "ENV", radius: 13, href: "/docs/architecture/topology", description: "Network topology across Jetson edge, Tailscale mesh, and cloud", subLabels: ["Jetson Orin", "Tailscale Mesh", "Vercel Edge"], emo: 15, env: 75, cog: 10 },
+  { id: "topology", label: "Topology", group: "architecture", agt: "ENV", radius: 13, href: "/docs/architecture/topology", description: "Network topology across Jetson edge, Tailscale mesh, and cloud", subLabels: ["NVIDIA Jetson", "Tailscale Mesh", "Vercel Edge"], emo: 15, env: 75, cog: 10 },
   { id: "edge-mcp", label: "Edge MCP", group: "infrastructure", agt: "ENV", radius: 17, href: "/docs/infrastructure/edge", description: "HEDGEHOG MCP running on Jetson validator nodes at the edge", subLabels: ["Jetson K3s", "Local Inference", "Gaze Processing"], emo: 20, env: 70, cog: 10 },
   { id: "depin", label: "DePIN", group: "infrastructure", agt: "ENV", radius: 15, href: "/docs/infrastructure/depin", description: "CSTB Trust attestation and DePIN validator staking", subLabels: ["$CSTB Token", "Validator Staking", "Trust Score"], emo: 15, env: 65, cog: 20 },
   { id: "bridge-hub", label: "Bridge Hub", group: "on-chain-bridge", agt: "EMO", radius: 19, href: "/docs/on-chain-bridge", description: "Multi-chain bridge architecture — OPTX to EVM, XRPL, LayerZero", subLabels: ["AARON Router", "Multi-Chain", "Bridge Infra"], emo: 50, env: 40, cog: 10 },
@@ -83,7 +83,7 @@ export const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "moa", label: "MOA", group: "dojo", agt: "COG", radius: 14, href: "/docs/dojo/moa", description: "Map of Augments — cognitive cartography of the documentation graph", subLabels: ["Force Graph", "AGT Classification", "Visual Index"], emo: 30, env: 15, cog: 55 },
 ];
 
-const EDGES: Edge[] = [
+export const EDGES: Edge[] = [
   { source: "index", target: "what-is-optx" }, { source: "index", target: "astrojoe" },
   { source: "index", target: "arch-flows" },
   { source: "index", target: "gaze" }, { source: "index", target: "aaron-protocol" },
@@ -1090,6 +1090,13 @@ function NodeCard({
         <div className="flex items-center gap-2 mb-0.5">
           <span className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: AGT[node.agt].color, boxShadow: `0 0 8px ${AGT[node.agt].glow}` }} />
           <span className="font-bold text-fd-foreground text-[13px] tracking-wide">{node.label}</span>
+          <span className="flex items-center gap-1 text-[9px] font-mono tabular-nums font-semibold opacity-80">
+            <span style={{ color: "#eab308" }}>{node.cog}</span>
+            <span className="text-fd-muted-foreground/30">/</span>
+            <span style={{ color: "#f43f5e" }}>{node.emo}</span>
+            <span className="text-fd-muted-foreground/30">/</span>
+            <span style={{ color: "#60a5fa" }}>{node.env}</span>
+          </span>
           <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: AGT[node.agt].color + "18", color: AGT[node.agt].color, border: `1px solid ${AGT[node.agt].color}33` }}>
             {node.agt}
           </span>

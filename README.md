@@ -215,7 +215,7 @@ to the DePIN program on Solana.
 
 ## Prerequisites
 
-- Jetson Orin Nano (or equivalent ARM64 edge device)
+- NVIDIA Jetson edge device (or equivalent ARM64 agentic GPU)
 - Tailscale mesh membership
 - Minimum 10 $CSTB staked (devnet: airdrop available)
 
