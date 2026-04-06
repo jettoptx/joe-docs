@@ -14,6 +14,20 @@ export function MoaSearch() {
   const [query, setQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close on click outside
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setQuery("");
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
 
   const matches = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -46,8 +60,6 @@ export function MoaSearch() {
     const node = matches[idx];
     if (!node) return;
     window.dispatchEvent(new CustomEvent("moa-search-select", { detail: node.id }));
-    // Close augment overlay so sidebar + docs come back
-    window.dispatchEvent(new CustomEvent("augment-space-close"));
   }, [matches]);
 
   // Keyboard: / to open, Escape to close, arrows to navigate, Enter to select
@@ -84,7 +96,16 @@ export function MoaSearch() {
   if (!open) {
     return (
       <button
-        onClick={() => { setOpen(true); setTimeout(() => inputRef.current?.focus(), 50); }}
+        onClick={() => {
+          setOpen(true);
+          setTimeout(() => inputRef.current?.focus(), 50);
+          // Uncollapse sidebar if collapsed
+          const layout = document.getElementById("nd-docs-layout");
+          if (layout?.dataset.sidebarCollapsed === "true") {
+            const trigger = document.querySelector<HTMLButtonElement>('button[aria-label="Collapse Sidebar"][data-collapsed="true"]');
+            trigger?.click();
+          }
+        }}
         className="fixed top-[4.5rem] left-1/2 -translate-x-1/2 z-40 hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-fd-background/80 backdrop-blur-md border border-fd-border/50 text-xs text-fd-muted-foreground/50 hover:text-fd-muted-foreground hover:border-fd-border transition-all cursor-pointer font-[family-name:var(--font-geist-mono)]"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -95,7 +116,7 @@ export function MoaSearch() {
   }
 
   return (
-    <div className="fixed top-[4.5rem] left-1/2 -translate-x-1/2 z-40 w-[340px] hidden md:block font-[family-name:var(--font-geist-mono)]">
+    <div ref={containerRef} className="fixed top-[4.5rem] left-1/2 -translate-x-1/2 z-40 w-[340px] hidden md:block font-[family-name:var(--font-geist-mono)]">
       <div className="bg-fd-background/95 backdrop-blur-md border border-fd-border rounded-lg shadow-lg overflow-hidden">
         {/* Search input */}
         <div className="flex items-center gap-2 px-3 py-2 border-b border-fd-border/50">
@@ -106,7 +127,7 @@ export function MoaSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search nodes..."
+            placeholder="Search nodes ... /substrings"
             className="flex-1 bg-transparent text-xs text-fd-foreground placeholder:text-fd-muted-foreground/40 focus:outline-none"
             autoFocus
           />
@@ -154,10 +175,13 @@ export function MoaSearch() {
         )}
 
         {/* Footer hint */}
-        <div className="px-3 py-1.5 border-t border-fd-border/30 flex items-center gap-3 text-[9px] text-fd-muted-foreground/30">
-          <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x2191;&#x2193; navigate</span>
-          <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x23CE; select</span>
-          <span className="hover:text-orange-400/60 transition-colors cursor-default">esc close</span>
+        <div className="px-3 py-1.5 border-t border-fd-border/30 flex items-center justify-between text-[9px] text-fd-muted-foreground/30">
+          <div className="flex items-center gap-3">
+            <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x2191;&#x2193; navigate</span>
+            <span className="hover:text-orange-400/60 transition-colors cursor-default">&#x23CE; select</span>
+            <span className="hover:text-orange-400/60 transition-colors cursor-default">esc close</span>
+          </div>
+          <span className="text-orange-400/25 hover:text-orange-400/70 hover:drop-shadow-[0_0_4px_rgba(255,105,0,0.4)] transition-all cursor-default font-semibold tracking-wide">SUBSTRINGS</span>
         </div>
       </div>
     </div>

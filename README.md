@@ -241,12 +241,15 @@ curl http://localhost:8888/health
 
 ## Current Version
 
-**v1.8.1** — April 5, 2026
+**v1.8.2** — April 5, 2026
 
-- Collapsed sidebar panel visibility fix (Tailwind v4 cascade layer override via CSS animation)
-- AGT header link scroll offset correction
-- Jett Cursor documentation accuracy update (barycentric simplex widget)
-- MOA Search: node selection closes augment overlay, orange hover on footer hints
+- MOA Search: node selection now selects in the visual graph instead of navigating away
+- MOA Search: click-outside-to-close for the search overlay
+- MOA Search: clicking "Search MOA" auto-expands collapsed sidebar
+- MOA Search: placeholder and footer hint show `/substrings` search mode
+- Augment Space: `#augment` URL hash opens the MOA visual overlay on page load
+- Collapsed sidebar: disabled hover-to-expand effect (click buttons instead)
+- Circuit-style TOC: dot nodes centered on trace line with `@layer base` cascade fix
 
 ## License
 

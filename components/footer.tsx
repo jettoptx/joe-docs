@@ -245,7 +245,7 @@ export function SiteFooter() {
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 5, 2026 &mdash; v1.8.1
+              Last updated: April 5, 2026 &mdash; v1.8.2
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -253,6 +253,15 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v1.8.2</span> &mdash; April 5, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; MOA Search: node selection stays in visual graph, click-outside-to-close, auto-expand sidebar</li>
+                      <li>&#x2022; MOA Search: /substrings hint in placeholder and footer with orange glow hover</li>
+                      <li>&#x2022; Augment Space: #augment URL hash opens MOA overlay on page load</li>
+                      <li>&#x2022; Collapsed sidebar: disabled hover-to-expand (click buttons only)</li>
+                      <li>&#x2022; Circuit TOC: dot nodes centered on trace line, bigger dots, @layer base cascade fix</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v1.8.1</span> &mdash; April 5, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Collapsed sidebar: fixed Tailwind v4 cascade layer opacity override via CSS animation</li>

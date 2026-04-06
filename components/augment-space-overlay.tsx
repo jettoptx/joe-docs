@@ -19,6 +19,11 @@ export function AugmentSpaceOverlay() {
       setOpen(true);
       document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
     }
+    // Open if URL has #augment hash
+    if (window.location.hash === "#augment") {
+      setOpen(true);
+      document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
+    }
   }, []);
 
   const handleToggle = useCallback(() => {
@@ -33,6 +38,14 @@ export function AugmentSpaceOverlay() {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       });
+      // Update URL hash outside render cycle
+      queueMicrotask(() => {
+        if (next) {
+          history.replaceState(null, "", "#augment");
+        } else {
+          history.replaceState(null, "", window.location.pathname);
+        }
+      });
       return next;
     });
   }, []);
@@ -41,6 +54,7 @@ export function AugmentSpaceOverlay() {
   const handleClose = useCallback(() => {
     setOpen(false);
     document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.remove("augment-active"));
+    history.replaceState(null, "", window.location.pathname);
   }, []);
 
   useEffect(() => {
