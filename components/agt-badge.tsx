@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useCallback } from "react";
 
 const AGT_COLORS = {
   COG: "#eab308",
@@ -29,6 +29,10 @@ export function AgtBadge({
 }) {
   const color = AGT_COLORS[tensor];
 
+  const openInMoa = useCallback(() => {
+    window.dispatchEvent(new CustomEvent("augment-space-open", { detail: node }));
+  }, [node]);
+
   // Sort segments largest first for the bar
   const segments = ([
     { label: "COG" as Tensor, pct: cog, color: AGT_COLORS.COG },
@@ -40,11 +44,11 @@ export function AgtBadge({
 
   return (
     <div className="flex flex-col gap-1.5 mt-1 mb-3">
-      {/* Primary tensor label */}
-      <Link
-        href={`/docs?node=${node}`}
-        className="inline-flex items-center gap-1.5 no-underline group"
-        style={{ textDecoration: "none" }}
+      {/* Primary tensor label — opens MOA overlay with this node selected */}
+      <button
+        type="button"
+        onClick={openInMoa}
+        className="inline-flex items-center gap-1.5 group cursor-pointer bg-transparent border-none p-0"
       >
         <span
           className="inline-block w-3 h-3 rounded-full transition-shadow group-hover:shadow-lg"
@@ -65,7 +69,7 @@ export function AgtBadge({
         >
           View in MOA
         </span>
-      </Link>
+      </button>
 
       {/* AGT distribution bar */}
       {hasDistribution && (

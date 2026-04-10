@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Pre } from "@/components/mdx-components";
 import { AgtBadge } from "@/components/agt-badge";
+import { DocTitleMoaLink } from "@/components/doc-title-moa-link";
 import { CopyForAgentsBtn } from "@/components/copy-for-agents-btn";
 import { CopyForAgents } from "@/components/copy-for-agents";
 import type { Metadata } from "next";
@@ -94,7 +95,13 @@ export default async function Page(props: {
       full={data.full}
       tableOfContent={{ footer: <CopyForAgentsBtn content={rawContent} /> }}
     >
-      <DocsTitle>{data.title}</DocsTitle>
+      {agt ? (
+        <DocTitleMoaLink nodeId={agt.node}>
+          <DocsTitle>{data.title}</DocsTitle>
+        </DocTitleMoaLink>
+      ) : (
+        <DocsTitle>{data.title}</DocsTitle>
+      )}
       {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
       <DocsDescription>{data.description}</DocsDescription>
       <DocsBody>

@@ -81,14 +81,35 @@ export function AugmentSpaceOverlay() {
     history.replaceState(null, "", window.location.pathname);
   }, []);
 
+  // Open overlay (one-directional — only opens, doesn't toggle)
+  // Accepts optional CustomEvent<string> with a node ID to deep-link
+  const handleOpen = useCallback((e?: Event) => {
+    setOpen(true);
+    document.querySelectorAll(".augment-space-btn").forEach((btn) => btn.classList.add("augment-active"));
+    queueMicrotask(() => {
+      history.replaceState(null, "", "#augment");
+    });
+    const nodeId = (e as CustomEvent<string> | undefined)?.detail;
+    if (nodeId) {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        window.dispatchEvent(new CustomEvent("moa-search-select", { detail: nodeId }));
+        attempts++;
+        if (attempts >= 10) clearInterval(interval);
+      }, 400);
+    }
+  }, []);
+
   useEffect(() => {
     window.addEventListener("augment-space-toggle", handleToggle);
     window.addEventListener("augment-space-close", handleClose);
+    window.addEventListener("augment-space-open", handleOpen);
     return () => {
       window.removeEventListener("augment-space-toggle", handleToggle);
       window.removeEventListener("augment-space-close", handleClose);
+      window.removeEventListener("augment-space-open", handleOpen);
     };
-  }, [handleToggle, handleClose]);
+  }, [handleToggle, handleClose, handleOpen]);
 
   // ESC to close
   useEffect(() => {
