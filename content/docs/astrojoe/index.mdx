@@ -4,16 +4,16 @@ title: "JOE — Jett Optics Engine"
 description: "Agent j(OS)H — the primary intelligent agent in the OPTX Agentic OS. Orchestrates DePIN, spatial encryption, and multi-agent swarms."
 ---
 
-**JOE** (Jett Optics Engine) is the jOSH Operating Environment — the primary intelligent agent in the OPTX ecosystem. It runs on Hermes Agent v0.7.0 with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state.
+**JOE** (Jett Optics Engine) is the jOSH Operating Environment — the primary intelligent agent in the OPTX ecosystem. It runs on Hermes Agent v0.8.0 with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state. The [hermes-optx-api v0.3.0](/docs/astrojoe/api) provides SSE streaming chat, Tempo wallet billing, and gateway capability probing.
 
 ## Architecture
 
 ```
-User → Hermes Workspace UI
+User → JettChat / Workspace UI
          ↓
-    hermes-optx-api
+    hermes-optx-api (:8643)   → SSE streaming, Tempo wallet, tasks
          ↓                    ↕ SpacetimeDB (Validator Node)
-    Hermes Agent              ↕ SKILL.md tools
+    Hermes Agent (:8642)      ↕ SKILL.md tools + MCP servers
          ↓                    ↕ AARON Router
     HEDGEHOG Gateway          ↕ Matrix/Conduit
          ↓
@@ -24,7 +24,9 @@ User → Hermes Workspace UI
 
 | Capability | Service | Description |
 |-----------|---------|-------------|
+| **SSE Streaming Chat** | hermes-optx-api | Real-time token streaming via Server-Sent Events |
 | **Task Orchestration** | hermes-optx-api | Create, claim, execute, complete tasks with DAG workflows |
+| **Tempo Billing** | hermes-optx-api | Metered HEDGEHOG API calls, escrow, on-chain wallet |
 | **Memory** | SpacetimeDB | Persistent memory with categories, importance scoring, and full-text search |
 | **Gaze Verification** | AARON Router | Manage gaze sessions, analyze AGT tensors (COG/EMO/ENV) |
 | **Web Search** | HEDGEHOG | Search web and X/Twitter via Grok 4.20 multi-agent |

@@ -39,15 +39,15 @@ Each memory has:
 | `end_session` | session_id, summary | Close a session |
 | `process_matrix_message` | room_id, sender, body, direction | Bridge Matrix message |
 
-## API Endpoints (via hermes-optx-api)
+## API Endpoints (via hermes-optx-api v0.3.0)
 
 ```
 POST   /api/memory          — Store a memory
-GET    /api/memory           — List memories (filter by category, search)
-GET    /api/memory/{id}      — Get specific memory
+POST   /api/memory/search   — Search with filters (category, importance)
+GET    /api/memory           — List all memories
+GET    /api/memory/recall    — Quick recall (GET-based search)
 DELETE /api/memory/{id}      — Delete a memory
-GET    /api/memory/stats     — Memory statistics
-GET    /api/memory/health    — Backend health check
+GET    /api/memory/stats     — Memory statistics + backend health
 ```
 
 ## Memory Backends
@@ -57,8 +57,10 @@ The hermes-optx-api supports pluggable memory backends:
 | Backend | Description | Default |
 |---------|-------------|---------|
 | **holographic** | SQLite + FTS5 full-text search (local) | Yes |
-| **spacetimedb** | SpacetimeDB on validator node (real-time, shared) | Production |
-| **custom** | Implement your own `MemoryBackend` interface | — |
+| **spacetimedb** | SpacetimeDB on validator node — uses HTTP SQL + reducer calls | Production |
+| **sqlite** | Standalone SQLite (same as holographic, different config) | — |
+
+The SpacetimeDB backend (added in v0.3.0) connects directly to the `optx-cortex` database on Jetson, using the same `store_memory` and `delete_memory` reducers as the agent itself. Client-side filtering handles SpacetimeDB's SQL limitations (no LIKE, no ORDER BY).
 
 ## SpacetimeDB Limitations
 

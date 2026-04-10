@@ -44,8 +44,8 @@ The complete success workflow from user request through agent execution to resul
 | Code | Full Name | Role |
 |------|-----------|------|
 | **USR** | User | Task creator |
-| **WS** | Hermes Workspace | Agent workspace UI |
-| **API** | hermes-optx-api | Task orchestration API |
+| **WS** | JettChat / Workspace | Agent UI (SSE streaming via hermes-optx-api) |
+| **API** | hermes-optx-api v0.3.0 | Task orchestration + SSE streaming + Tempo billing |
 | **DB** | SpacetimeDB | Edge database |
 | **JOE** | AstroJOE | Executing agent |
 | **HH** | HEDGEHOG | AI gateway (Grok proxy) |
