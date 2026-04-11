@@ -62,6 +62,7 @@ export const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "orchestration", label: "Orchestration", group: "astrojoe", agt: "COG", radius: 15, href: "/docs/astrojoe/orchestration", description: "Task lifecycle management with DAG workflows and swarm decomposition", subLabels: ["DAG Workflows", "Swarm Agents", "State Machine", "Gaze-Gated"], emo: 15, env: 15, cog: 70 },
   { id: "hedgehog-doc", label: "HEDGEHOG", group: "astrojoe", agt: "ENV", radius: 17, href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway — Grok 4.20 primary, Claude fallback", subLabels: ["Grok Gateway", "MCP Server", "12 Tools", "XAI API Stats"], emo: 20, env: 65, cog: 15 },
   { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "COG", radius: 14, href: "/docs/astrojoe/api", description: "Enhanced API bridge for Hermes Agent — sessions, skills, memory", subLabels: ["Sessions", "Config", "Task API", "Gateway Proxy"], emo: 10, env: 15, cog: 75 },
+  { id: "matrix", label: "Matrix GW", group: "astrojoe", agt: "ENV", radius: 13, href: "/docs/astrojoe/matrix", description: "Native Hermes Matrix gateway for real-time agent messaging via Conduit homeserver", subLabels: ["Conduit :6167", "nio Listener", "Cortex Bridge", "Federated Comms"], emo: 15, env: 70, cog: 15 },
   { id: "arch-flows", label: "Flows", group: "architecture", agt: "COG", radius: 17, href: "/docs/architecture", description: "Architecture flow diagrams across the full OPTX stack", subLabels: ["Mermaid Diagrams", "Data Flows", "System Maps"], emo: 15, env: 20, cog: 65 },
   { id: "task-lifecycle", label: "Task Life", group: "architecture", agt: "COG", radius: 12, href: "/docs/architecture/task-lifecycle", description: "Task creation through completion with state transitions", subLabels: ["Create → Claim → Execute", "Completion Proofs"], emo: 15, env: 15, cog: 70 },
   { id: "swarm-dag", label: "Swarm DAG", group: "architecture", agt: "COG", radius: 12, href: "/docs/architecture/swarm-dag", description: "Multi-agent DAG decomposition for parallel task execution", subLabels: ["Parallel/Sequential", "Agent Pools", "Dependency Graph"], emo: 30, env: 15, cog: 55 },
@@ -78,6 +79,7 @@ export const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy" | "pulse">[] = [
   { id: "xrpl-wormhole", label: "XRPL/WH", group: "on-chain-bridge", agt: "EMO", radius: 15, href: "/docs/on-chain-bridge/xrpl-wormhole", description: "XRPL pipeline — Wormhole NTT, TraderJoe Swarm, xSPECTAR NFTs", subLabels: ["Wormhole NTT", "TraderJoe Swarm", "xSPECTAR NFTs"], emo: 55, env: 35, cog: 10 },
   { id: "api-ref", label: "API Ref", group: "reference", agt: "COG", radius: 16, href: "/docs/reference/api", description: "Complete API reference — WebSocket RPC and REST endpoints", subLabels: ["WebSocket RPC", "REST Endpoints", "Auth Headers"], emo: 5, env: 5, cog: 90 },
   { id: "doc-index", label: "Index", group: "reference", agt: "COG", radius: 15, href: "/docs/reference", description: "Complete documentation index — every page classified by AGT tensor", subLabels: ["33 Pages", "AGT Classification", "arscontexta Inspired"], emo: 10, env: 10, cog: 80 },
+  { id: "changelog", label: "Changelog", group: "reference", agt: "COG", radius: 12, href: "/docs/reference/changelog", description: "Version history and release notes for the OPTX platform", subLabels: ["Version History", "Breaking Changes", "Migration Notes"], emo: 10, env: 10, cog: 80 },
   { id: "dojo", label: "DOJO", group: "dojo", agt: "ENV", radius: 19, href: "/docs/dojo", description: "Developer Operator Jett Optics — IDE training ground and augment marketplace", subLabels: ["Augment Marketplace", "Skill Composition", "Knowledge Graph"], emo: 25, env: 45, cog: 30 },
   { id: "mojo", label: "MOJO", group: "dojo", agt: "EMO", radius: 15, href: "/docs/dojo/mojo", description: "Mobile Jett Optics — wallet identity, biometrics, Jett Cursor & Widgets", subLabels: ["Jett Cursor", "Wallet Connect", "Mobile Biometrics"], emo: 50, env: 35, cog: 15 },
   { id: "moa", label: "MOA", group: "dojo", agt: "COG", radius: 14, href: "/docs/dojo/moa", description: "Map of Augments — cognitive cartography of the documentation graph", subLabels: ["Force Graph", "AGT Classification", "Visual Index"], emo: 30, env: 15, cog: 55 },
@@ -174,6 +176,10 @@ export const EDGES: Edge[] = [
   { source: "gaze", target: "on-chain" },
   { source: "hedgehog-doc", target: "orchestration" },
   { source: "architecture-overview", target: "biometric-proof" },
+  { source: "matrix", target: "astrojoe" },
+  { source: "matrix", target: "hedgehog-doc" },
+  { source: "changelog", target: "doc-index" },
+  { source: "changelog", target: "api-ref" },
 ];
 
 interface Particle { edge: number; t: number; speed: number; color: string; size: number; }
@@ -607,6 +613,7 @@ function MoaVisualInner() {
       for (const n of nodes) {
         const agt = AGT[n.agt];
         const isActive = n.id === activeId;
+        const isNodeSelected = selected !== null && n.id === selected.id;
         const isConnected = connected.has(n.id);
         const searchDimmed = searchMatchRef.current !== null && !searchMatchRef.current.has(n.id);
         const dimmed = searchDimmed || (activeId && !isActive && !isConnected);
@@ -638,6 +645,19 @@ function MoaVisualInner() {
           ctx.stroke();
         }
 
+
+        // Extra OPTX orange glow for selected nodes (from heading click)
+        if (isNodeSelected && !dimmed) {
+          const outerGlowR = r + 14 + Math.sin(t * 1.2 + n.pulse) * 3;
+          const glowGrad = ctx.createRadialGradient(n.x, n.y, r, n.x, n.y, outerGlowR);
+          glowGrad.addColorStop(0, "rgba(234,179,8,0.55)");
+          glowGrad.addColorStop(0.5, "rgba(234,179,8,0.25)");
+          glowGrad.addColorStop(1, "transparent");
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, outerGlowR, 0, Math.PI * 2);
+          ctx.fillStyle = glowGrad;
+          ctx.fill();
+        }
         // Node fill
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);

@@ -988,3 +988,24 @@ aside#nd-sidebar a[data-active="true"]::before {
 }
 
 
+
+/* ═══ MOA Node Orange Glow — selected node pulse animation ═══ */
+@keyframes moa-node-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(234, 179, 8, 0.6),
+      0 0 40px rgba(234, 179, 8, 0.3),
+      inset 0 0 0 1px rgba(234, 179, 8, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(234, 179, 8, 0.85),
+      0 0 56px rgba(234, 179, 8, 0.45),
+      inset 0 0 0 1px rgba(234, 179, 8, 0.6);
+  }
+}
+
+.moa-node-selected {
+  animation: moa-node-glow-pulse 2s ease-in-out infinite;
+  background-color: rgba(234, 179, 8, 0.10) !important;
+}

@@ -64,6 +64,7 @@ const DOC_NODES: DocNode[] = [
   { id: "orchestration", label: "Orchestration", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/orchestration", description: "Task lifecycle, DAG swarm coordination", emo: 15, env: 15, cog: 70 },
   { id: "hedgehog-doc", label: "HEDGEHOG Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway on edge hardware", emo: 20, env: 65, cog: 15 },
   { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/api", description: "Hermes OPTX API endpoints and configuration", emo: 10, env: 15, cog: 75 },
+  { id: "matrix", label: "Matrix Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/matrix", description: "Native Hermes Matrix gateway for real-time agent messaging", emo: 15, env: 70, cog: 15 },
 
   // Architecture Flows
   { id: "arch-flows", label: "Architecture Flows", group: "architecture", agt: "COG", href: "/docs/architecture", description: "Mermaid diagrams for every major system flow", emo: 15, env: 20, cog: 65 },
@@ -88,6 +89,7 @@ const DOC_NODES: DocNode[] = [
   // Reference
   { id: "api-ref", label: "API Reference", group: "reference", agt: "COG", href: "/docs/reference/api", description: "WebSocket RPC, REST endpoints, capabilities", emo: 5, env: 5, cog: 90 },
   { id: "doc-index", label: "Index", group: "reference", agt: "COG", href: "/docs/reference", description: "Complete documentation index with AGT classification", emo: 10, env: 10, cog: 80 },
+  { id: "changelog", label: "Changelog", group: "reference", agt: "COG", href: "/docs/reference/changelog", description: "Version history and release notes", emo: 10, env: 10, cog: 80 },
 
   // DOJO
   { id: "dojo", label: "DOJO", group: "dojo", agt: "ENV", href: "/docs/dojo", description: "Developer Operator Jett Optics — IDE training ground and augment marketplace", emo: 25, env: 45, cog: 30 },
@@ -200,6 +202,10 @@ const DOC_EDGES: Edge[] = [
   { source: "wallet", target: "aaron-protocol" },
   { source: "gaze", target: "on-chain" },
   { source: "hedgehog-doc", target: "orchestration" },
+  { source: "matrix", target: "astrojoe" },
+  { source: "matrix", target: "hedgehog-doc" },
+  { source: "changelog", target: "doc-index" },
+  { source: "changelog", target: "api-ref" },
 ];
 
 function getConnections(nodeId: string): string[] {
@@ -216,6 +222,7 @@ export function MoaGraph() {
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   // Keyboard shortcut: Escape clears filters
@@ -228,6 +235,21 @@ export function MoaGraph() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  // Listen for MOA node selection to highlight the node in the list view
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const nodeId = (e as CustomEvent<string>).detail;
+      if (nodeId) {
+        setSelectedNodeId(nodeId);
+        setTimeout(() => {
+          document.getElementById(`moa-node-${nodeId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 120);
+      }
+    };
+    window.addEventListener("moa-search-select", handler);
+    return () => window.removeEventListener("moa-search-select", handler);
   }, []);
 
   const grouped = useMemo(() => {
@@ -414,6 +436,7 @@ export function MoaGraph() {
                   {nodes.map((node) => {
                     const agt = AGT_COLORS[node.agt];
                     const isHovered = hoveredNode === node.id;
+                    const isSelected = selectedNodeId === node.id;
                     const isConnected = connectedTo.has(node.id);
                     const isDimmed = hoveredNode !== null && !isHovered && !isConnected;
                     const connections = getConnections(node.id);
@@ -422,15 +445,16 @@ export function MoaGraph() {
                     return (
                       <div
                         key={node.id}
+                        id={`moa-node-${node.id}`}
                         className="group relative"
                         onMouseEnter={() => setHoveredNode(node.id)}
                         onMouseLeave={() => setHoveredNode(null)}
                       >
                         <div
-                          className="flex items-start gap-2.5 py-2 px-2 -mx-2 rounded transition-all duration-150"
+                          className={`flex items-start gap-2.5 py-2 px-2 -mx-2 rounded transition-all duration-200${isSelected ? " moa-node-selected" : ""}`}
                           style={{
                             opacity: isDimmed ? 0.25 : 1,
-                            backgroundColor: isHovered ? agt.dim : "transparent",
+                            backgroundColor: isSelected ? "rgba(234,179,8,0.10)" : isHovered ? agt.dim : "transparent",
                           }}
                         >
                           {/* AGT dot */}

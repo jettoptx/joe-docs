@@ -24,6 +24,7 @@ const PATH_TO_NODE: Record<string, string> = {
   "/docs/astrojoe/memory": "memory",
   "/docs/astrojoe/orchestration": "orchestration",
   "/docs/astrojoe/hedgehog": "hedgehog-doc",
+  "/docs/astrojoe/matrix": "matrix",
   "/docs/astrojoe/api": "hermes-api",
   "/docs/architecture": "arch-flows",
   "/docs/architecture/task-lifecycle": "task-lifecycle",
@@ -40,6 +41,7 @@ const PATH_TO_NODE: Record<string, string> = {
   "/docs/on-chain-bridge/evm-layerzero": "evm-layerzero",
   "/docs/on-chain-bridge/xrpl-wormhole": "xrpl-wormhole",
   "/docs/reference/api": "api-ref",
+  "/docs/reference/changelog": "changelog",
   "/docs/reference": "doc-index",
   "/docs/dojo": "dojo",
   "/docs/dojo/moa": "moa",
@@ -155,7 +157,6 @@ function MoaHeading({
         onClick={
           currentNode
             ? (e) => {
-                e.preventDefault();
                 window.dispatchEvent(
                   new CustomEvent("augment-space-open", { detail: currentNode })
                 );

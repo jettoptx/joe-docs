@@ -40,6 +40,7 @@ const PAGE_AGT: Record<string, AgtEntry> = {
     "astrojoe":               { tensor: "EMO", node: "astrojoe",      emo: 45, env: 20, cog: 35 },
     "astrojoe/api":           { tensor: "COG", node: "hermes-api",    emo: 10, env: 15, cog: 75 },
     "astrojoe/hedgehog":      { tensor: "ENV", node: "hedgehog-doc",  emo: 20, env: 65, cog: 15 },
+    "astrojoe/matrix":        { tensor: "ENV", node: "matrix",        emo: 15, env: 70, cog: 15 },
     "astrojoe/memory":        { tensor: "COG", node: "memory",        emo: 10, env: 25, cog: 65 },
     "astrojoe/orchestration": { tensor: "COG", node: "orchestration", emo: 15, env: 15, cog: 70 },
     "astrojoe/skills":        { tensor: "COG", node: "skills",        emo: 20, env: 10, cog: 70 },
@@ -62,6 +63,7 @@ const PAGE_AGT: Record<string, AgtEntry> = {
     "infrastructure/depin": { tensor: "ENV", node: "depin",    emo: 15, env: 65, cog: 20 },
     // Reference
     "reference/api": { tensor: "COG", node: "api-ref",   emo: 5,  env: 5,  cog: 90 },
+    "reference/changelog": { tensor: "COG", node: "changelog", emo: 10, env: 10, cog: 80 },
     "reference":     { tensor: "COG", node: "doc-index", emo: 10, env: 10, cog: 80 },
 };
 
