@@ -14,27 +14,44 @@ import { D2Diagram } from "@/components/d2-diagram";
 |-------|------------|
 | <span style={{color: "#60a5fa"}}>**Devices**</span> | Desktop / Workstation, Mobile, Seekers |
 | <span style={{color: "#eab308"}}>**Tailscale**</span> | WireGuard encrypted mesh tunnels |
-| <span style={{color: "#f43f5e"}}>**Edge Node**</span> | K3s, SpacetimeDB, HEDGEHOG, AARON, JOE WS, Conduit |
-| <span style={{color: "#60a5fa"}}>**Orchestration**</span> | Hermes Agent, Workspace UI, AgenC Coordinator |
+| <span style={{color: "#f43f5e"}}>**Edge Node**</span> | K3s, SpacetimeDB, HEDGEHOG v3.6.0, AARON, Conduit v0.10.12, Edge JOE (matrix-nio relay) |
+| <span style={{color: "#60a5fa"}}>**Orchestration**</span> | AstroJOE (Hermes v0.8.0, Docker), Workspace UI, AgenC Coordinator |
 | <span style={{color: "#eab308"}}>**Cloud**</span> | Vercel, Convex, Solana, xAI Grok |
 
-## OPTX Validator Node — Edge Services
+## Edge Node — Validator Services
 
 | Service | Role |
 |---------|------|
 | **SpacetimeDB** | Primary edge database (reducers + subscriptions) |
-| **HEDGEHOG** | AI gateway (Grok proxy + memory) |
+| **HEDGEHOG v3.6.0** | AI gateway — OpenAI-compatible REST API for agents, MCP stdio for IDEs |
 | **AARON Router** | Gaze verification + tensor classification |
-| **JOE WebSocket** | Matrix relay for mobile tasking |
-| **Conduit** | Matrix homeserver (federated messaging) |
+| **Conduit v0.10.12** | Matrix homeserver (federated messaging, public at `matrix.jettoptics.ai`) |
+| **Edge JOE** | Lightweight matrix-nio relay with strict mention filter |
 
-## Orchestration Cluster — Agent Services
+## Orchestration Host — Agent Services
 
 | Service | Role |
 |---------|------|
-| **Hermes Agent** | AstroJOE brain — task execution |
+| **AstroJOE** | Primary agent brain — Hermes v0.8.0 in Docker, Grok 4.20 via HEDGEHOG |
 | **Hermes Workspace** | Agent workspace UI |
-| **AgenC Coordinator** | SubJOE agent coordination |
+| **AgenC Coordinator** | SubJOE agent swarm orchestration |
+
+### AgenC Swarm Pattern
+
+AgenC coordinates multi-agent task execution:
+
+```
+AgenC Coordinator
+  ├── AstroJOE (primary brain, Hermes v0.8.0)
+  ├── Edge JOE (lightweight relay, edge node)
+  └── TraderJOE (XRPL swarm, paper trading)
+       ↓
+  Task DAG decomposition → parallel/sequential subtasks
+       ↓
+  Policy checks → ZK proofs → on-chain attestation
+```
+
+Each sub-agent operates independently with its own wallet and can claim tasks from the shared DAG. AgenC ensures policy compliance and coordinates cross-agent dependencies.
 
 ## Cloud Services
 
@@ -49,8 +66,23 @@ import { D2Diagram } from "@/components/d2-diagram";
 
 All internal communication flows through **Tailscale** mesh networking with WireGuard encryption. Public access points:
 - `jettoptics.ai` — Vercel CDN
-- `matrix.jettoptics.ai` — Federated Matrix homeserver
+- `matrix.jettoptics.ai` — Federated Matrix homeserver (via Cloudflare Tunnel)
+
+## Communication Flow
+
+```
+Matrix Client (Element X / Web)
+  → Conduit Homeserver (edge node)
+    → Hermes Matrix Gateway (AstroJOE, /sync long-poll)
+      → Grok 4.20 via HEDGEHOG REST API
+        → Response posted back to room
+
+Edge JOE (matrix-nio, edge node)
+  → Strict @joe: mention filter
+    → Relay to AstroJOE if needed
+```
 
 ## Related
 - [System Architecture](/docs/getting-started/architecture) — High-level overview
 - [Edge MCP](/docs/infrastructure/edge) — HEDGEHOG on validator node details
+- [Matrix Gateway](/docs/astrojoe/matrix) — Matrix integration details

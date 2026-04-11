@@ -1,0 +1,50 @@
+---
+icon: MessageSquare
+title: Matrix Gateway
+description: Native Hermes Matrix gateway for real-time agent messaging via Conduit homeserver.
+---
+
+AstroJOE connects to the OPTX Matrix homeserver via Hermes' native Matrix gateway. This enables real-time auto-response in Matrix rooms without custom bridges or polling scripts.
+
+## How It Works
+
+The Hermes gateway uses matrix-nio to long-poll the homeserver's /sync endpoint. When a message arrives in a configured room, AstroJOE processes it through the full Hermes pipeline (tool use, memory, reasoning, skills) and posts a reply.
+
+## Configuration
+
+| Variable | Purpose |
+|----------|---------|
+| `MATRIX_HOMESERVER` | Homeserver URL |
+| `MATRIX_USER_ID` | Bot user ID (e.g., `@astrojoe:jettoptics.ai`) |
+| `MATRIX_PASSWORD` | Bot password |
+| `MATRIX_REQUIRE_MENTION` | Only respond when @mentioned (default: true) |
+| `MATRIX_FREE_RESPONSE_ROOMS` | Room IDs where bot responds to ALL messages |
+| `MATRIX_ALLOWED_USERS` | Whitelist of users who can interact |
+| `MATRIX_ENCRYPTION` | Enable E2EE (default: false) |
+
+## Capabilities
+
+- **Auto-response**: Responds to all messages in configured rooms or when @mentioned
+- **DM support**: Each DM gets its own session
+- **Thread support**: MSC3440 threads with isolated context
+- **Media**: Send/receive images, audio, video, files
+- **Home channel**: Delivers cron job results and cross-platform notifications
+
+## Identity
+
+- **Matrix handle**: `@astrojoe:jettoptics.ai`
+- **Homeserver**: Conduit v0.10.12 (self-hosted, federated)
+- **Public URL**: `matrix.jettoptics.ai` (via Cloudflare Tunnel)
+- **Primary room**: `#optx:jettoptics.ai` (OPTX Command Room)
+
+## Architecture
+
+```
+Matrix Client (Element X / Web)
+  → Conduit Homeserver (edge node)
+    → Hermes Gateway (/sync long-poll)
+      → Grok 4.20 via HEDGEHOG
+        → Response posted back to room
+```
+
+Requires Hermes Agent v0.6.0+ (gateway feature). Current: v0.8.0.

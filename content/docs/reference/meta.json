@@ -1,5 +1,9 @@
 {
   "title": "Reference",
   "icon": "Code",
-  "pages": ["api", "index"]
+  "pages": [
+    "api",
+    "index",
+    "changelog"
+  ]
 }

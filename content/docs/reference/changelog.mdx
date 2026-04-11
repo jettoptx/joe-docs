@@ -1,0 +1,71 @@
+---
+icon: History
+title: Changelog
+description: Version history and release notes for the OPTX ecosystem.
+---
+
+## 2026-04-11 — Hermes v0.8.0 Matrix Gateway
+
+### Added
+- **Native Matrix gateway** — AstroJOE auto-responds in OPTX Command Room via Hermes built-in Matrix support
+- **Self-maintenance protocol** — AstroJOE now proactively updates SOUL.md, skills, and dev logs as infrastructure changes
+- **Hermes harness documentation** — SOUL.md includes full tool inventory, skill system, gateway config, MCP integrations
+- **SOL funding scripts** — `scripts/fund-agents.sh` and `scripts/check-balances.sh` for agent wallet management
+- **Dev log automation** — AstroJOE writes Obsidian-format session logs to OPTX-Cortex vault
+
+### Changed
+- **Hermes Agent v0.7.0 → v0.8.0** (NousResearch tag `v2026.4.8`)
+- **Matrix identity**: `@joe:jettoptics.ai` → `@astrojoe:jettoptics.ai` (AstroJOE is the primary agent)
+- **HEDGEHOG MCP**: Removed from Hermes `mcp_servers` config (REST-only, no /mcp endpoint). LLM routing continues via `OPENAI_BASE_URL`. Custom skills (`hedgehog-websearch`, `hedgehog-memory`) handle tool access.
+- **Docker volume mount**: Config files now copied from read-only host mount into writable named volume at boot, enabling runtime config changes (e.g., `/sethome`)
+- **Edge JOE mention filter**: Strict `@joe:` prefix matching instead of broad keyword match
+
+### Fixed
+- `/sethome` failing with `[Errno 16] Device or resource busy` — bind mount on named volume prevented atomic writes
+- Hermes dashboard showing "unknown" model — config.yaml not propagating into container
+- `joe.ps1` launcher syntax errors — Unicode em-dashes replaced with ASCII
+
+### Infrastructure
+- **AstroJOE**: Docker on orchestration host, Hermes v0.8.0, Grok 4.20-0309-reasoning
+- **Edge JOE**: Edge node, matrix-nio relay, strict mention filter
+- **Conduit**: v0.10.12, public via Cloudflare Tunnel at `matrix.jettoptics.ai`
+- **HEDGEHOG**: v3.6.0, REST gateway on edge node, 1700+ queries served
+
+### Wallets
+| Wallet | Address | Planned SOL |
+|--------|---------|-------------|
+| AstroJOE Operational | `EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk` | 1.5 |
+| Jetson Edge JOE | `PJM2Y4xqCSqxX1g9AWN5ejy8s6o9SeGfUTbj2cKEycs` | 0.5 |
+| Treasury PDA | Derived from agent asset | 1.0 |
+
+---
+
+## 2026-04-10 — AstroJOE Complete Build
+
+### Added
+- Metaplex Core Asset identity on mainnet (`9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R`)
+- AccessPass system (JTX gate) — grant/revoke/close with tiers
+- Treasury system — initialize, fund, heartbeat, withdraw, survival modes
+- Survival monitor service — 5min PDA health checks, mode transitions, alerts
+- Welcome bot service — tiered greets, AccessPass PDA checks
+- Docker Compose stack for agent services
+
+### Changed
+- Convex schema updated with agent fields for UI sync
+- MyAgents.tsx wired to Convex reactive subscriptions (was hardcoded mock data)
+- Seeded 3 core agents: AstroJOE, Edge JOE, TraderJOE
+
+---
+
+## 2026-04-09 — Matrix + X API Integration
+
+### Added
+- Cloudflare Tunnel for `matrix.jettoptics.ai` (replaced mesh network funnel)
+- X API OAuth 1.0a posting via `@jettoptx` account
+- Cortex bridge — matrix-nio listener to SpacetimeDB `process_matrix_message` reducer
+- Image support in cortex bridge (m.image, m.audio, m.video, m.file events)
+- Element X mobile login via `.well-known` discovery
+
+### Changed
+- Matrix handles assigned: `@astrojoe` (Hermes/orchestration host), `@joe` (Edge/validator node), `@josh` (founder)
+- Edge JOE `.env` updated to `@joe:jettoptics.ai`

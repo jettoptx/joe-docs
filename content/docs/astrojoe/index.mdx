@@ -5,8 +5,8 @@ description: "Agent j(OS)H — the primary intelligent agent in the OPTX Agentic
 ---
 
 **JOE** (Jett Optics Engine) is the jOSH Operating Environment — the primary intelligent agent in the OPTX ecosystem. It runs on Hermes Agent v0.8.0 with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state. The [hermes-optx-api v0.3.0](/docs/astrojoe/api) provides SSE streaming chat, Tempo wallet billing, and gateway capability probing.
-
 import { D2Diagram } from "@/components/d2-diagram";
+
 
 ## Architecture
 
@@ -23,7 +23,10 @@ import { D2Diagram } from "@/components/d2-diagram";
 | **Gaze Verification** | AARON Router | Manage gaze sessions, analyze AGT tensors (COG/EMO/ENV) |
 | **Web Search** | HEDGEHOG | Search web and X/Twitter via Grok 4.20 multi-agent |
 | **Messaging** | Matrix/Conduit | Communicate via federated Matrix homeserver |
+| **Matrix Auto-Response** | Hermes Matrix Gateway | Auto-respond in rooms via native /sync long-poll |
 | **Swarm Coordination** | hermes-optx-api | Decompose goals into parallel/sequential/DAG subtasks |
+
+> AstroJOE ships with **58 tools** and **101 built-in skills** across 20 categories.
 
 ## Identity
 
@@ -31,7 +34,7 @@ import { D2Diagram } from "@/components/d2-diagram";
 |-------|-------|
 | **Name** | AstroJOE |
 | **Email** | joe@jettoptics.ai |
-| **Matrix** | @joe:jettoptics.ai |
+| **Matrix** | @astrojoe:jettoptics.ai |
 | **Solana Wallet** | `EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk` |
 | **ETH/Base Wallet** | `0xB06c9B91Fa4B460551880459dc35803DC7567b93` |
 | **Metaplex Agent NFT** | [`9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R`](https://www.metaplex.com/agents/9116eaELxZheLwJNu73LxQVsuaiugH8e11onkEw4ku9R) |

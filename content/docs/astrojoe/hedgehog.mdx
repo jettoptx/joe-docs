@@ -1,17 +1,30 @@
 ---
 icon: Zap
 title: HEDGEHOG Gateway
-description: Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway — multi-API AI MCP server.
+description: Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway — multi-API AI gateway (v3.6.0).
 ---
 
-**HEDGEHOG** (Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway) is the AI gateway that powers AstroJOE's intelligence. It runs on OPTX Validator Nodes and proxies requests to Grok 4.20 via the xAI API.
+**HEDGEHOG** (Handshake Encrypted Delegated Gesture Envelope Handler Optical Gateway) is the AI gateway that powers AstroJOE's intelligence. It runs on OPTX Validator Nodes and proxies requests to Grok 4.20 via the xAI API. Current version: **v3.6.0**.
 
-## Architecture
+## Two Modes of Operation
 
-HEDGEHOG serves two roles:
+HEDGEHOG operates in two distinct modes:
 
-1. **MCP Server** (stdio) — 12 tools for Claude Code / Cursor integration
-2. **HTTP Service** (port 8811) — OpenAI-compatible shim for Hermes Agent and AgenC
+### 1. MCP Server (stdio) — For Claude Code / Cursor
+
+When launched as an MCP server, HEDGEHOG communicates via stdio using the Model Context Protocol. This is how developers interact with HEDGEHOG from their IDE.
+
+- **Protocol**: stdio (not HTTP)
+- **12 tools** exposed via MCP
+- **Configuration**: `~/.claude/mcp.json` or `~/.cursor/mcp.json`
+
+### 2. HTTP Service (port 8811) — REST API for Agents
+
+When running as a service, HEDGEHOG exposes an **OpenAI-compatible REST API**. This is how Hermes Agent and AgenC connect for LLM inference.
+
+- **Protocol**: HTTP REST (OpenAI-compatible)
+- **No `/mcp` endpoint** — this is a pure REST API, not an MCP-over-HTTP server
+- **HEDGEHOG serves as both the LLM gateway AND the tool calling proxy** — `web_search` and `x_search` are handled via the `/v1/responses` endpoint
 
 ## HTTP Endpoints
 
@@ -19,15 +32,17 @@ HEDGEHOG serves two roles:
 ```
 POST /v1/chat/completions
 ```
-SSE streaming support. Used by Hermes Agent and AgenC for LLM inference.
+SSE streaming support. Used by Hermes Agent as `OPENAI_BASE_URL` for LLM inference.
 
-### Multi-Agent Responses
+### Multi-Agent Responses (Tool Calling Proxy)
 ```
 POST /v1/responses
 ```
-Proxies to xAI's `/v1/responses` with Grok 4.20 multi-agent mode. Supports built-in tools:
+Proxies to xAI's `/v1/responses` with Grok 4.20 multi-agent mode. Built-in tools:
 - `web_search` — Search the web
 - `x_search` — Search X/Twitter
+
+This is how AstroJOE's `hedgehog-websearch` skill accesses web and X search — by calling the HEDGEHOG REST API, not via MCP.
 
 ### Memory Endpoints
 ```
@@ -69,3 +84,9 @@ GET /v1/models        — List available models
 ## Multi-Agent Fallback
 
 If the `/v1/responses` endpoint fails, HEDGEHOG automatically falls back to `/v1/chat/completions` with the reasoning model.
+
+## Integration Notes
+
+- **Hermes Agent** connects to HEDGEHOG via `OPENAI_BASE_URL` pointed at port 8811. Custom skills (`hedgehog-websearch`, `hedgehog-memory`) handle tool access through REST calls.
+- **Claude Code / Cursor** connects via MCP stdio — no HTTP involved.
+- **HEDGEHOG was removed from Hermes' `mcp_servers` config** because there is no `/mcp` endpoint on the HTTP service. LLM routing continues via `OPENAI_BASE_URL`.
