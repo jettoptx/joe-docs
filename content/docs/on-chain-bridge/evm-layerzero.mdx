@@ -4,7 +4,7 @@ title: EVM via LayerZero
 description: Cross-chain $OPTX bridging to Ethereum, Base, Arbitrum, and Polygon using LayerZero OFT standard.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 **LayerZero OFT (Omnichain Fungible Token)** wraps $OPTX for EVM chains. This is the primary bridge for DePIN reward distribution and multi-chain wallet verification.
 
@@ -19,22 +19,7 @@ import { Mermaid } from "@/components/mermaid";
 
 ## Bridge Architecture
 
-<Mermaid chart={`flowchart TD
-    A["  OPTX  "] --> B["  Lock  "]
-    B --> C["  SOL EP  "]
-    C --> D["  DVN  "]
-    D --> E["  EVM EP  "]
-    E --> F["  ERC20  "]
-    F --> G["  Wallet  "]
-
-    style A fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style B fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style C fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style D fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style F fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style G fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-`} />
+<D2Diagram src="/diagrams/evm-layerzero.svg" alt="EVM Bridge via LayerZero — OPTX locked on Solana, verified by DVN, minted as ERC-20" caption="EVM Bridge via LayerZero" />
 
 | Node | Color | Description |
 |------|-------|-------------|

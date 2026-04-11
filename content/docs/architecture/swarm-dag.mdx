@@ -4,44 +4,13 @@ title: Swarm Decomposition
 description: DAG workflow for multi-agent coordination — decompose goals into parallel, sequential, or dependency-linked subtasks.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Swarm Decomposition (DAG Workflow)
 
 Complex goals are decomposed into subtasks using Grok, then executed as a Directed Acyclic Graph (DAG) by multiple agents.
 
-<Mermaid chart={`sequenceDiagram
-    participant USR
-    participant API
-    participant HH
-    participant DB
-    participant A1
-    participant A2
-    participant A3
-
-    USR->>API: Create swarm
-    API->>HH: Decompose goal
-    HH-->>API: Subtask list
-
-    loop Each subtask
-        API->>DB: Store task
-    end
-    API-->>USR: Swarm created
-
-    par No dependencies
-        A1->>DB: Claim Task A
-        A2->>DB: Claim Task B
-    end
-
-    A1->>DB: Complete A
-    Note over DB: DAG: C needs A ✓
-    DB-->>A3: C unblocked
-    A3->>DB: Claim C
-
-    A2->>DB: Complete B
-    A3->>DB: Complete C
-    Note over API: All done → aggregate
-`} />
+<D2Diagram src="/diagrams/swarm-dag.svg" alt="Swarm Decomposition — User creates swarm, Grok decomposes, agents execute DAG in parallel" caption="Swarm Decomposition (DAG Workflow)" />
 
 | Code | Full Name | Role |
 |------|-----------|------|

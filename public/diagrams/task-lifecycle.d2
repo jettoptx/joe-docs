@@ -1,0 +1,45 @@
+layout: elk
+theme: 200
+sketch: true
+
+shape: sequence_diagram
+
+USR: User
+WS: JettChat
+API: hermes-optx-api
+DB: SpacetimeDB
+JOE: AstroJOE
+HH: HEDGEHOG
+GRK: Grok 4.20
+
+USR -> WS: Submit task
+WS -> API: Create task
+API -> DB: Store task
+DB -> API: task_id {
+  style.stroke-dash: 3
+}
+API -> WS: Open {
+  style.stroke-dash: 3
+}
+JOE -> DB: Subscribe
+DB -> JOE: New task {
+  style.stroke-dash: 3
+}
+JOE -> API: Claim
+API -> DB: → InProgress
+JOE -> HH: Execute skill
+HH -> GRK: Query
+GRK -> HH: Result {
+  style.stroke-dash: 3
+}
+HH -> JOE: Response {
+  style.stroke-dash: 3
+}
+JOE -> API: Complete
+API -> DB: → Completed
+API -> API: Check DAG
+API -> WS: Done {
+  style.stroke-dash: 3
+}
+
+# Luke 18:31

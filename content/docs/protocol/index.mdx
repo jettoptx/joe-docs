@@ -66,44 +66,9 @@ Aaron exposes a **stateless REST API** for autonomous agent integration.
 | **JOE** | The Agent | JETT Optical Engine. Autonomous AI agent on the validator node. Executes tools, manages services, talks via Matrix chat. |
 | **HEDGEHOG** | The Brain | MCP context bridge. Routes AI queries to Grok 4.20, stores gaze data in SpacetimeDB, tracks API usage. The memory layer. |
 
-```text
-  User (Eyes + Wallet)
-        |
-        v
-  +-----------+     +-----------+     +-------------+
-  |  Frontend |---->|   AARON   |---->| SpacetimeDB |
-  | (Next.js) |     |  Router   |     |  (Edge DB)  |
-  +-----------+     +-----+-----+     +------+------+
-        |                 |                   |
-        |           validates            stores gaze
-        |           gaze proof           sessions +
-        |           + AGT tensors        attestations
-        |                 |                   |
-        |                 v                   v
-        |           +-----+-----+     +------+------+
-        |           |    JOE    |<--->|  HEDGEHOG   |
-        |           |  (Agent)  |     |   (Brain)   |
-        |           +-----+-----+     +------+------+
-        |                 |                   |
-        |           executes tools      routes AI to
-        |           Matrix chat,        Grok 4.20,
-        |           service mgmt        tracks tokens
-        |                 |                   |
-        |                 v                   v
-        |           +-----+-----+     +------+------+
-        |           |  Solana   |     |   SQLite    |
-        |           |  (Chain)  |     | (API audit) |
-        |           +-----------+     +-------------+
-        |                 |
-        v                 v
-  $OPTX minted     Attestation PDA
-  to wallet        stored on-chain
+import { D2Diagram } from "@/components/d2-diagram";
 
-  ---------------------------------------------------
-  All three run on OPTX Validator Nodes across the Solana mainnet.
-  Raw biometric data never leaves the validator node.
-  Only 32-byte opaque proofs reach the blockchain.
-```
+<D2Diagram src="/diagrams/aaron-joe-hedgehog.svg" alt="AARON + JOE + HEDGEHOG — Frontend to AARON Router, JOE Agent, HEDGEHOG Brain, Solana chain" caption="AARON + JOE + HEDGEHOG System Architecture" />
 
 ## Core Principles
 

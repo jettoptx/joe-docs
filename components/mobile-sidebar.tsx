@@ -216,7 +216,7 @@ export function MobileSidebar() {
           md:hidden
           ${
             expanded
-              ? "w-[260px] dark:bg-[rgba(10,10,10,0.96)] bg-[rgba(255,255,255,0.97)]"
+              ? "w-full dark:bg-[rgba(10,10,10,0.96)] bg-[rgba(255,255,255,0.97)]"
               : "w-[52px] dark:bg-[rgba(10,10,10,0.88)] bg-[rgba(255,255,255,0.9)]"
           }
           ${dissolved ? "sidebar-dissolve" : "sidebar-materialize"}
@@ -237,15 +237,15 @@ export function MobileSidebar() {
             setExpanded((v) => !v);
             if (expanded) setActiveSection(null);
           }}
-          className="flex items-center justify-center h-10 w-full shrink-0 border-b border-[var(--fd-border)] text-[rgb(255,105,0)] hover:bg-[rgba(255,105,0,0.08)] transition-colors duration-150"
+          className="flex items-center justify-center h-12 w-full shrink-0 border-b border-[var(--fd-border)] text-[rgb(255,105,0)] hover:bg-[rgba(255,105,0,0.08)] transition-colors duration-150"
         >
-          {expanded ? <X size={16} strokeWidth={2} /> : <ChevronRight size={16} strokeWidth={2} />}
+          {expanded ? <X size={20} strokeWidth={2} /> : <ChevronRight size={16} strokeWidth={2} />}
         </button>
 
         {/* Nav area — accordion */}
         <nav
           aria-label="Mobile docs navigation"
-          className="flex-1 min-h-0 overflow-hidden py-1 px-1.5"
+          className="flex-1 min-h-0 overflow-y-auto py-2 px-3"
         >
           <div className="flex flex-col gap-0.5">
             {NAV_SECTIONS.map((section) => {
@@ -263,29 +263,31 @@ export function MobileSidebar() {
                     aria-expanded={isOpen}
                     onClick={() => handleSectionTap(section.href)}
                     className={`
-                      flex items-center ${expanded ? "gap-2.5" : "justify-center"}
-                      rounded-md px-2 py-1.5
+                      flex items-center ${expanded ? "gap-3" : "justify-center"}
+                      rounded-md ${expanded ? "px-4 py-2.5" : "px-2 py-1.5"}
                       font-[family-name:var(--font-geist-mono)]
-                      text-xs font-medium
+                      ${expanded ? "text-[15px]" : "text-[13px]"} font-medium
                       transition-all duration-150
                       select-none whitespace-nowrap overflow-hidden
                       w-full text-left
                       ${
                         active
-                          ? "text-[rgb(255,105,0)] bg-[rgba(255,105,0,0.1)] border-l-2 border-[rgb(255,105,0)]"
+                          ? "text-[rgb(192,132,252)] bg-[rgba(168,85,247,0.1)] border-l-2 border-[rgb(168,85,247)]"
                           : "text-[var(--fd-muted-foreground)] hover:text-[var(--fd-foreground)] hover:bg-[var(--fd-accent)]"
                       }
                     `}
+                    style={active ? { boxShadow: "0 0 12px rgba(168,85,247,0.15), inset 0 0 8px rgba(168,85,247,0.05)" } : undefined}
                   >
                     <Icon
-                      size={16}
+                      size={expanded ? 20 : 16}
                       strokeWidth={1.75}
-                      className={`shrink-0 ${active ? "text-[rgb(255,105,0)]" : "opacity-70"}`}
+                      className={`shrink-0 ${active ? "text-[rgb(192,132,252)]" : "opacity-70"}`}
+                      style={active ? { filter: "drop-shadow(0 0 6px rgba(168,85,247,0.5))" } : undefined}
                       aria-hidden="true"
                     />
                     {expanded && (
                       <>
-                        <span className="text-[11px] truncate flex-1">{section.label}</span>
+                        <span className="text-[15px] truncate flex-1">{section.label}</span>
                         <ChevronRight
                           size={12}
                           strokeWidth={2}
@@ -297,7 +299,7 @@ export function MobileSidebar() {
 
                   {/* Sub-pages accordion — expand below */}
                   {expanded && isOpen && subPages.length > 0 && (
-                    <div className="flex flex-col gap-0.5 pl-5 py-1 border-l border-[rgba(255,105,0,0.15)] ml-4 mt-0.5 mb-1">
+                    <div className="flex flex-col gap-0.5 pl-6 py-1.5 border-l border-[rgba(168,85,247,0.2)] ml-5 mt-0.5 mb-1">
                       {subPages.map((page) => {
                         const isCurrent = pathname === page.href;
                         const agtColor = AGT_COLORS[page.agt];
@@ -307,14 +309,14 @@ export function MobileSidebar() {
                             key={page.href}
                             href={page.href}
                             className={`
-                              flex items-center gap-2 rounded-md px-2 py-1.5
+                              flex items-center gap-2.5 rounded-md px-3 py-2
                               font-[family-name:var(--font-geist-mono)]
-                              text-[11px] font-medium
+                              text-[14px] font-medium
                               transition-all duration-150
                               select-none overflow-hidden
                               ${
                                 isCurrent
-                                  ? "text-[rgb(255,105,0)] bg-[rgba(255,105,0,0.1)]"
+                                  ? "text-[rgb(192,132,252)] bg-[rgba(168,85,247,0.1)]"
                                   : "text-[var(--fd-muted-foreground)] hover:text-[var(--fd-foreground)] hover:bg-[var(--fd-accent)]"
                               }
                             `}
@@ -322,8 +324,8 @@ export function MobileSidebar() {
                             <span
                               className="shrink-0 rounded-full"
                               style={{
-                                width: isCurrent ? 7 : 5,
-                                height: isCurrent ? 7 : 5,
+                                width: isCurrent ? 8 : 6,
+                                height: isCurrent ? 8 : 6,
                                 backgroundColor: agtColor,
                                 boxShadow: `0 0 4px ${agtColor}50`,
                               }}
@@ -350,7 +352,7 @@ export function MobileSidebar() {
           >
             <BookOpen size={15} strokeWidth={1.75} className="shrink-0" aria-hidden="true" />
             {expanded && (
-              <span className="font-[family-name:var(--font-geist-mono)] text-[11px] font-medium">
+              <span className="font-[family-name:var(--font-geist-mono)] text-[13px] font-medium">
                 DOCS Rules
               </span>
             )}
@@ -368,7 +370,7 @@ export function MobileSidebar() {
               <Moon size={15} strokeWidth={1.75} className="shrink-0" aria-hidden="true" />
             )}
             {expanded && mounted && (
-              <span className="font-[family-name:var(--font-geist-mono)] text-[11px] font-medium">
+              <span className="font-[family-name:var(--font-geist-mono)] text-[13px] font-medium">
                 {resolvedTheme === "dark" ? "Light" : "Dark"}
               </span>
             )}

@@ -4,34 +4,13 @@ title: XRPL via Wormhole
 description: XRPL to Solana pipeline — Wormhole NTT, native USDC burn/mint, TraderJoe Swarm, and xSPECTAR agent NFTs.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 The **XRPL bridge** connects the XRP Ledger to Solana through **Wormhole NTT (Native Token Transfers)**. This path handles USDC flows, autonomous trading agents, and xSPECTAR NFTs for agent identity.
 
 ## Pipeline
 
-<Mermaid chart={`flowchart TD
-    A["  r9  "] --> B["  Xaman  "]
-    B --> C["  TJ  "]
-    C --> D["  USDC  "]
-    D --> E["  Guards  "]
-    E --> F["  VAA  "]
-    F --> G["  NTT  "]
-    G --> H["  USDC  "]
-    H --> I["  AgenC  "]
-    I --> J["  SubJOE  "]
-
-    style A fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style B fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style C fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style D fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style F fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style G fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style H fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style I fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style J fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-`} />
+<D2Diagram src="/diagrams/xrpl-wormhole.svg" alt="XRPL Wormhole Pipeline — r9 wallet through Xaman, TraderJoe, Wormhole guardians to Solana" caption="XRPL Wormhole Pipeline" />
 
 | Node | Zone | Description |
 |------|------|-------------|

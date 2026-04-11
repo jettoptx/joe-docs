@@ -8,6 +8,7 @@ import {
 import { notFound } from "next/navigation";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Pre } from "@/components/mdx-components";
+import { MdxLink, mdxHeadings } from "@/components/mdx-link";
 import { AgtBadge } from "@/components/agt-badge";
 import { DocTitleMoaLink } from "@/components/doc-title-moa-link";
 import { CopyForAgentsBtn } from "@/components/copy-for-agents-btn";
@@ -105,7 +106,7 @@ export default async function Page(props: {
       {agt && <AgtBadge tensor={agt.tensor} node={agt.node} emo={agt.emo} env={agt.env} cog={agt.cog} />}
       <DocsDescription>{data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, pre: Pre }} />
+        <MDX components={{ ...defaultMdxComponents, pre: Pre, a: MdxLink, ...mdxHeadings }} />
       </DocsBody>
     </DocsPage>
   );

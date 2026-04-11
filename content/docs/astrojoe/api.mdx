@@ -10,23 +10,11 @@ The **Hermes OPTX API** is a FastAPI sidecar that extends Hermes Agent v0.8.0+ w
 
 JettChat and Hermes Workspace expect `/api/sessions`, `/api/skills`, `/api/memory`, `/api/config`, and SSE streaming chat endpoints that upstream Hermes Agent doesn't provide. Rather than forking the agent, the Hermes OPTX API sits alongside it as a sidecar — extending capabilities without modifying the core.
 
+import { D2Diagram } from "@/components/d2-diagram";
+
 ## Architecture
 
-```
-JettChat / Workspace UI
-    ↓
-Hermes OPTX API (:8643)
-    ├── /api/sessions/{id}/chat/stream  → SSE streaming tokens
-    ├── /api/sessions/new/chat/stream   → create + stream in one call
-    ├── /api/sessions                   → reads Hermes state.db
-    ├── /api/skills                     → scans SKILL.md files
-    ├── /api/memory                     → pluggable backend
-    ├── /api/config                     → reads/writes config.yaml
-    ├── /api/tasks                      → SpacetimeDB DAG orchestration
-    ├── /api/wallet                     → Tempo billing + escrow
-    ├── /api/gateway-status             → capability probing
-    └── /v1/*                           → streaming proxy to Hermes Agent
-```
+<D2Diagram src="/diagrams/hermes-optx-api.svg" alt="Hermes OPTX API Architecture — JettChat to API sidecar to Hermes Agent with all endpoint routes" caption="Hermes OPTX API v0.3.0 Architecture" />
 
 ## SSE Streaming Chat
 

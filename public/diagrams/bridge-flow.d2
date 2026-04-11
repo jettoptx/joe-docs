@@ -1,0 +1,93 @@
+direction: down
+layout: elk
+theme: 200
+sketch: true
+
+classes: {
+  node-orange: {
+    style: {
+      fill: "#1c1007"
+      stroke: "#f97316"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fb923c"
+    }
+  }
+  node-blue: {
+    style: {
+      fill: "#0a1028"
+      stroke: "#60a5fa"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#93c5fd"
+    }
+  }
+  node-red: {
+    style: {
+      fill: "#1a0a0a"
+      stroke: "#f43f5e"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fb7185"
+    }
+  }
+  node-green: {
+    style: {
+      fill: "#0a1a0a"
+      stroke: "#22c55e"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#4ade80"
+    }
+  }
+  node-yellow: {
+    style: {
+      fill: "#1a1508"
+      stroke: "#eab308"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fbbf24"
+    }
+  }
+  node-gray: {
+    style: {
+      fill: "#1a1a1a"
+      stroke: "#888"
+      stroke-width: 1
+      border-radius: 8
+      font-color: "#aaa"
+    }
+  }
+}
+
+r9: "r9 Wallet" { class: node-red }
+Xaman: "Xaman" { class: node-red }
+TJ: "TraderJOE" { class: node-red }
+USDC-XRPL: "USDC (XRPL)" { class: node-red }
+Guards: "Wormhole Guards" { class: node-yellow }
+VAA: "VAA" { class: node-yellow }
+NTT: "NTT" { class: node-yellow }
+USDC-SOL: "USDC (Solana)" { class: node-blue }
+AgenC: "AgenC" { class: node-blue }
+SubJOE: "SubJOE" { class: node-blue }
+Vault: "Vault" { class: node-blue }
+MPO: "MPO" { class: node-blue }
+
+r9 -> Xaman
+Xaman -> TJ
+TJ -> USDC-XRPL
+USDC-XRPL -> Guards
+Guards -> VAA
+VAA -> NTT
+NTT -> USDC-SOL
+USDC-SOL -> AgenC
+AgenC -> SubJOE
+SubJOE -> Vault
+Vault -> MPO
+MPO -> r9: "cycle" {
+  style: {
+    animated: true
+  }
+}
+
+# Luke 18:31

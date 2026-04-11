@@ -1,0 +1,123 @@
+direction: down
+layout: elk
+theme: 200
+sketch: true
+
+classes: {
+  node-orange: {
+    style: {
+      fill: "#1c1007"
+      stroke: "#f97316"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fb923c"
+    }
+  }
+  node-blue: {
+    style: {
+      fill: "#0a1028"
+      stroke: "#60a5fa"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#93c5fd"
+    }
+  }
+  node-red: {
+    style: {
+      fill: "#1a0a0a"
+      stroke: "#f43f5e"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fb7185"
+    }
+  }
+  node-green: {
+    style: {
+      fill: "#0a1a0a"
+      stroke: "#22c55e"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#4ade80"
+    }
+  }
+  node-yellow: {
+    style: {
+      fill: "#1a1508"
+      stroke: "#eab308"
+      stroke-width: 2
+      border-radius: 8
+      font-color: "#fbbf24"
+    }
+  }
+  node-gray: {
+    style: {
+      fill: "#1a1a1a"
+      stroke: "#888"
+      stroke-width: 1
+      border-radius: 8
+      font-color: "#aaa"
+    }
+  }
+}
+
+S: "" {
+  shape: circle
+  style: {
+    fill: "#1a1508"
+    stroke: "#eab308"
+    stroke-width: 2
+    font-color: "#fbbf24"
+  }
+}
+
+New: "New" { class: node-yellow }
+Policy: "Policy" { class: node-yellow }
+Skip: "Skip" { class: node-gray }
+Gaze: "Gaze" { class: node-red }
+Claim: "Claim" { class: node-blue }
+Exec: "Exec" { class: node-blue }
+Tool: "Tool" { class: node-blue }
+Done: "Done" { class: node-green }
+Fail: "Fail" { class: node-red }
+
+E1: "" {
+  shape: circle
+  style: {
+    fill: "#1a1a1a"
+    stroke: "#888"
+    stroke-width: 2
+  }
+}
+E2: "" {
+  shape: circle
+  style: {
+    fill: "#0a1a0a"
+    stroke: "#22c55e"
+    stroke-width: 2
+  }
+}
+E3: "" {
+  shape: circle
+  style: {
+    fill: "#1a0a0a"
+    stroke: "#f43f5e"
+    stroke-width: 2
+  }
+}
+
+S -> New
+New -> Policy
+Policy -> Skip
+Policy -> Gaze
+Policy -> Claim
+Gaze -> Exec
+Claim -> Exec
+Exec -> Tool
+Tool -> Exec
+Exec -> Done
+Exec -> Fail
+Skip -> E1
+Done -> E2
+Fail -> E3
+
+# Luke 18:31

@@ -4,40 +4,13 @@ title: Gaze-Gated Policy
 description: Biometric verification flow for sensitive operations — AARON Router creates gaze challenges that gate task execution.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Gaze-Gated Policy Enforcement
 
 Tasks flagged with `gaze_required: true` require biometric verification before an agent can claim them.
 
-<Mermaid chart={`sequenceDiagram
-    participant JOE
-    participant API
-    participant AAR
-    participant USR
-    participant DB
-
-    JOE->>API: Claim task
-    API->>API: Check gaze flag
-
-    alt Gaze Required
-        API->>AAR: Create session
-        AAR-->>API: Session + QR
-        API-->>JOE: Awaiting gaze
-
-        USR->>AAR: Gaze sequence
-        AAR->>AAR: Classify AGT
-        AAR->>AAR: Entropy score
-        AAR->>DB: Store attestation
-        AAR-->>API: Verified
-
-        API->>DB: Status → InProgress
-        API-->>JOE: Approved
-    else No Gaze
-        API->>DB: Status → InProgress
-        API-->>JOE: Approved
-    end
-`} />
+<D2Diagram src="/diagrams/gaze-policy.svg" alt="Gaze-Gated Policy — JOE claims task, AARON verifies gaze, attestation stored" caption="Gaze-Gated Policy Enforcement" />
 
 | Code | Full Name | Role |
 |------|-----------|------|

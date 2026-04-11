@@ -4,42 +4,13 @@ title: Task Lifecycle
 description: Happy path sequence diagram — from task creation through HEDGEHOG execution to completion.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Task Lifecycle (Happy Path)
 
 The complete success workflow from user request through agent execution to result storage.
 
-<Mermaid chart={`sequenceDiagram
-    participant USR
-    participant WS
-    participant API
-    participant DB
-    participant JOE
-    participant HH
-    participant GRK
-
-    USR->>WS: Submit task
-    WS->>API: Create task
-    API->>DB: Store task
-    DB-->>API: task_id
-    API-->>WS: Open
-
-    JOE->>DB: Subscribe
-    DB-->>JOE: New task
-    JOE->>API: Claim
-    API->>DB: → InProgress
-
-    JOE->>HH: Execute skill
-    HH->>GRK: Query
-    GRK-->>HH: Result
-    HH-->>JOE: Response
-
-    JOE->>API: Complete
-    API->>DB: → Completed
-    API->>API: Check DAG
-    API-->>WS: Done
-`} />
+<D2Diagram src="/diagrams/task-lifecycle.svg" alt="Task Lifecycle — User submits task, JOE claims and executes via HEDGEHOG, completes with DAG check" caption="Task Lifecycle (Happy Path)" />
 
 | Code | Full Name | Role |
 |------|-----------|------|

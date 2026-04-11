@@ -4,41 +4,11 @@ title: Task State Machine
 description: All possible task states and transitions — from discovery through gaze-gating to completion or failure.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Task Execution State Machine
 
-<Mermaid chart={`flowchart TD
-    S((" ")) --> New["  New  "]
-    New --> Policy["  Policy  "]
-    Policy --> Skip["  Skip  "]
-    Policy --> Gaze["  Gaze  "]
-    Policy --> Claim["  Claim  "]
-    Gaze --> Claim
-    Gaze --> Skip
-    Claim --> Exec["  Exec  "]
-    Exec --> Tool["  Tool  "]
-    Tool --> Exec
-    Exec --> Done["  Done  "]
-    Exec --> Fail["  Fail  "]
-    Done --> E1((" "))
-    Fail --> E2((" "))
-    Skip --> E3((" "))
-
-    style S fill:#eab308,stroke:#eab308
-    style New fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style Policy fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style Gaze fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style Claim fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style Exec fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style Tool fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style Skip fill:#1a1a2e,stroke:#888,color:#888
-    style Done fill:#1a1a2e,stroke:#22c55e,color:#22c55e
-    style Fail fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style E1 fill:#22c55e,stroke:#22c55e
-    style E2 fill:#f43f5e,stroke:#f43f5e
-    style E3 fill:#888,stroke:#888
-`} />
+<D2Diagram src="/diagrams/task-states.svg" alt="Task State Machine — New through Policy, Gaze, Claim, Exec, to Done or Fail" caption="Task Execution State Machine" />
 
 | State | Phase | Description |
 |-------|-------|-------------|

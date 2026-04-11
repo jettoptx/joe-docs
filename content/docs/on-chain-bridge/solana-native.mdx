@@ -4,7 +4,7 @@ title: Solana Native
 description: Home chain operations — $OPTX, $JTX, $CSTB tokens, DePIN staking, and Metaplex agent identity.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 Solana is the home chain for OPTX. All verification, staking, and agent identity lives here. This is the trust root that all bridges extend from.
 
@@ -38,17 +38,7 @@ AstroJOE is registered as a **Metaplex Core Asset** on mainnet — the on-chain 
 
 ## DePIN Staking (CSTB Trust)
 
-<Mermaid chart={`flowchart TD
-    V["Node"] --> A["AARON"]
-    A --> S["CSTB"]
-    S --> R["OPTX"]
-    R --> V
-
-    style V fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style A fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style S fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style R fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-`} />
+<D2Diagram src="/diagrams/depin-staking.svg" alt="DePIN Staking Cycle — Validator Node to AARON to CSTB stake to OPTX rewards" caption="DePIN Staking Cycle" />
 
 | Node | Description |
 |------|-------------|

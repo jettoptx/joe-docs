@@ -4,25 +4,11 @@ title: Infrastructure Topology
 description: Full network map of all OPTX services across validator nodes, orchestration clusters, and cloud deployments.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Infrastructure Topology
 
-<Mermaid chart={`flowchart LR
-    A["  Devices  "] --> B["  Tailscale  "]
-    B --> C["  Edge Node  "]
-    B --> D["  Orchestration  "]
-    D --> C
-    C --> D
-    C --> E["  Cloud  "]
-    D --> E
-
-    style A fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style B fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style C fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style D fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
-`} />
+<D2Diagram src="/diagrams/topology.svg" alt="OPTX Infrastructure Topology — Devices, Tailscale, Edge Node, Orchestration, Cloud" caption="Infrastructure Topology" />
 
 | Layer | Components |
 |-------|------------|

@@ -1,0 +1,84 @@
+direction: down
+layout: elk
+theme: 200
+sketch: true
+
+classes: {
+  core: {
+    style: {
+      fill: "#1c1007"
+      stroke: "#f97316"
+      stroke-width: 2
+      border-radius: 10
+      font-color: "#f97316"
+      shadow: true
+    }
+  }
+  service: {
+    style: {
+      fill: "#1a1a1a"
+      stroke: "#3b82f6"
+      stroke-width: 1
+      border-radius: 8
+      font-color: "#93c5fd"
+    }
+  }
+  chain: {
+    shape: hexagon
+    style: {
+      fill: "#0a1a0a"
+      stroke: "#22c55e"
+      stroke-width: 2
+      font-color: "#4ade80"
+    }
+  }
+  db: {
+    shape: cylinder
+    style: {
+      fill: "#1a1508"
+      stroke: "#f59e0b"
+      stroke-width: 1
+      font-color: "#fbbf24"
+    }
+  }
+  mesh: {
+    style: {
+      fill: "#0a141a"
+      stroke: "#06b6d4"
+      stroke-width: 2
+      border-radius: 10
+      font-color: "#22d3ee"
+    }
+  }
+}
+
+ui: "JettChat / Workspace UI" {
+  class: service
+}
+
+api: "Hermes OPTX API (:8643)" {
+  class: core
+  chat: "/api/sessions/{id}/chat/stream → SSE streaming"
+  sessions: "/api/sessions → state.db"
+  skills: "/api/skills → SKILL.md files"
+  memory: "/api/memory → pluggable backend"
+  config: "/api/config → config.yaml"
+  tasks: "/api/tasks → SpacetimeDB DAG"
+  wallet: "/api/wallet → Tempo billing"
+  gateway: "/api/gateway-status → capability probe"
+  proxy: "/v1/* → streaming proxy"
+}
+
+agent: "Hermes Agent (:8642)" {
+  class: service
+}
+
+ui -> api: "HTTP / SSE" {
+  style.stroke: "#3b82f6"
+}
+
+api -> agent: "dispatch" {
+  style.stroke: "#f97316"
+}
+
+# Luke 18:31

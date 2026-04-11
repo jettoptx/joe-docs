@@ -4,73 +4,17 @@ description: High-level system diagram of the AARON protocol stack, bridge flow,
 icon: Building
 ---
 
+import { D2Diagram } from "@/components/d2-diagram";
+
 High-level system diagram of the **AARON protocol** stack.
 
 ## System Diagram
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│  CLIENT (Browser / iOS / Agent)                         │
-│  ├── Camera Feed → MediaPipe → AGT Classification       │
-│  ├── Wallet Connection (Phantom / OKX)                  │
-│  └── x402 Payment Attestation                           │
-├─────────────────────────────────────────────────────────┤
-│  JETT AUTH (Joule Encryption Temporal Template)          │
-│  ├── Agentive Gaze Tensor (AGT: COG/EMO/ENV)           │
-│  ├── Biometric identity capture on-device               │
-│  └── Generates JOULE template (knot encoding)           │
-├─────────────────────────────────────────────────────────┤
-│  AARON EDGE ROUTER (Astro Knots Router)                 │
-│  ├── Gaze verification + audit logging                  │
-│  ├── x402 micropayment settlement                       │
-│  └── IP protocol filter + rate limiting                 │
-├─────────────────────────────────────────────────────────┤
-│  USDC BRIDGE + XAHAU HOOKS                              │
-│  ├── XRP → USDC via Xahau programmable hooks            │
-│  ├── Wormhole/DeBridge cross-chain transfer              │
-│  └── MPP agent payments (donate_usdc_agent)              │
-├─────────────────────────────────────────────────────────┤
-│  OPTx (Optical Program Technologic Xtension)            │
-│  ├── Verification hash → 32-byte opaque proof           │
-│  ├── Bridge: SpacetimeDB → Solana transaction           │
-│  └── Turns JETT Auth into on-chain attestations         │
-├─────────────────────────────────────────────────────────┤
-│  OPTX NETWORK (Solana — Public)                         │
-│  ├── CSTB Trust DePIN Program (Anchor)                  │
-│  ├── $OPTX Token (Token-2022 SPL)                       │
-│  ├── $JTX Governance Token                              │
-│  ├── Vault Program (JTX5...YA7)                         │
-│  └── Attestation + DonorReceipt PDAs on-chain           │
-└─────────────────────────────────────────────────────────┘
-```
+<D2Diagram src="/diagrams/aaron-protocol-stack.svg" alt="AARON Protocol Stack — Client, JETT Auth, AARON Router, USDC Bridge, OPTx, OPTX Network" caption="AARON Protocol Architecture" />
 
 ## Bridge Flow: XRP to Solana USDC
 
-```text
-XRP User / Agent
-      │
-      ▼
-┌──────────────┐     ┌──────────────────┐
-│  Xahau Hook  │────▶│  USDC Bridge     │
-│  (XRP Ledger)│     │  (Wormhole /     │
-│              │     │   DeBridge)      │
-└──────────────┘     └───────┬──────────┘
-                             │
-                     USDC on Solana
-                             │
-                             ▼
-                  ┌─────────────────────┐
-                  │  Vault Program      │
-                  │  donate_usdc_agent  │
-                  │  (JTX5...YA7)       │
-                  └──────────┬──────────┘
-                             │
-                     ┌───────┴───────┐
-                     │               │
-                     ▼               ▼
-              DonorReceipt     VaultConfig
-              PDA created      raised_usdc++
-```
+<D2Diagram src="/diagrams/bridge-flow.svg" alt="Cross-Chain Bridge Flow — XRPL through Wormhole to Solana" caption="Bridge Flow: XRP to Solana USDC" />
 
 ## Architecture Layers
 

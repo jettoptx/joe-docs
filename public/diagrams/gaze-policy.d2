@@ -1,0 +1,34 @@
+layout: elk
+theme: 200
+sketch: true
+
+shape: sequence_diagram
+
+JOE: AstroJOE
+API: hermes-optx-api
+AAR: AARON
+USR: User
+DB: SpacetimeDB
+
+JOE -> API: Claim task
+API -> API: Check gaze flag
+API -> AAR: Create session
+AAR -> API: Session + QR {
+  style.stroke-dash: 3
+}
+API -> JOE: Awaiting gaze {
+  style.stroke-dash: 3
+}
+USR -> AAR: Gaze sequence
+AAR -> AAR: Classify AGT
+AAR -> AAR: Entropy score
+AAR -> DB: Store attestation
+AAR -> API: Verified {
+  style.stroke-dash: 3
+}
+API -> DB: Status → InProgress
+API -> JOE: Approved {
+  style.stroke-dash: 3
+}
+
+# Luke 18:31

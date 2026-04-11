@@ -78,7 +78,7 @@ Frontmatter fields: `title`, `description`, `icon` (Lucide icon name for sidebar
 - **AGT Tensor Classification** — Tri-dimensional page tagging: COG (yellow) / EMO (red) / ENV (blue)
 - **Full-text Search** — Instant search across all MDX pages via Fumadocs search API
 - **Dark/Light Themes** — OPTX-branded color scheme with theme toggle
-- **Mermaid Diagrams** — Inline diagram support in MDX
+- **D2 Diagrams** — Architecture diagrams rendered with ELK layout + click-to-enlarge lightbox
 - **Copy for Agents** — One-click page content copy for LLM/agent consumption
 
 ## Using joe-docs as a Template
@@ -242,6 +242,16 @@ curl http://localhost:8888/health
 ```
 
 ## Current Version
+
+**v1.9.0** — April 11, 2026
+
+- **D2 Diagrams**: replaced all 12 Mermaid + 3 ASCII diagrams with D2 (ELK layout, theme 200 Dark Mauve, sketch mode) across 15 MDX pages
+- **D2Diagram component**: click-to-enlarge lightbox overlay with fullscreen viewport fill (`components/d2-diagram.tsx`)
+- **Content links → MOA**: internal doc links in content body open MOA overlay with target node selected; TOC anchor links still scroll normally (`components/mdx-link.tsx`)
+- **Heading permalinks → MOA**: heading anchor clicks open MOA with current page's node highlighted instead of scrolling; custom `MoaHeading` overrides Fumadocs h2–h6
+- **Mobile sidebar**: full-width when expanded, larger fonts (15px sections / 14px sub-pages), purple glow on active item matching desktop
+- **Docs INDEX**: added "Connected" column listing all MOA graph connections per page + "Connection Density" summary table (`content/docs/reference/index.mdx`)
+- **14 D2 source files** in `public/diagrams/` with pre-rendered SVGs
 
 **v1.8.3** — April 5, 2026
 

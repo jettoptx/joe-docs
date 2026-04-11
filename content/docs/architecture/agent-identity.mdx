@@ -4,45 +4,13 @@ title: Agent Identity
 description: On-chain agent registration, multi-chain wallets, Metaplex NFT identity, and xSPECTAR soul binding.
 ---
 
-import { Mermaid } from "@/components/mermaid";
+import { D2Diagram } from "@/components/d2-diagram";
 
 ## Agent Identity & Registration
 
 AstroJOE has a multi-layered identity spanning on-chain registration, soul-bound NFTs, and biometric attestations.
 
-<Mermaid chart={`flowchart TD
-    A["  SOUL  "] --> B["  Hermes  "]
-    C["  NFT  "] --> D["  Solana  "]
-    E["  xSPECTAR  "] --> F["  XRPL  "]
-    G["  Gaze  "] --> H["  AARON  "]
-
-    D --> I["  PDA  "]
-    I --> J["  Skills  "]
-    I --> K["  Rep  "]
-    I --> L["  Wallets  "]
-
-    L --> M["  SOL  "]
-    L --> N["  ETH  "]
-    L --> O["  MPX  "]
-    L --> P["  XRP  "]
-
-    style A fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style B fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style C fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style D fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style E fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style F fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style G fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style H fill:#1a1a2e,stroke:#eab308,color:#eab308
-    style I fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style J fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style K fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style L fill:#1a1a2e,stroke:#60a5fa,color:#60a5fa
-    style M fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style N fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style O fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-    style P fill:#1a1a2e,stroke:#f43f5e,color:#f43f5e
-`} />
+<D2Diagram src="/diagrams/agent-identity.svg" alt="Agent Identity Hierarchy — SOUL, NFT, xSPECTAR, Gaze to on-chain PDA and multi-chain wallets" caption="Agent Identity & Registration" />
 
 | Node | Layer | Description |
 |------|-------|-------------|

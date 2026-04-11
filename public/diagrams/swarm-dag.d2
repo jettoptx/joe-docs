@@ -1,0 +1,34 @@
+layout: elk
+theme: 200
+sketch: true
+
+shape: sequence_diagram
+
+USR: User
+API: hermes-optx-api
+HH: HEDGEHOG
+DB: SpacetimeDB
+A1: Agent 1
+A2: Agent 2
+A3: Agent 3
+
+USR -> API: Create swarm
+API -> HH: Decompose goal
+HH -> API: Subtask list {
+  style.stroke-dash: 3
+}
+API -> DB: Store tasks (multiple)
+API -> USR: Swarm created {
+  style.stroke-dash: 3
+}
+A1 -> DB: Claim Task A
+A2 -> DB: Claim Task B
+A1 -> DB: Complete A
+DB -> A3: C unblocked {
+  style.stroke-dash: 3
+}
+A3 -> DB: Claim C
+A2 -> DB: Complete B
+A3 -> DB: Complete C
+
+# Luke 18:31
