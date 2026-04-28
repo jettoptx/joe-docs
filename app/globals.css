@@ -308,84 +308,23 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* ═══ TOC — Circuit trace with node dots ═══ */
+/* ═══ TOC — Fumadocs default styling, orange active color ═══ */
 
-/* Scroll-tracking thumb — sliding bar on the trace */
+/* Scroll-tracking thumb — let Fumadocs' default clip-path elbow render,
+   only swap the color to orange */
 #nd-toc [style*="clip-path"] {
-  width: 3px !important;
   background: rgb(255, 105, 0) !important;
-  transition: clip-path 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  z-index: 1 !important;
 }
 
-/* Trace line — thicker for circuit feel */
-#nd-toc .border-s {
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  border-left-width: 2px !important;
-}
-
-/* All links — position for dots */
-#nd-toc a {
-  position: relative !important;
-  transition: color 0.15s ease !important;
-}
-
-/* Active text — bold orange */
+/* Active link — orange, slightly heavier */
 #nd-toc a[data-active="true"] {
   color: rgb(255, 105, 0) !important;
   font-weight: 600 !important;
 }
 
-/* Hover */
+/* Hover — lighter orange */
 #nd-toc a:hover {
   color: rgb(255, 140, 50) !important;
-}
-
-/* Light mode trace */
-:root:not(.dark) #nd-toc .border-s {
-  border-color: rgba(0, 0, 0, 0.12) !important;
-}
-
-/* TOC circuit dots — must be in @layer base to beat Tailwind v4 cascade */
-@layer base {
-  /* Inactive node dots — sit centered on the trace line */
-  #nd-toc a::before {
-    content: "" !important;
-    position: absolute !important;
-    left: -1px !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 7px !important;
-    height: 7px !important;
-    border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-    transition: all 0.25s ease !important;
-    z-index: 3 !important;
-  }
-
-  /* Active node — filled orange with glow */
-  #nd-toc a[data-active="true"]::before {
-    background: rgb(255, 105, 0) !important;
-    border-color: rgb(255, 130, 40) !important;
-    width: 9px !important;
-    height: 9px !important;
-    box-shadow: 0 0 6px rgba(255, 105, 0, 0.6), 0 0 12px rgba(255, 105, 0, 0.2) !important;
-  }
-
-  /* Hover dot */
-  #nd-toc a:hover::before {
-    background: rgba(255, 105, 0, 0.4) !important;
-    border-color: rgba(255, 105, 0, 0.5) !important;
-    width: 8px !important;
-    height: 8px !important;
-  }
-
-  /* Light mode dots */
-  :root:not(.dark) #nd-toc a::before {
-    background: rgba(0, 0, 0, 0.06) !important;
-    border-color: rgba(0, 0, 0, 0.18) !important;
-  }
 }
 
 /* Hide TOC popover trigger on md+ — redundant when sidebar TOC is visible */
