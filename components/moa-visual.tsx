@@ -311,7 +311,6 @@ function MoaVisualInner() {
         || nodes.find((n) => n.id.includes(q) || q.includes(n.id));
       if (node) {
         setSelected(node);
-        panRef.current = { x: dims.w / 2 - node.x, y: dims.h / 2 - node.y };
       }
     };
     window.addEventListener("moa-search-highlight", handler);
@@ -384,10 +383,6 @@ function MoaVisualInner() {
         e.preventDefault();
         e.stopPropagation();
         setSelected(match);
-        // Scroll/pan to center the node
-        const cx = dims.w / 2;
-        const cy = dims.h / 2;
-        panRef.current = { x: cx - match.x, y: cy - match.y };
       }
     };
 
