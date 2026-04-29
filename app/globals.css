@@ -308,15 +308,20 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* ═══ TOC — Fumadocs default styling, orange active color ═══ */
+/* ═══ TOC — gray trace line + orange dot indicator on active ═══ */
 
-/* Scroll-tracking thumb — let Fumadocs' default clip-path elbow render,
-   only swap the color to orange */
+/* Hide Fumadocs' sliding clip-path thumb — we use a static dot instead */
 #nd-toc [style*="clip-path"] {
-  background: rgb(255, 105, 0) !important;
+  display: none !important;
 }
 
-/* Active link — orange, slightly heavier */
+/* TOC links are positioned relative so ::before dot anchors to them */
+#nd-toc a {
+  position: relative !important;
+  transition: color 0.15s ease !important;
+}
+
+/* Active link — orange text, slightly heavier */
 #nd-toc a[data-active="true"] {
   color: rgb(255, 105, 0) !important;
   font-weight: 600 !important;
@@ -325,6 +330,23 @@ nav[data-fd-sidebar] {
 /* Hover — lighter orange */
 #nd-toc a:hover {
   color: rgb(255, 140, 50) !important;
+}
+
+/* Active dot — sits on the gray trace line with a soft orange glow */
+@layer base {
+  #nd-toc a[data-active="true"]::before {
+    content: "" !important;
+    position: absolute !important;
+    left: -1px !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 9999px !important;
+    background: rgb(255, 105, 0) !important;
+    box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.2) !important;
+    z-index: 2 !important;
+  }
 }
 
 /* Hide TOC popover trigger on md+ — redundant when sidebar TOC is visible */

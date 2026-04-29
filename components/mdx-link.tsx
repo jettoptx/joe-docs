@@ -154,15 +154,14 @@ function MoaHeading({
         data-card=""
         href={`#${props.id}`}
         className="peer"
-        onClick={
-          currentNode
-            ? (e) => {
-                window.dispatchEvent(
-                  new CustomEvent("augment-space-open", { detail: currentNode })
-                );
-              }
-            : undefined
-        }
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentNode) {
+            window.dispatchEvent(
+              new CustomEvent("augment-space-open", { detail: currentNode })
+            );
+          }
+        }}
       >
         {props.children}
       </a>
