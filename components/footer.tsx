@@ -260,9 +260,9 @@ export function SiteFooter() {
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
                   <li><span className="text-orange-400">v1.9.0</span> &mdash; April 29, 2026
                     <ul className="ml-3 mt-1 space-y-1">
-                      <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use the platform system font stack instead of Orbitron; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>
+                      <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use <strong>Space Grotesk</strong> via next/font/google; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>
                       <li>&#x2022; Heading colors: neutral white in dark / near-black in light, with OPTX orange on hover</li>
-                      <li>&#x2022; Heading clicks no longer scroll-to-self (the heading is already on screen) &mdash; MOA event still fires on AGT pages</li>
+                      <li>&#x2022; Headings are no longer links: removed the anchor wrapper, click handler, permalink chain icon, scroll-to-self behavior, and cursor:pointer. Plain text with hover-orange visual cue only</li>
                       <li>&#x2022; TOC: orange dot indicator on the active link (5px circle + 3px soft glow) sitting on the gray trace line; circuit dots removed</li>
                       <li>&#x2022; MOA: clicking a heading or sidebar link no longer auto-pans the camera (mobile-friendly)</li>
                       <li>&#x2022; MOA selected-node glow: OPTX orange instead of yellow (canvas + side panel card)</li>

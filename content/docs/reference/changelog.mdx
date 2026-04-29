@@ -7,17 +7,20 @@ description: Version history and release notes for the OPTX ecosystem.
 ## 2026-04-29 — Docs typography + TOC + MOA UX refresh
 
 ### Changed
-- **Center docs typography**: page titles and section headers (`h1`–`h4`) now render in the platform **system font stack** (`system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`) instead of Orbitron, with tightened display-size letter-spacing (-0.022em → -0.008em). Sidebar, brand wordmark, AGT badges, and small UI accents continue to use Orbitron. Body text continues to use Geist Mono.
+- **Center docs typography**: page titles and section headers (`h1`–`h4`) now render in **Space Grotesk** loaded via `next/font/google` (weights 300/400/500/600/700, exposed as `--font-space-grotesk`). Letter-spacing tightened at display sizes (-0.022em → -0.008em). Sidebar, brand wordmark, AGT badges, and small UI accents continue to use Orbitron. Body text continues to use Geist Mono. Pairing rationale: Space Grotesk was redrawn from Space Mono with proportional widths, so it carries similar geometric DNA to Geist Mono while giving a clear hierarchy contrast.
 - **Heading colors**: doc headers are now bright white in dark mode and near-black in light mode (previously orange). Hover state shifts to OPTX orange.
-- **Heading interaction**: hover-orange affordance retained for the visual cue, but heading clicks no longer trigger the default scroll-to-self anchor jump (the heading is already on screen, so the motion was wasted). The MOA `augment-space-open` event still fires on AGT-mapped pages.
+- **Headings are not links**: the previous heading→MOA click behavior, permalink chain icon, scroll-to-self anchor jump, and `cursor: pointer` are all gone. Headings render as plain text and respond to hover with an orange color shift as the only visual cue. MOA can still be opened from the sidebar `/docs` links and the Augment Space button.
 - **TOC styling**: the right-side "On this page" sidebar uses Fumadocs' default indented hierarchy with a static **orange dot indicator** on the active link (5px circle with a 3px soft glow, sitting on the gray trace line). The previous AGT-dot-per-item markers and the sliding clip-path elbow are removed. Hover stays orange.
 
 ### Fixed
-- **MOA auto-pan on link**: clicking a heading anchor or sidebar `/docs` link no longer pans the MOA camera to the target node. Selection still updates so the matching node card appears, but the camera stays where the user left it. Particularly important on mobile, where the auto-pan was disorienting.
+- **MOA auto-pan on link**: clicking a sidebar `/docs` link no longer pans the MOA camera to the target node. Selection still updates so the matching node card appears, but the camera stays where the user left it. Particularly important on mobile, where the auto-pan was disorienting.
+- **MOA selected-node glow**: the canvas-side radial gradient on the selected node now uses OPTX orange (`rgba(255,105,0,…)`) instead of yellow (`rgba(234,179,8,…)`). The CSS-side card highlight in the index panel was updated in the same pass.
+- **Sidebar group title**: `content/docs/astrojoe/meta.json` had a U+FFFD replacement character between "JOE" and "Jett Optics Engine". Restored the proper em-dash so the sidebar no longer shows a diamond-question-mark glyph.
 - **Vercel prerender failure on `/docs/astrojoe`**: the `D2Diagram` import was sitting on the line directly after the intro paragraph with no blank line, so MDX parsed it as prose instead of a top-of-file ESM import. Hoisted the import below the frontmatter so SSG succeeds.
 
 ### Removed
-- **Inter** font load from `next/font/google` — headers now use the platform system font stack instead, so the extra font payload is no longer needed.
+- **Inter** font load — never shipped to production. Headers transitioned to a system-font stack, then to Space Grotesk; the Inter import was removed when it became unused.
+- **`DocTitleMoaLink` component** and the `MoaHeading` anchor wrapper — both made headings clickable to open MOA. With the no-link decision, both are dead weight; deleted.
 
 ---
 

@@ -130,44 +130,22 @@ export function MdxLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 }
 
 /**
- * Custom heading component that opens MOA when the heading permalink is clicked.
- * Replaces Fumadocs' default Heading to intercept anchor clicks.
+ * Plain heading components — headings render as static text with scroll-margin.
+ * Hover-orange affordance is in globals.css. No anchor link, no click handler.
  */
-function MoaHeading({
+function PlainHeading({
   as,
   className,
   ...props
 }: HTMLAttributes<HTMLHeadingElement> & { as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" }) {
   const As = as;
-  const pathname = usePathname();
-  const currentNode = PATH_TO_NODE[pathname];
-
-  if (!props.id) return <As className={className} {...props} />;
-
-  return (
-    <As className={`scroll-m-28 ${className ?? ""}`} {...props}>
-      <a
-        data-card=""
-        href={`#${props.id}`}
-        onClick={(e) => {
-          e.preventDefault();
-          if (currentNode) {
-            window.dispatchEvent(
-              new CustomEvent("augment-space-open", { detail: currentNode })
-            );
-          }
-        }}
-      >
-        {props.children}
-      </a>
-    </As>
-  );
+  return <As className={`scroll-m-28 ${className ?? ""}`} {...props} />;
 }
 
 export const mdxHeadings = {
-  h2: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h2" {...props} />,
-  h3: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h3" {...props} />,
-  h4: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h4" {...props} />,
-  h5: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h5" {...props} />,
-  h6: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h6" {...props} />,
+  h2: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h2" {...props} />,
+  h3: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h3" {...props} />,
+  h4: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h4" {...props} />,
+  h5: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h5" {...props} />,
+  h6: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h6" {...props} />,
 };
