@@ -263,10 +263,11 @@ export function SiteFooter() {
                       <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use <strong>Space Grotesk</strong> via next/font/google; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>
                       <li>&#x2022; Heading colors: neutral white in dark / near-black in light, with OPTX orange on hover</li>
                       <li>&#x2022; Headings are no longer links: removed the anchor wrapper, click handler, permalink chain icon, scroll-to-self behavior, and cursor:pointer. Plain text with hover-orange visual cue only</li>
-                      <li>&#x2022; TOC: orange dot indicator on the active link (5px circle + 3px soft glow) sitting on the gray trace line; circuit dots removed</li>
-                      <li>&#x2022; MOA: clicking a heading or sidebar link no longer auto-pans the camera (mobile-friendly)</li>
+                      <li>&#x2022; TOC: orange clip-path elbow indicator slides between active sections (Fumadocs default) plus a static dot at the active link, sitting on a gray trace line</li>
+                      <li>&#x2022; MOA: clicking a sidebar link no longer auto-pans the camera (mobile-friendly)</li>
                       <li>&#x2022; MOA selected-node glow: OPTX orange instead of yellow (canvas + side panel card)</li>
                       <li>&#x2022; Sidebar: fixed corrupted em-dash in &ldquo;JOE &mdash; Jett Optics Engine&rdquo; group title (was rendering as a U+FFFD diamond)</li>
+                      <li>&#x2022; Removed Copy for Agents button (desktop TOC footer + mobile FAB) and deleted the three unused component files</li>
                       <li>&#x2022; Build: hoisted D2Diagram MDX import in astrojoe/index above prose so Vercel prerender succeeds</li>
                     </ul>
                   </li>

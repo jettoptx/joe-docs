@@ -323,11 +323,14 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* ═══ TOC — gray trace line + orange dot indicator on active ═══ */
+/* ═══ TOC — gray trace line + orange clip-path elbow + active dot ═══ */
 
-/* Hide Fumadocs' sliding clip-path thumb — we use a static dot instead */
+/* Fumadocs' sliding clip-path thumb — recolor to OPTX orange.
+   This is the bracket/elbow indicator that animates between heading
+   positions as you scroll, showing which section range is active. */
 #nd-toc [style*="clip-path"] {
-  display: none !important;
+  background: rgb(255, 105, 0) !important;
+  transition: clip-path 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* TOC links are positioned relative so ::before dot anchors to them */
