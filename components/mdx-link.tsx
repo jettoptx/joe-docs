@@ -2,7 +2,6 @@
 
 import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
 import { usePathname } from "next/navigation";
-import { LinkIcon } from "lucide-react";
 
 /**
  * Maps doc paths to MOA node IDs.
@@ -146,14 +145,10 @@ function MoaHeading({
   if (!props.id) return <As className={className} {...props} />;
 
   return (
-    <As
-      className={`flex scroll-m-28 flex-row items-center gap-2 ${className ?? ""}`}
-      {...props}
-    >
+    <As className={`scroll-m-28 ${className ?? ""}`} {...props}>
       <a
         data-card=""
         href={`#${props.id}`}
-        className="peer"
         onClick={(e) => {
           e.preventDefault();
           if (currentNode) {
@@ -165,10 +160,6 @@ function MoaHeading({
       >
         {props.children}
       </a>
-      <LinkIcon
-        aria-hidden
-        className="size-3.5 shrink-0 text-fd-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
-      />
     </As>
   );
 }
