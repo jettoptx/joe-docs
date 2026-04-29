@@ -645,8 +645,8 @@ function MoaVisualInner() {
         if (isNodeSelected && !dimmed) {
           const outerGlowR = r + 14 + Math.sin(t * 1.2 + n.pulse) * 3;
           const glowGrad = ctx.createRadialGradient(n.x, n.y, r, n.x, n.y, outerGlowR);
-          glowGrad.addColorStop(0, "rgba(234,179,8,0.55)");
-          glowGrad.addColorStop(0.5, "rgba(234,179,8,0.25)");
+          glowGrad.addColorStop(0, "rgba(255,105,0,0.55)");
+          glowGrad.addColorStop(0.5, "rgba(255,105,0,0.25)");
           glowGrad.addColorStop(1, "transparent");
           ctx.beginPath();
           ctx.arc(n.x, n.y, outerGlowR, 0, Math.PI * 2);
