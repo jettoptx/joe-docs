@@ -1,6 +1,6 @@
 import "./globals.css";
 import { RootProvider } from "fumadocs-ui/provider/next";
-import { Orbitron, Geist_Mono, Geist } from "next/font/google";
+import { Orbitron, Geist_Mono, Geist, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 
@@ -17,6 +17,12 @@ const geistMono = Geist_Mono({
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -71,7 +77,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${orbitron.variable} ${geistMono.variable} ${geistSans.variable}`}
+      className={`${orbitron.variable} ${geistMono.variable} ${geistSans.variable} ${spaceGrotesk.variable}`}
       suppressHydrationWarning
     >
       <body className="font-[family-name:var(--font-geist-mono)] antialiased">

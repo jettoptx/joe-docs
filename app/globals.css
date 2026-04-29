@@ -40,26 +40,41 @@
 
 /* ═══ Typography — Bold headers like AgenC ═══ */
 
-/* Page title (h1) — Orbitron bold, large */
+/* Page title (h1) — Space Grotesk, large display */
 .prose h1,
 [data-mdx] h1 {
-  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
-  font-weight: 800 !important;
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, -apple-system, sans-serif !important;
+  font-weight: 700 !important;
   font-size: 2.75rem !important;
-  line-height: 1.2 !important;
-  letter-spacing: 0.02em !important;
-  color: rgb(255, 105, 0) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.022em !important;
   margin-bottom: 1rem !important;
+  transition: color 0.15s ease;
 }
 
-/* Section headers (h2) — Orbitron semibold */
+.dark .prose h1,
+.dark [data-mdx] h1 {
+  color: oklch(0.985 0 0) !important;
+}
+
+:root:not(.dark) .prose h1,
+:root:not(.dark) [data-mdx] h1 {
+  color: oklch(0.1 0 0) !important;
+}
+
+.prose h1:hover,
+[data-mdx] h1:hover {
+  color: rgb(255, 105, 0) !important;
+}
+
+/* Section headers (h2) — system font semibold */
 .prose h2,
 [data-mdx] h2 {
-  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
-  font-weight: 700 !important;
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, -apple-system, sans-serif !important;
+  font-weight: 600 !important;
   font-size: 1.75rem !important;
-  line-height: 1.3 !important;
-  letter-spacing: 0.015em !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.018em !important;
   margin-top: 2.5rem !important;
   margin-bottom: 0.75rem !important;
   padding-bottom: 0.5rem !important;
@@ -77,35 +92,77 @@
   border-bottom-color: oklch(0.88 0 0) !important;
 }
 
-/* Sub-section headers (h3) — Orbitron medium */
+/* Sub-section headers (h3) — system font medium */
 .prose h3,
 [data-mdx] h3 {
-  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, -apple-system, sans-serif !important;
   font-weight: 600 !important;
   font-size: 1.35rem !important;
-  line-height: 1.4 !important;
-  letter-spacing: 0.01em !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.012em !important;
   margin-top: 2rem !important;
   margin-bottom: 0.5rem !important;
 }
 
 .dark .prose h3,
 .dark [data-mdx] h3 {
-  color: rgb(255, 165, 80) !important;
+  color: oklch(0.95 0 0) !important;
 }
 
 :root:not(.dark) .prose h3,
 :root:not(.dark) [data-mdx] h3 {
-  color: rgb(181, 82, 0) !important;
+  color: oklch(0.12 0 0) !important;
 }
 
 /* h4 headers */
 .prose h4,
 [data-mdx] h4 {
-  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, -apple-system, sans-serif !important;
   font-weight: 600 !important;
   font-size: 1.15rem !important;
-  letter-spacing: 0.01em !important;
+  letter-spacing: -0.008em !important;
+}
+
+.dark .prose h4,
+.dark [data-mdx] h4 {
+  color: oklch(0.92 0 0) !important;
+}
+
+:root:not(.dark) .prose h4,
+:root:not(.dark) [data-mdx] h4 {
+  color: oklch(0.15 0 0) !important;
+}
+
+/* Headings hover orange (visual cue only — headings are not links) */
+.prose :is(h2, h3, h4):hover,
+[data-mdx] :is(h2, h3, h4):hover {
+  color: rgb(255, 105, 0) !important;
+  transition: color 0.15s ease !important;
+}
+
+/* Defensive: if any anchor sneaks into a heading, render it as inert text
+   (no underline, no color difference, no pointer cursor, no hover effect). */
+.prose :is(h1, h2, h3, h4, h5, h6) a,
+[data-mdx] :is(h1, h2, h3, h4, h5, h6) a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+  cursor: inherit !important;
+  pointer-events: none !important;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6) a:hover,
+[data-mdx] :is(h1, h2, h3, h4, h5, h6) a:hover {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Hide the Lucide LinkIcon Fumadocs injects after heading text */
+.prose :is(h1, h2, h3, h4, h5, h6) > svg.lucide-link,
+.prose :is(h1, h2, h3, h4, h5, h6) > .lucide-link,
+[data-mdx] :is(h1, h2, h3, h4, h5, h6) > svg.lucide-link,
+[data-mdx] :is(h1, h2, h3, h4, h5, h6) > .lucide-link {
+  display: none !important;
 }
 
 /* Body text — Geist Mono, larger, more readable */
@@ -266,83 +323,47 @@ nav[data-fd-sidebar] {
   border-left-color: rgb(255, 105, 0) !important;
 }
 
-/* ═══ TOC — Circuit trace with node dots ═══ */
+/* ═══ TOC — gray trace line + orange clip-path elbow + active dot ═══ */
 
-/* Scroll-tracking thumb — sliding bar on the trace */
+/* Fumadocs' sliding clip-path thumb — recolor to OPTX orange.
+   This is the bracket/elbow indicator that animates between heading
+   positions as you scroll, showing which section range is active. */
 #nd-toc [style*="clip-path"] {
-  width: 3px !important;
   background: rgb(255, 105, 0) !important;
   transition: clip-path 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  z-index: 1 !important;
 }
 
-/* Trace line — thicker for circuit feel */
-#nd-toc .border-s {
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  border-left-width: 2px !important;
-}
-
-/* All links — position for dots */
+/* TOC links are positioned relative so ::before dot anchors to them */
 #nd-toc a {
   position: relative !important;
   transition: color 0.15s ease !important;
 }
 
-/* Active text — bold orange */
+/* Active link — orange text, slightly heavier */
 #nd-toc a[data-active="true"] {
   color: rgb(255, 105, 0) !important;
   font-weight: 600 !important;
 }
 
-/* Hover */
+/* Hover — lighter orange */
 #nd-toc a:hover {
   color: rgb(255, 140, 50) !important;
 }
 
-/* Light mode trace */
-:root:not(.dark) #nd-toc .border-s {
-  border-color: rgba(0, 0, 0, 0.12) !important;
-}
-
-/* TOC circuit dots — must be in @layer base to beat Tailwind v4 cascade */
+/* Active dot — sits on the gray trace line with a soft orange glow */
 @layer base {
-  /* Inactive node dots — sit centered on the trace line */
-  #nd-toc a::before {
+  #nd-toc a[data-active="true"]::before {
     content: "" !important;
     position: absolute !important;
     left: -1px !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    width: 7px !important;
-    height: 7px !important;
-    border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-    transition: all 0.25s ease !important;
-    z-index: 3 !important;
-  }
-
-  /* Active node — filled orange with glow */
-  #nd-toc a[data-active="true"]::before {
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 9999px !important;
     background: rgb(255, 105, 0) !important;
-    border-color: rgb(255, 130, 40) !important;
-    width: 9px !important;
-    height: 9px !important;
-    box-shadow: 0 0 6px rgba(255, 105, 0, 0.6), 0 0 12px rgba(255, 105, 0, 0.2) !important;
-  }
-
-  /* Hover dot */
-  #nd-toc a:hover::before {
-    background: rgba(255, 105, 0, 0.4) !important;
-    border-color: rgba(255, 105, 0, 0.5) !important;
-    width: 8px !important;
-    height: 8px !important;
-  }
-
-  /* Light mode dots */
-  :root:not(.dark) #nd-toc a::before {
-    background: rgba(0, 0, 0, 0.06) !important;
-    border-color: rgba(0, 0, 0, 0.18) !important;
+    box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.2) !important;
+    z-index: 2 !important;
   }
 }
 
@@ -417,10 +438,10 @@ nav[aria-label="breadcrumb"] {
 
 /* Tables */
 .prose table th {
-  font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, -apple-system, sans-serif !important;
   font-weight: 600 !important;
   font-size: 0.78rem !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
 }
 
@@ -993,19 +1014,19 @@ aside#nd-sidebar a[data-active="true"]::before {
 @keyframes moa-node-glow-pulse {
   0%, 100% {
     box-shadow:
-      0 0 20px rgba(234, 179, 8, 0.6),
-      0 0 40px rgba(234, 179, 8, 0.3),
-      inset 0 0 0 1px rgba(234, 179, 8, 0.4);
+      0 0 20px rgba(255, 105, 0, 0.6),
+      0 0 40px rgba(255, 105, 0, 0.3),
+      inset 0 0 0 1px rgba(255, 105, 0, 0.4);
   }
   50% {
     box-shadow:
-      0 0 28px rgba(234, 179, 8, 0.85),
-      0 0 56px rgba(234, 179, 8, 0.45),
-      inset 0 0 0 1px rgba(234, 179, 8, 0.6);
+      0 0 28px rgba(255, 105, 0, 0.85),
+      0 0 56px rgba(255, 105, 0, 0.45),
+      inset 0 0 0 1px rgba(255, 105, 0, 0.6);
   }
 }
 
 .moa-node-selected {
   animation: moa-node-glow-pulse 2s ease-in-out infinite;
-  background-color: rgba(234, 179, 8, 0.10) !important;
+  background-color: rgba(255, 105, 0, 0.10) !important;
 }

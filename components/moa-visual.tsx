@@ -311,7 +311,6 @@ function MoaVisualInner() {
         || nodes.find((n) => n.id.includes(q) || q.includes(n.id));
       if (node) {
         setSelected(node);
-        panRef.current = { x: dims.w / 2 - node.x, y: dims.h / 2 - node.y };
       }
     };
     window.addEventListener("moa-search-highlight", handler);
@@ -384,10 +383,6 @@ function MoaVisualInner() {
         e.preventDefault();
         e.stopPropagation();
         setSelected(match);
-        // Scroll/pan to center the node
-        const cx = dims.w / 2;
-        const cy = dims.h / 2;
-        panRef.current = { x: cx - match.x, y: cy - match.y };
       }
     };
 
@@ -650,8 +645,8 @@ function MoaVisualInner() {
         if (isNodeSelected && !dimmed) {
           const outerGlowR = r + 14 + Math.sin(t * 1.2 + n.pulse) * 3;
           const glowGrad = ctx.createRadialGradient(n.x, n.y, r, n.x, n.y, outerGlowR);
-          glowGrad.addColorStop(0, "rgba(234,179,8,0.55)");
-          glowGrad.addColorStop(0.5, "rgba(234,179,8,0.25)");
+          glowGrad.addColorStop(0, "rgba(255,105,0,0.55)");
+          glowGrad.addColorStop(0.5, "rgba(255,105,0,0.25)");
           glowGrad.addColorStop(1, "transparent");
           ctx.beginPath();
           ctx.arc(n.x, n.y, outerGlowR, 0, Math.PI * 2);

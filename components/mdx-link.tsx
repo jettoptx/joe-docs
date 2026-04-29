@@ -2,7 +2,6 @@
 
 import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
 import { usePathname } from "next/navigation";
-import { LinkIcon } from "lucide-react";
 
 /**
  * Maps doc paths to MOA node IDs.
@@ -131,53 +130,23 @@ export function MdxLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 }
 
 /**
- * Custom heading component that opens MOA when the heading permalink is clicked.
- * Replaces Fumadocs' default Heading to intercept anchor clicks.
+ * Plain heading components — headings render as static text with scroll-margin.
+ * Hover-orange affordance is in globals.css. No anchor link, no click handler.
  */
-function MoaHeading({
+function PlainHeading({
   as,
   className,
   ...props
 }: HTMLAttributes<HTMLHeadingElement> & { as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" }) {
   const As = as;
-  const pathname = usePathname();
-  const currentNode = PATH_TO_NODE[pathname];
-
-  if (!props.id) return <As className={className} {...props} />;
-
-  return (
-    <As
-      className={`flex scroll-m-28 flex-row items-center gap-2 ${className ?? ""}`}
-      {...props}
-    >
-      <a
-        data-card=""
-        href={`#${props.id}`}
-        className="peer"
-        onClick={
-          currentNode
-            ? (e) => {
-                window.dispatchEvent(
-                  new CustomEvent("augment-space-open", { detail: currentNode })
-                );
-              }
-            : undefined
-        }
-      >
-        {props.children}
-      </a>
-      <LinkIcon
-        aria-hidden
-        className="size-3.5 shrink-0 text-fd-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
-      />
-    </As>
-  );
+  return <As className={`scroll-m-28 ${className ?? ""}`} {...props} />;
 }
 
 export const mdxHeadings = {
-  h2: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h2" {...props} />,
-  h3: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h3" {...props} />,
-  h4: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h4" {...props} />,
-  h5: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h5" {...props} />,
-  h6: (props: HTMLAttributes<HTMLHeadingElement>) => <MoaHeading as="h6" {...props} />,
+  h1: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h1" {...props} />,
+  h2: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h2" {...props} />,
+  h3: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h3" {...props} />,
+  h4: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h4" {...props} />,
+  h5: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h5" {...props} />,
+  h6: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h6" {...props} />,
 };
