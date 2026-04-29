@@ -143,6 +143,7 @@ function PlainHeading({
 }
 
 export const mdxHeadings = {
+  h1: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h1" {...props} />,
   h2: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h2" {...props} />,
   h3: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h3" {...props} />,
   h4: (props: HTMLAttributes<HTMLHeadingElement>) => <PlainHeading as="h4" {...props} />,
