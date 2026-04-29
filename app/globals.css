@@ -40,10 +40,10 @@
 
 /* ═══ Typography — Bold headers like AgenC ═══ */
 
-/* Page title (h1) — Inter, large display */
+/* Page title (h1) — system font, large display */
 .prose h1,
 [data-mdx] h1 {
-  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 700 !important;
   font-size: 2.75rem !important;
   line-height: 1.15 !important;
@@ -68,10 +68,10 @@
   color: rgb(255, 105, 0) !important;
 }
 
-/* Section headers (h2) — Inter semibold */
+/* Section headers (h2) — system font semibold */
 .prose h2,
 [data-mdx] h2 {
-  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 600 !important;
   font-size: 1.75rem !important;
   line-height: 1.25 !important;
@@ -93,10 +93,10 @@
   border-bottom-color: oklch(0.88 0 0) !important;
 }
 
-/* Sub-section headers (h3) — Inter medium */
+/* Sub-section headers (h3) — system font medium */
 .prose h3,
 [data-mdx] h3 {
-  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 600 !important;
   font-size: 1.35rem !important;
   line-height: 1.35 !important;
@@ -118,7 +118,7 @@
 /* h4 headers */
 .prose h4,
 [data-mdx] h4 {
-  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 600 !important;
   font-size: 1.15rem !important;
   letter-spacing: -0.008em !important;
@@ -420,7 +420,7 @@ nav[aria-label="breadcrumb"] {
 
 /* Tables */
 .prose table th {
-  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-weight: 600 !important;
   font-size: 0.78rem !important;
   letter-spacing: 0.04em !important;

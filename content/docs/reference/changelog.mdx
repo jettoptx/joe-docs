@@ -4,20 +4,20 @@ title: Changelog
 description: Version history and release notes for the OPTX ecosystem.
 ---
 
-## 2026-04-28 — Docs typography + TOC + MOA UX refresh
+## 2026-04-29 — Docs typography + TOC + MOA UX refresh
 
 ### Changed
-- **Center docs typography**: page titles and section headers (`h1`–`h4`) now render in **Inter** instead of Orbitron, with tightened display-size letter-spacing (-0.022em → -0.008em). Sidebar, brand wordmark, AGT badges, and small UI accents continue to use Orbitron.
-- **Heading colors**: doc headers are now bright white in dark mode and near-black in light mode (previously orange). Hover state shifts to OPTX orange to signal clickability.
-- **Heading clickability**: every center heading now exposes `cursor: pointer` and inherits its color through the wrapping anchor, so the "click heading → open MOA / scroll to anchor" affordance is visible without hovering for the link icon.
-- **TOC styling**: the right-side "On this page" sidebar now matches the Fumadocs default — indented hierarchy, single thin trace line, and a sliding clip-path "elbow" indicator on the active item. The custom AGT-dot per-item markers are removed. Active and hover colors remain orange.
+- **Center docs typography**: page titles and section headers (`h1`–`h4`) now render in the platform **system font stack** (`system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`) instead of Orbitron, with tightened display-size letter-spacing (-0.022em → -0.008em). Sidebar, brand wordmark, AGT badges, and small UI accents continue to use Orbitron. Body text continues to use Geist Mono.
+- **Heading colors**: doc headers are now bright white in dark mode and near-black in light mode (previously orange). Hover state shifts to OPTX orange.
+- **Heading interaction**: hover-orange affordance retained for the visual cue, but heading clicks no longer trigger the default scroll-to-self anchor jump (the heading is already on screen, so the motion was wasted). The MOA `augment-space-open` event still fires on AGT-mapped pages.
+- **TOC styling**: the right-side "On this page" sidebar uses Fumadocs' default indented hierarchy with a static **orange dot indicator** on the active link (5px circle with a 3px soft glow, sitting on the gray trace line). The previous AGT-dot-per-item markers and the sliding clip-path elbow are removed. Hover stays orange.
 
 ### Fixed
 - **MOA auto-pan on link**: clicking a heading anchor or sidebar `/docs` link no longer pans the MOA camera to the target node. Selection still updates so the matching node card appears, but the camera stays where the user left it. Particularly important on mobile, where the auto-pan was disorienting.
 - **Vercel prerender failure on `/docs/astrojoe`**: the `D2Diagram` import was sitting on the line directly after the intro paragraph with no blank line, so MDX parsed it as prose instead of a top-of-file ESM import. Hoisted the import below the frontmatter so SSG succeeds.
 
-### Added
-- **Inter** loaded via `next/font/google` (weights 400/500/600/700/800) and exposed as `--font-inter`. Orbitron remains loaded for the sidebar and brand wordmark.
+### Removed
+- **Inter** font load from `next/font/google` — headers now use the platform system font stack instead, so the extra font payload is no longer needed.
 
 ---
 
