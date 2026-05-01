@@ -20,7 +20,7 @@ description: Version history and release notes for the OPTX ecosystem.
 - **On-Chain Bridge** — EVM (`evm-layerzero`) and XRPL (`xrpl-wormhole`) pages retired pending re-implementation.
 - **Matrix Gateway** — reframed as **optional federation transport** for AstroJOE only; not part of JettChat dual-mode core.
 - **ERC-8004 Agent Wallet** — labeled **Roadmap**; design intent retained, no contract is deployed.
-- **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.11.0** (see audit memory).
+- **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.12.0** (NousResearch tag `2026.4.30`, "The Curator release"). See "Hermes v0.12.0 alignment" sub-entry below.
 - **JOE topology** — explicitly **dual-instance**: Jetson Orin Nano (primary, runs AARON + HEDGEHOG + SpacetimeDB) + CorsairOne (secondary).
 - **Docs domain** — README and intra-doc references updated from `optxspace.dev` → `jettoptx.dev` (canonical, per JETT Hub footer).
 
@@ -44,6 +44,21 @@ The dual-mode framing landed in seven coordinated PRs. All update READMEs / meta
 | [`joe-jtx-cstb-depin`](https://github.com/jettoptx/joe-jtx-cstb-depin) | [PR #3](https://github.com/jettoptx/joe-jtx-cstb-depin/pull/3) | Subscription tier table rebuilt against canonical staking model; docs link → jettoptx.dev/docs |
 
 Three private repos with overlapping JettChat scope are **on hold** pending disambiguation: `jettoptx/jettchat`, `jettoptx/jett-auth-sdk`, and `jettoptx/tempo` (Tempo CLI role needs confirmation — see open items in the source plan).
+
+### Hermes v0.12.0 alignment
+
+The OPTX deployment now tracks **Hermes Agent v0.12.0** (NousResearch tag `2026.4.30`) — *"The Curator release."* Released 2026-04-30 (1,096 commits, 550 PRs, 213 contributors since v0.11.0). Headline features that affect AstroJOE / JOE deployments on the [agent mesh](/docs/architecture/topology):
+
+- **Autonomous Curator** — background process grades, prunes, and consolidates the skill library without operator intervention. Aligns with the existing AstroJOE self-maintenance protocol.
+- **Self-improvement loop** substantially upgraded; review summaries surface in the TUI transcript and via `hermes curator status` (most-used + least-used skills).
+- **Four new inference providers** added — broader fallback options on top of HEDGEHOG's Grok routing.
+- **Microsoft Teams + Yuanbao** added as the 18th and 19th messaging platforms (joining the existing Matrix/X/etc. set).
+- **Spotify + Google Meet** native integrations.
+- **ComfyUI + TouchDesigner-MCP** bundled by default — these MCP servers are now first-class for AstroJOE on Jetson + CorsairOne without manual installation.
+- **Humanizer skill** ported from earlier branches.
+- **~57% TUI cold-start reduction** — perceptibly faster `hermes` launch on edge nodes.
+
+Pinned version references in the docs site were unpinned in prose during this overhaul (link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) instead). Where a version *is* required for a hard dependency claim, use **v0.12.0**.
 
 ---
 
