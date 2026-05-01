@@ -1,0 +1,84 @@
+---
+title: Ecosystem Repos
+description: Every repo in the jettoptx and Secure-Legion GitHub orgs that backs OPTX and JettChat — with role, visibility, and current status.
+icon: Boxes
+---
+
+The OPTX / JettChat platform is split across two GitHub orgs. This page outlines every repo so readers know where to look, even when a repo isn't yet documented in depth.
+
+- **`jettoptx`** — the umbrella org for OPTX, JettChat (xChat Native), AARON, JOE, and supporting infrastructure.
+- **`Secure-Legion`** — the org for Phantom Mode (Tor + post-quantum messaging, patent pending) and its Tor patches.
+
+Visibility key: **PUB** = public on GitHub, **PRI** = private. Status key: **Active** = currently in production or used by the docs site, **Overlapping** = scope unclear vs. another repo (see Notes), **Roadmap** = planned, no shipped artifact yet.
+
+---
+
+## `jettoptx` org
+
+### Active core
+
+| Repo | Vis | Role |
+|------|-----|------|
+| [`joe-docs`](https://github.com/jettoptx/joe-docs) | PUB | This documentation site (Next.js 16 + Fumadocs + MDX). Deployed at [jettoptx.dev/docs](https://jettoptx.dev/docs). |
+| [`joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) | PRI | **xChat Native** UI — clean-room encrypted AI chat. See [JettChat → xChat Native](/docs/jettchat/xchat-native). |
+| [`joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx) | PUB | The published `@jettoptx/auth` SDK — X OAuth 2.0 PKCE + Solana `signMessage` + Ed25519 JWT. See [JETT Auth](/docs/authentication/jett-auth). |
+| [`joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk) | PRI | E2E encryption SDK (X25519 + TKDF hybrid PQC) + Matrix bridge + X Activity API. See [Messaging Features](/docs/jettchat/messaging). |
+| [`joe-aaron-router`](https://github.com/jettoptx/joe-aaron-router) | PUB | AARON gaze-verification router (FastAPI). Serves both JettChat modes. See [AARON Protocol](/docs/protocol). |
+| [`joe-core`](https://github.com/jettoptx/joe-core) | PRI | JOE Agentic Core — sovereign AstroKnot Lattice + JETT Auth backend + Knot Proof Gallery + OPTX Network logic. See [AstroJOE](/docs/astrojoe). |
+| [`joe-optx-hermes-api`](https://github.com/jettoptx/joe-optx-hermes-api) | PUB | FastAPI bridge for [Hermes Agent](https://github.com/NousResearch/hermes-agent), MPP pay-per-request. See [Hermes OPTX API](/docs/astrojoe/api). |
+| [`joe-jtx-cstb-depin`](https://github.com/jettoptx/joe-jtx-cstb-depin) | PUB | Anchor program for $JTX/$CSTB compute-trust bonding on Solana. See [Token / JTX](/docs/token). |
+
+### Active supporting
+
+| Repo | Vis | Role |
+|------|-----|------|
+| [`solana-wallet-adapter-jett`](https://github.com/jettoptx/solana-wallet-adapter-jett) | PRI | JETT-flavored Solana wallet adapter. |
+| [`xmcp-client`](https://github.com/jettoptx/xmcp-client) | PRI | xmcp protocol client. |
+| [`optx-mesh-sdk`](https://github.com/jettoptx/optx-mesh-sdk) | PRI | Distributed mesh SDK. |
+| [`optx-cockpit`](https://github.com/jettoptx/optx-cockpit) | PRI | Operator cockpit for the OPTX bridge and agent mesh (Wormhole NTT, AgenC, AstroJOE). |
+| [`tailscale-acls`](https://github.com/jettoptx/tailscale-acls) | PRI | Tailscale ACL policy (GitOps) for the OPTX mesh. See [Topology](/docs/architecture/topology). |
+| [`astroknots`](https://github.com/jettoptx/astroknots) | PRI | Knot-theoretic spatial encryption module (the math behind the gaze polynomial PIN). |
+
+### Overlapping — scope under review
+
+These three repos have descriptions that overlap with already-active repos. They are listed here so readers don't miss them, but the canonical install / consume targets are the active repos above. Documentation will be expanded once the layering is finalized.
+
+| Repo | Vis | Note |
+|------|-----|------|
+| [`jettchat`](https://github.com/jettoptx/jettchat) | PRI | "Gaze-gated E2E encrypted Xitter mesh with Solana integration." Overlaps with `joe-jettchat-app` (UI) and `joe-jettchat-sdk` (E2E SDK). For now, treat `joe-jettchat-app` as the canonical product entry point. |
+| [`jett-auth-sdk`](https://github.com/jettoptx/jett-auth-sdk) | PRI | "JETT Auth SDK for secure authentication and authorization." Overlaps with `joe-jettauth-optx` (the published `@jettoptx/auth`). For now, install `@jettoptx/auth` from `joe-jettauth-optx`. |
+| [`tempo`](https://github.com/jettoptx/tempo) | PRI | "Tempo - high precision timing library for OPTX." The JETT Hub login surface offers *"Pay with Tempo CLI · $8.88"* as a payment rail; the relationship between the timing library and the payment CLI is being clarified. See [JETT Auth → Access flow](/docs/authentication/jett-auth). |
+
+---
+
+## `Secure-Legion` org
+
+| Repo | Vis | Role |
+|------|-----|------|
+| [`Secure-Legion/android`](https://github.com/Secure-Legion/android) | PUB | **Phantom Mode** runtime — Tor private messaging app with post-quantum cryptography, private payments, metadata resistance. Patent pending. See [JettChat → Phantom Mode](/docs/jettchat/phantom-mode). |
+| [`Secure-Legion/tor-hsservice-patched`](https://github.com/Secure-Legion/tor-hsservice-patched) | PUB | Fork of `tor-hsservice` 0.40 with intro-point exposure for OnionBalance coordination. Backs the **triple `.onion`** topology in Phantom Mode. |
+| [`Secure-Legion/.github`](https://github.com/Secure-Legion) | PUB | Org profile. Tagline: *"The first messenger that protects your identity, not just your messages. Serverless, blockchain-integrated, Private Payments."* |
+
+---
+
+## Cross-org reference map
+
+Use this when you're trying to figure out where a feature lives:
+
+| Feature | Lives in |
+|---------|----------|
+| xChat Native UI | [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) |
+| Published `@jettoptx/auth` SDK | [`jettoptx/joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx) |
+| E2E messaging SDK + TKDF | [`jettoptx/joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk) |
+| Phantom Mode runtime | [`Secure-Legion/android`](https://github.com/Secure-Legion/android) |
+| Triple `.onion` topology | [`Secure-Legion/tor-hsservice-patched`](https://github.com/Secure-Legion/tor-hsservice-patched) |
+| AARON gaze-verification router | [`jettoptx/joe-aaron-router`](https://github.com/jettoptx/joe-aaron-router) |
+| JOE agentic core | [`jettoptx/joe-core`](https://github.com/jettoptx/joe-core) |
+| Hermes API bridge | [`jettoptx/joe-optx-hermes-api`](https://github.com/jettoptx/joe-optx-hermes-api) |
+| $JTX / $CSTB DePIN program | [`jettoptx/joe-jtx-cstb-depin`](https://github.com/jettoptx/joe-jtx-cstb-depin) |
+
+---
+
+## Companion documentation PRs
+
+The 2026-04-30 dual-mode overhaul shipped as a coordinated set of PRs across these repos. See the [Changelog](/docs/reference/changelog) for the full PR table.
