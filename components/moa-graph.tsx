@@ -30,7 +30,9 @@ export const AGT_COLORS: Record<AGT, { color: string; label: string; dim: string
 
 const GROUPS: Record<string, { label: string; order: number }> = {
   "getting-started": { label: "Getting Started", order: 0 },
+  jettchat: { label: "JettChat", order: 0.5 },
   authentication: { label: "Authentication", order: 1 },
+  token: { label: "Token", order: 1.5 },
   protocol: { label: "Protocol — AARON", order: 2 },
   astrojoe: { label: "AstroJOE — Agent OS", order: 3 },
   architecture: { label: "Architecture Flows", order: 5 },
@@ -42,13 +44,25 @@ const GROUPS: Record<string, { label: string; order: number }> = {
 
 const DOC_NODES: DocNode[] = [
   // Getting Started
-  { id: "what-is-optx", label: "What is OPTX?", group: "getting-started", agt: "COG", href: "/docs/getting-started/what-is-optx", description: "Core concepts, naming hierarchy, protocol overview", emo: 25, env: 20, cog: 55 },
-  { id: "architecture-overview", label: "Architecture", group: "getting-started", agt: "COG", href: "/docs/getting-started/architecture", description: "End-to-end system architecture from client to chain", emo: 15, env: 30, cog: 55 },
+  { id: "what-is-optx", label: "What is OPTX?", group: "getting-started", agt: "COG", href: "/docs/getting-started/what-is-optx", description: "Dual-mode JettChat overview, naming hierarchy, protocol primitives", emo: 25, env: 20, cog: 55 },
+  { id: "architecture-overview", label: "Architecture", group: "getting-started", agt: "COG", href: "/docs/getting-started/architecture", description: "Two JettChat modes (xChat Native + Phantom Mode) sharing AGT, JTX, Solana", emo: 15, env: 30, cog: 55 },
   { id: "on-chain", label: "On-Chain Addresses", group: "getting-started", agt: "ENV", href: "/docs/getting-started/on-chain-addresses", description: "Solana program addresses, token mints, wallets", emo: 10, env: 80, cog: 10 },
 
+  // JettChat
+  { id: "jettchat", label: "JettChat", group: "jettchat", agt: "EMO", href: "/docs/jettchat", description: "Encrypted AI chat — two modes (xChat Native + Phantom Mode)", emo: 55, env: 25, cog: 20 },
+  { id: "xchat-native", label: "xChat Native", group: "jettchat", agt: "EMO", href: "/docs/jettchat/xchat-native", description: "X OAuth 2.0 PKCE + Solana JTX gating + Ed25519 JWT", emo: 60, env: 20, cog: 20 },
+  { id: "phantom-mode", label: "Phantom Mode", group: "jettchat", agt: "ENV", href: "/docs/jettchat/phantom-mode", description: "Tor + post-quantum (X25519 + ML-KEM-1024) + StrongBox/TEE + duress PIN", emo: 30, env: 55, cog: 15 },
+  { id: "jettchat-messaging", label: "Messaging Features", group: "jettchat", agt: "EMO", href: "/docs/jettchat/messaging", description: "E2EE messaging shared by both modes — gaze cursor, offline-first, groups, self-destruct", emo: 60, env: 25, cog: 15 },
+
   // Authentication
+  { id: "jett-auth", label: "JETT Auth", group: "authentication", agt: "EMO", href: "/docs/authentication/jett-auth", description: "Unified auth surface — supports both xChat Native and Phantom Mode", emo: 55, env: 20, cog: 25 },
   { id: "gaze", label: "Gaze Verification", group: "authentication", agt: "EMO", href: "/docs/authentication/gaze", description: "AGT biometric auth — iris tracking, tensor classification", emo: 55, env: 5, cog: 40 },
-  { id: "wallet", label: "Agent Wallet", group: "authentication", agt: "EMO", href: "/docs/authentication/wallet", description: "ERC-8004 soulbound wallet for computational identity", emo: 50, env: 40, cog: 10 },
+  { id: "wallet", label: "Agent Wallet", group: "authentication", agt: "EMO", href: "/docs/authentication/wallet", description: "ERC-8004 soulbound wallet for computational identity (roadmap)", emo: 50, env: 40, cog: 10 },
+
+  // Token
+  { id: "token", label: "$JTX Token", group: "token", agt: "ENV", href: "/docs/token", description: "JettChat access + governance token on Solana mainnet", emo: 25, env: 50, cog: 25 },
+  { id: "token-tiers", label: "Tiers", group: "token", agt: "COG", href: "/docs/token/tiers", description: "Canonical 3-tier model (MOJO / DOJO / SPACE COWBOY) — stake or subscribe", emo: 20, env: 30, cog: 50 },
+  { id: "token-subscriptions", label: "Subscriptions", group: "token", agt: "COG", href: "/docs/token/subscriptions", description: "Wallet-less paths — Stripe + Tempo CLI", emo: 25, env: 20, cog: 55 },
 
   // Protocol
   { id: "aaron-protocol", label: "AARON Protocol", group: "protocol", agt: "COG", href: "/docs/protocol", description: "Biometric proof protocol and edge router", emo: 20, env: 15, cog: 65 },
@@ -64,7 +78,8 @@ const DOC_NODES: DocNode[] = [
   { id: "orchestration", label: "Orchestration", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/orchestration", description: "Task lifecycle, DAG swarm coordination", emo: 15, env: 15, cog: 70 },
   { id: "hedgehog-doc", label: "HEDGEHOG Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway on edge hardware", emo: 20, env: 65, cog: 15 },
   { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/api", description: "Hermes OPTX API endpoints and configuration", emo: 10, env: 15, cog: 75 },
-  { id: "matrix", label: "Matrix Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/matrix", description: "Native Hermes Matrix gateway for real-time agent messaging", emo: 15, env: 70, cog: 15 },
+  { id: "hermes-features", label: "Hermes v0.12.0", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/hermes-features", description: "The Curator release — autonomous skill curator, +4 providers, ComfyUI + TouchDesigner-MCP bundled, ~57% TUI cold-start cut", emo: 10, env: 25, cog: 65 },
+  { id: "matrix", label: "Matrix Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/matrix", description: "Optional federation transport for AstroJOE — not part of JettChat dual-mode core", emo: 15, env: 70, cog: 15 },
 
   // Architecture Flows
   { id: "arch-flows", label: "Architecture Flows", group: "architecture", agt: "COG", href: "/docs/architecture", description: "Mermaid diagrams for every major system flow", emo: 15, env: 20, cog: 65 },
@@ -77,10 +92,8 @@ const DOC_NODES: DocNode[] = [
   { id: "topology", label: "Topology", group: "architecture", agt: "ENV", href: "/docs/architecture/topology", description: "Full network map of all OPTX services", emo: 15, env: 75, cog: 10 },
 
   // On-Chain Bridge
-  { id: "bridge-hub", label: "On-Chain Bridge", group: "on-chain-bridge", agt: "EMO", href: "/docs/on-chain-bridge", description: "Multi-chain bridge hub — OPTX to EVM, XRPL, LayerZero", emo: 50, env: 40, cog: 10 },
+  { id: "bridge-hub", label: "On-Chain Bridge", group: "on-chain-bridge", agt: "EMO", href: "/docs/on-chain-bridge", description: "Solana-native bridge hub — EVM and XRPL bridging on roadmap", emo: 50, env: 40, cog: 10 },
   { id: "solana-native", label: "Solana Native", group: "on-chain-bridge", agt: "EMO", href: "/docs/on-chain-bridge/solana-native", description: "Home chain — $OPTX, $JTX, $CSTB, Metaplex identity", emo: 45, env: 45, cog: 10 },
-  { id: "evm-layerzero", label: "EVM via LayerZero", group: "on-chain-bridge", agt: "EMO", href: "/docs/on-chain-bridge/evm-layerzero", description: "Cross-chain $OPTX bridging to ETH, Base, ARB, POLY", emo: 55, env: 35, cog: 10 },
-  { id: "xrpl-wormhole", label: "XRPL via Wormhole", group: "on-chain-bridge", agt: "EMO", href: "/docs/on-chain-bridge/xrpl-wormhole", description: "XRPL pipeline — USDC, TraderJoe Swarm, xSPECTAR NFTs", emo: 55, env: 35, cog: 10 },
 
   // Infrastructure
   { id: "edge-mcp", label: "Edge MCP", group: "infrastructure", agt: "ENV", href: "/docs/infrastructure/edge", description: "HEDGEHOG on OPTX Validator Node edge compute", emo: 20, env: 70, cog: 10 },
@@ -89,6 +102,7 @@ const DOC_NODES: DocNode[] = [
   // Reference
   { id: "api-ref", label: "API Reference", group: "reference", agt: "COG", href: "/docs/reference/api", description: "WebSocket RPC, REST endpoints, capabilities", emo: 5, env: 5, cog: 90 },
   { id: "doc-index", label: "Index", group: "reference", agt: "COG", href: "/docs/reference", description: "Complete documentation index with AGT classification", emo: 10, env: 10, cog: 80 },
+  { id: "ecosystem", label: "Ecosystem Repos", group: "reference", agt: "ENV", href: "/docs/reference/ecosystem", description: "All jettoptx + Secure-Legion repos backing OPTX/JettChat", emo: 25, env: 60, cog: 15 },
   { id: "changelog", label: "Changelog", group: "reference", agt: "COG", href: "/docs/reference/changelog", description: "Version history and release notes", emo: 10, env: 10, cog: 80 },
 
   // DOJO
@@ -132,10 +146,8 @@ const DOC_EDGES: Edge[] = [
   { source: "task-lifecycle", target: "task-states" },
   { source: "gaze-policy", target: "gaze" },
   { source: "gaze-policy", target: "aaron-protocol" },
-  { source: "bridge-flow", target: "evm-layerzero" },
   { source: "agent-identity", target: "on-chain" },
   { source: "edge-mcp", target: "topology" },
-  { source: "evm-layerzero", target: "bridge-flow" },
   { source: "depin", target: "on-chain" },
   { source: "dojo", target: "skills" },
   { source: "dojo", target: "moa" },
@@ -143,15 +155,11 @@ const DOC_EDGES: Edge[] = [
   { source: "mojo", target: "astrojoe" },
   { source: "mojo", target: "hedgehog-doc" },
   { source: "bridge-hub", target: "solana-native" },
-  { source: "bridge-hub", target: "evm-layerzero" },
-  { source: "bridge-hub", target: "xrpl-wormhole" },
   { source: "bridge-hub", target: "aaron-protocol" },
   { source: "bridge-hub", target: "on-chain" },
   { source: "solana-native", target: "on-chain" },
   { source: "solana-native", target: "depin" },
   { source: "solana-native", target: "agent-identity" },
-  { source: "evm-layerzero", target: "bridge-hub" },
-  { source: "xrpl-wormhole", target: "bridge-flow" },
   { source: "doc-index", target: "api-ref" },
   { source: "doc-index", target: "moa" },
 
@@ -184,13 +192,8 @@ const DOC_EDGES: Edge[] = [
   { source: "task-states", target: "on-chain" },
   { source: "topology", target: "bridge-hub" },
   { source: "edge-mcp", target: "depin" },
-  { source: "evm-layerzero", target: "aaron-protocol" },
   { source: "depin", target: "architecture-overview" },
   { source: "solana-native", target: "aaron-protocol" },
-  { source: "evm-layerzero", target: "how-it-works" },
-  { source: "evm-layerzero", target: "on-chain" },
-  { source: "xrpl-wormhole", target: "how-it-works" },
-  { source: "xrpl-wormhole", target: "on-chain" },
   { source: "api-ref", target: "wallet" },
   { source: "api-ref", target: "on-chain" },
   { source: "doc-index", target: "wallet" },
@@ -206,6 +209,54 @@ const DOC_EDGES: Edge[] = [
   { source: "matrix", target: "hedgehog-doc" },
   { source: "changelog", target: "doc-index" },
   { source: "changelog", target: "api-ref" },
+
+  // v2.0.0 dual-mode JettChat + Token + new auth surface
+  { source: "jettchat", target: "jett-auth" },
+  { source: "jettchat", target: "gaze" },
+  { source: "jettchat", target: "mojo" },
+  { source: "jettchat", target: "what-is-optx" },
+  { source: "jettchat", target: "token" },
+  { source: "jettchat", target: "jettchat-messaging" },
+  { source: "jettchat", target: "xchat-native" },
+  { source: "jettchat", target: "phantom-mode" },
+  { source: "xchat-native", target: "jett-auth" },
+  { source: "xchat-native", target: "on-chain" },
+  { source: "xchat-native", target: "wallet" },
+  { source: "phantom-mode", target: "jett-auth" },
+  { source: "phantom-mode", target: "gaze" },
+  { source: "phantom-mode", target: "edge-mcp" },
+  { source: "jettchat-messaging", target: "matrix" },
+  { source: "jettchat-messaging", target: "xchat-native" },
+  { source: "jettchat-messaging", target: "phantom-mode" },
+
+  // Token section connections
+  { source: "token", target: "on-chain" },
+  { source: "token", target: "depin" },
+  { source: "token", target: "jett-auth" },
+  { source: "token", target: "token-tiers" },
+  { source: "token", target: "token-subscriptions" },
+  { source: "token-tiers", target: "mojo" },
+  { source: "token-tiers", target: "jettchat" },
+  { source: "token-subscriptions", target: "token-tiers" },
+
+  // JETT Auth — unified surface
+  { source: "jett-auth", target: "gaze" },
+  { source: "jett-auth", target: "wallet" },
+  { source: "jett-auth", target: "what-is-optx" },
+
+  // Hermes v0.12.0 features
+  { source: "hermes-features", target: "astrojoe" },
+  { source: "hermes-features", target: "hermes-api" },
+  { source: "hermes-features", target: "hedgehog-doc" },
+  { source: "hermes-features", target: "edge-mcp" },
+  { source: "hermes-features", target: "changelog" },
+
+  // Ecosystem Repos
+  { source: "ecosystem", target: "doc-index" },
+  { source: "ecosystem", target: "what-is-optx" },
+  { source: "ecosystem", target: "astrojoe" },
+  { source: "ecosystem", target: "jettchat" },
+  { source: "ecosystem", target: "jett-auth" },
 ];
 
 function getConnections(nodeId: string): string[] {
