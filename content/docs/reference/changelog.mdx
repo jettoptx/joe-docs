@@ -29,6 +29,22 @@ description: Version history and release notes for the OPTX ecosystem.
 - **Phantom Mode** → [`Secure-Legion/android`](https://github.com/Secure-Legion/android) (Tor + post-quantum messenger, patent pending) and [`Secure-Legion/tor-hsservice-patched`](https://github.com/Secure-Legion/tor-hsservice-patched) (triple `.onion` topology).
 - **TKDF ↔ Secure-Legion** — same X25519 + ML-KEM-1024 hybrid construction, different brand layers (SDK vs. org).
 
+### Companion PRs across the `jettoptx` org
+
+The dual-mode framing landed in seven coordinated PRs. All update READMEs / metadata only — no code or contract changes:
+
+| Repo | PR | Change |
+|------|----|--------|
+| [`joe-docs`](https://github.com/jettoptx/joe-docs) | [#dual-mode-jettchat](https://github.com/jettoptx/joe-docs/tree/docs/dual-mode-jettchat) | This overhaul (29 files, +518/−272) |
+| [`joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx) | [PR #1](https://github.com/jettoptx/joe-jettauth-optx/pull/1) | README dual-mode intro + repo description rewrite |
+| [`joe-aaron-router`](https://github.com/jettoptx/joe-aaron-router) | [PR #1](https://github.com/jettoptx/joe-aaron-router/pull/1) | README sentence: AARON serves both modes |
+| [`joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk) | [PR #1](https://github.com/jettoptx/joe-jettchat-sdk/pull/1) | README clarifies TKDF ↔ Secure-Legion are the same primitive |
+| [`joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) | [PR #15](https://github.com/jettoptx/joe-jettchat-app/pull/15) | README dual-mode intro + canonical pricing tiers (DOJO `$28.88/mo`, SPACE COWBOY rename) |
+| [`joe-core`](https://github.com/jettoptx/joe-core) | [PR #7](https://github.com/jettoptx/joe-core/pull/7) | README header cross-link to both modes |
+| [`joe-jtx-cstb-depin`](https://github.com/jettoptx/joe-jtx-cstb-depin) | [PR #3](https://github.com/jettoptx/joe-jtx-cstb-depin/pull/3) | Subscription tier table rebuilt against canonical staking model; docs link → jettoptx.dev/docs |
+
+Three private repos with overlapping JettChat scope are **on hold** pending disambiguation: `jettoptx/jettchat`, `jettoptx/jett-auth-sdk`, and `jettoptx/tempo` (Tempo CLI role needs confirmation — see open items in the source plan).
+
 ---
 
 ## 2026-04-11 — Hermes v0.8.0 Matrix Gateway
