@@ -1,13 +1,13 @@
 {
-  "title": "JOE — Jett Optics Engine",
+  "title": "JOE ï¿½ Jett Optics Engine",
   "icon": "BrainCircuit",
   "pages": [
     "index",
     "api",
     "hedgehog",
-    "matrix",
     "memory",
     "orchestration",
-    "skills"
+    "skills",
+    "matrix"
   ]
 }

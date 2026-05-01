@@ -1,0 +1,41 @@
+---
+title: Messaging Features
+description: E2EE messaging primitives shared by both JettChat modes — gaze cursor typing, offline-first delivery, groups, self-destruct.
+icon: MessageSquare
+---
+
+The following messaging features are available in **both** [xChat Native](/docs/jettchat/xchat-native) and [Phantom Mode](/docs/jettchat/phantom-mode). They sit above the auth and transport layers — the underlying crypto changes between modes, the messaging UX does not.
+
+## End-to-end encryption
+
+All messages are encrypted client-side before leaving the device. The server never sees plaintext.
+
+- **xChat Native**: TLS to JettChat server + per-conversation E2EE keys (X25519 + AEAD).
+- **Phantom Mode**: Triple Tor onion + per-conversation **X25519 + ML-KEM-1024** hybrid (PQC).
+
+The SDK layer is [`jettoptx/joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk), which describes its construction as "X25519 + TKDF hybrid".
+
+## Gaze cursor typing
+
+While composing, the user's AGT gaze tensors drive a cursor overlay that affects keyboard suggestions and visual focus. This is the JettChat differentiator — typing is **gaze-aware**, not just touch-driven.
+
+The same AGT pipeline used for [authentication](/docs/authentication/gaze) provides the live tensor stream for typing.
+
+## Offline-first delivery
+
+Messages compose and queue locally even with no network. On reconnect, queued messages are delivered through whichever transport the user's mode uses (HTTPS for xChat Native, Tor onion for Phantom Mode). No message body is stored server-side in plaintext at any point.
+
+## Group chats
+
+End-to-end encrypted group chat with sender keys (one symmetric key per group, distributed via per-recipient asymmetric envelopes). Group joins, leaves, and rekeys are signed by group admins.
+
+## Self-destruct messages
+
+Per-message TTL configurable at send time. The recipient device deletes the message body after expiry; the sender device can also delete from its own copy. Self-destruct does not guarantee deletion on a compromised endpoint — it is a UX feature, not a forensic one.
+
+## What's not in scope here
+
+- **Auth** — see [JETT Auth](/docs/authentication/jett-auth)
+- **Token gating** — see [Token / Tiers](/docs/token/tiers)
+- **Tor topology and PQC** — see [Phantom Mode](/docs/jettchat/phantom-mode)
+- **Federation transport (Matrix)** — *optional*; see [Matrix Gateway](/docs/astrojoe/matrix). Matrix is not part of JettChat dual-mode messaging.

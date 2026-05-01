@@ -1,0 +1,5 @@
+{
+  "title": "JettChat",
+  "icon": "MessageCircle",
+  "pages": ["index", "xchat-native", "phantom-mode", "messaging"]
+}

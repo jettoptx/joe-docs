@@ -1,5 +1,5 @@
 {
   "title": "Authentication",
   "icon": "Lock",
-  "pages": ["gaze", "wallet"]
+  "pages": ["jett-auth", "gaze", "wallet"]
 }

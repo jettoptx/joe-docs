@@ -1,8 +1,10 @@
 ---
 icon: MessageSquare
-title: Matrix Gateway
-description: Native Hermes Matrix gateway for real-time agent messaging via Conduit homeserver.
+title: "Optional Transport: Matrix Gateway"
+description: Optional federation transport for AstroJOE — not part of JettChat dual-mode auth or messaging core.
 ---
+
+> **Status: Optional transport.** Matrix is a federation transport for AstroJOE only. It is **not** part of the [JettChat dual-mode auth](/docs/authentication/jett-auth) or [messaging core](/docs/jettchat/messaging). JettChat E2EE messaging works in both [xChat Native](/docs/jettchat/xchat-native) and [Phantom Mode](/docs/jettchat/phantom-mode) without Matrix.
 
 AstroJOE connects to the OPTX Matrix homeserver via Hermes' native Matrix gateway. This enables real-time auto-response in Matrix rooms without custom bridges or polling scripts.
 
@@ -47,4 +49,4 @@ Matrix Client (Element X / Web)
         → Response posted back to room
 ```
 
-Requires Hermes Agent v0.6.0+ (gateway feature). Current: v0.8.0.
+Requires Hermes Agent with the Matrix gateway feature. See the [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) for current versions.

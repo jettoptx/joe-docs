@@ -2,16 +2,16 @@
 
 The official documentation engine for the **OPTX ecosystem** — built on [Next.js](https://nextjs.org) + [Fumadocs](https://fumadocs.vercel.app) with MDX content pages.
 
-Live at **[optxspace.dev](https://optxspace.dev)**
+Live at **[jettoptx.dev](https://jettoptx.dev)**
 
-> **[What is OPTX?](https://optxspace.dev/docs/getting-started/what-is-optx)** — Start here for the full overview of the OPTX protocol, gaze biometrics, and agentic architecture.
+> **[What is OPTX?](https://jettoptx.dev/docs/getting-started/what-is-optx)** — Start here for the full overview of the OPTX protocol, gaze biometrics, and agentic architecture.
 
 ## Ecosystem Repos
 
 | Repo | Type | Description |
 |------|------|-------------|
 | **[joe-docs](https://github.com/jettoptx/joe-docs)** | Docs Engine | Next.js 16 + Fumadocs + MDX — this repo |
-| **[joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api)** | API Bridge | FastAPI bridge for Hermes Agent v0.7.0+, MPP pay-per-request |
+| **[joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api)** | API Bridge | FastAPI bridge for [Hermes Agent](https://github.com/NousResearch/hermes-agent), MPP pay-per-request |
 | **[joe-jtx-cstb-depin](https://github.com/jettoptx/joe-jtx-cstb-depin)** | On-chain Program | DePIN Anchor program for $JTX/$CSTB compute-trust bonding on Solana |
 | **[joe-aaron-router](https://github.com/jettoptx/joe-aaron-router)** | Edge Router | AARON gaze verification router — FastAPI, Proof-of-Insight, AGT pipeline |
 
@@ -105,10 +105,10 @@ Want to spin up docs for your own agent, SDK, or CLI? Follow these steps:
 ## Scripts
 
 ```bash
-pnpm install      # Install dependencies
-pnpm dev          # Start dev server (localhost:3000)
-pnpm build        # Production build
-pnpm start        # Start production server
+npm install       # Install dependencies
+npm run dev       # Start dev server (localhost:3000)
+npm run build     # Production build
+npm run start     # Start production server
 ```
 
 ## Agent-Ready Documentation Template
@@ -270,4 +270,4 @@ MIT — use it, fork it, ship it.
 
 ---
 
-Built by [OPTX](https://optxspace.dev) · Powered by [Fumadocs](https://fumadocs.vercel.app)
+Built by [OPTX](https://jettoptx.dev) · Powered by [Fumadocs](https://fumadocs.vercel.app)

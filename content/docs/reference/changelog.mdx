@@ -4,6 +4,33 @@ title: Changelog
 description: Version history and release notes for the OPTX ecosystem.
 ---
 
+## 2026-04-30 — Dual-mode JettChat: xChat Native + Phantom Mode
+
+### Added
+- **JettChat section** — new top-level `/docs/jettchat` documenting both modes. Pages: [overview](/docs/jettchat), [xChat Native](/docs/jettchat/xchat-native), [Phantom Mode](/docs/jettchat/phantom-mode), [messaging](/docs/jettchat/messaging).
+- **Token section** — new `/docs/token` mirroring [astroknots.space/stake](https://www.astroknots.space/stake): [overview](/docs/token), [tiers](/docs/token/tiers), [subscriptions](/docs/token/subscriptions). Canonical 3-tier model: MOJO ($8.88/mo or 12 JTX/1y), DOJO ($28.88/mo or 444 JTX/2y), SPACE COWBOY ($88.88/mo or 1,111 JTX/lifetime).
+- **JETT Auth page** — new `/docs/authentication/jett-auth` covering both auth surfaces.
+- **JETT Hub access flow** — Sign in with X → Hold 1 JTX *or* Pay $8.88 (Stripe) *or* Pay $8.88 (Tempo CLI).
+
+### Changed
+- **What is OPTX** — reframed around dual-mode JettChat (xChat Native + Phantom Mode).
+- **System Architecture** — adds mode comparison table; drops LayerZero/EVM from top-level diagram.
+- **DOJO/MOJO pricing** — fixed: DOJO is `$28.88 / mo` (not 6 months); top tier is **SPACE COWBOY $88.88 / mo** (renamed from "UNLIMITED"). Each tier shows JTX-stake and USD-subscription duality.
+- **On-Chain Addresses** — Solana-only; XRPL JOE wallet row removed; LayerZero/EVM line replaced with bridge cross-link.
+- **On-Chain Bridge** — EVM (`evm-layerzero`) and XRPL (`xrpl-wormhole`) pages retired pending re-implementation.
+- **Matrix Gateway** — reframed as **optional federation transport** for AstroJOE only; not part of JettChat dual-mode core.
+- **ERC-8004 Agent Wallet** — labeled **Roadmap**; design intent retained, no contract is deployed.
+- **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.11.0** (see audit memory).
+- **JOE topology** — explicitly **dual-instance**: Jetson Orin Nano (primary, runs AARON + HEDGEHOG + SpacetimeDB) + CorsairOne (secondary).
+- **Docs domain** — README and intra-doc references updated from `optxspace.dev` → `jettoptx.dev` (canonical, per JETT Hub footer).
+
+### Cross-org references
+- **xChat Native** → [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app), SDK at [`jettoptx/joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx).
+- **Phantom Mode** → [`Secure-Legion/android`](https://github.com/Secure-Legion/android) (Tor + post-quantum messenger, patent pending) and [`Secure-Legion/tor-hsservice-patched`](https://github.com/Secure-Legion/tor-hsservice-patched) (triple `.onion` topology).
+- **TKDF ↔ Secure-Legion** — same X25519 + ML-KEM-1024 hybrid construction, different brand layers (SDK vs. org).
+
+---
+
 ## 2026-04-11 — Hermes v0.8.0 Matrix Gateway
 
 ### Added
