@@ -1,0 +1,113 @@
+---
+title: Hermes v0.12.0 Features
+description: The Curator release — features in upstream Hermes Agent v0.12.0 (NousResearch tag 2026.4.30) that affect AstroJOE / JOE deployments on the OPTX agent mesh.
+icon: Sparkles
+---
+
+> **Hermes Agent v0.12.0** ("The Curator release", NousResearch tag `2026.4.30`) shipped 2026-04-30. **1,096 commits** · **550 merged PRs** · **213 community contributors** since v0.11.0. Full upstream release notes: [hermes-agent/RELEASE_v0.12.0](https://github.com/NousResearch/hermes-agent/releases/tag/v0.12.0).
+
+This page captures the features that matter for AstroJOE / JOE deployments on the OPTX [agent mesh](/docs/architecture/topology) — Jetson Orin Nano (primary) + CorsairOne (secondary) + Mac (operator). Where a feature is a thin wrapper over upstream behavior, the upstream PR is linked.
+
+## Autonomous Curator
+
+> Hermes Agent now maintains itself.
+
+The **`hermes curator`** runs as a background agent on the gateway's cron ticker (7-day cycle by default). It grades the skill library, consolidates related skills, prunes dead ones, and writes per-run reports. This complements the AstroJOE self-maintenance protocol introduced in [Hermes v0.8.0](/docs/reference/changelog#2026-04-11--hermes-v080-matrix-gateway).
+
+| Capability | What it does | Upstream PR |
+|------------|--------------|-------------|
+| **Background agent** | Runs on gateway cron, 7-day cycle, umbrella-first prompt, inherits parent config | [#17277](https://github.com/NousResearch/hermes-agent/pull/17277) |
+| **Per-run reports** | `logs/curator/run.json` + `REPORT.md` per cycle | [#17307](https://github.com/NousResearch/hermes-agent/pull/17307) |
+| **Consolidated vs pruned** | Archived skills classified by model + heuristic | [#17941](https://github.com/NousResearch/hermes-agent/pull/17941) |
+| **`hermes curator status`** | Ranks skills by usage — most-used + least-used | [#18033](https://github.com/NousResearch/hermes-agent/pull/18033) |
+| **Auxiliary model picker** | Curator model unified under `auxiliary.curator`; switch from `hermes model` or the dashboard | [#17868](https://github.com/NousResearch/hermes-agent/pull/17868) |
+| **Pinning protection** | `skill_manage` refuses writes on pinned skills; pinning blocks curator writes | [#17562](https://github.com/NousResearch/hermes-agent/pull/17562) · [#17578](https://github.com/NousResearch/hermes-agent/pull/17578) |
+
+**For OPTX:** check `~/.hermes/logs/curator/REPORT.md` after a Curator cycle. Pin skills you don't want curated (`bundled` and hub skills are already protected).
+
+## Self-improvement loop — substantially upgraded
+
+The background review fork (the core of Hermes' self-improvement: after each turn it decides what memories/skills to save or update) got a series of fixes that make it more reliable on edge nodes.
+
+- **Class-first prompt** — rubric-based grading rather than free-form ([#16026](https://github.com/NousResearch/hermes-agent/pull/16026))
+- **Active-update bias** — prefers the skill the agent just loaded; handles `references/`/`templates/` sub-files ([#17213](https://github.com/NousResearch/hermes-agent/pull/17213))
+- **Fork inherits parent runtime** — provider, model, and credentials propagate to the review fork ([#16099](https://github.com/NousResearch/hermes-agent/pull/16099))
+- **Scoped toolsets** — review fork restricted to memory + skills (no shell, no web) ([#16569](https://github.com/NousResearch/hermes-agent/pull/16569))
+- **Clean shutdown** — background review memory providers exit properly ([#16204](https://github.com/NousResearch/hermes-agent/pull/16204))
+
+## Bundled MCP servers — ComfyUI + TouchDesigner
+
+Two creative-coding MCP servers moved from optional to **bundled by default**. AstroJOE on Jetson and CorsairOne now ships with these tools without manual installation.
+
+### ComfyUI v5
+
+Image generation via official CLI + REST + hardware-gated local install. ([#17610](https://github.com/NousResearch/hermes-agent/pull/17610), [#17631](https://github.com/NousResearch/hermes-agent/pull/17631), [#17734](https://github.com/NousResearch/hermes-agent/pull/17734))
+
+### TouchDesigner-MCP
+
+Creative-coding bridge with GLSL, post-FX, audio, geometry, and 9 new reference docs. ([#16753](https://github.com/NousResearch/hermes-agent/pull/16753), [#16624](https://github.com/NousResearch/hermes-agent/pull/16624), [#16768](https://github.com/NousResearch/hermes-agent/pull/16768))
+
+## Inference providers — four new
+
+Operational redundancy for the agent mesh. Configure via `hermes model` or the dashboard's new Models tab.
+
+| Provider | Notes | PR |
+|----------|-------|-----|
+| **LM Studio** (first-class) | Promoted from custom-endpoint alias to native provider — auth, `hermes doctor` checks, reasoning transport, live `/models` listing | [#17102](https://github.com/NousResearch/hermes-agent/pull/17102) |
+| **GMI Cloud** | First-class | [#16663](https://github.com/NousResearch/hermes-agent/pull/16663) |
+| **Azure AI Foundry** | Auto-detection | [#15845](https://github.com/NousResearch/hermes-agent/pull/15845) |
+| **MiniMax OAuth** | PKCE browser flow | [#17524](https://github.com/NousResearch/hermes-agent/pull/17524) |
+| **Tencent Tokenhub** | Salvage of #16860 | [#16960](https://github.com/NousResearch/hermes-agent/pull/16960) |
+
+The **remote model catalog manifest** ([#16033](https://github.com/NousResearch/hermes-agent/pull/16033)) means OpenRouter and Nous Portal model lists update without a Hermes release.
+
+## Messaging platforms
+
+The gateway is now a **plugin host**. Drop-in messaging adapters live outside the core, and Microsoft Teams is the first plugin-shipped platform.
+
+| Platform | Mechanism | PR |
+|----------|-----------|-----|
+| **Microsoft Teams** | Pluggable Gateway plugin (first plugin-shipped platform) | [#17751](https://github.com/NousResearch/hermes-agent/pull/17751), [#17828](https://github.com/NousResearch/hermes-agent/pull/17828) |
+| **Tencent 元宝 (Yuanbao)** | Native gateway adapter, 18th platform — text + media | [#16298](https://github.com/NousResearch/hermes-agent/pull/16298), [#17424](https://github.com/NousResearch/hermes-agent/pull/17424) |
+
+For the existing Matrix transport AstroJOE uses, see [Optional Transport: Matrix Gateway](/docs/astrojoe/matrix).
+
+## Spotify + Google Meet — native integrations
+
+Both ship as bundled plugins/skills, not bolt-ons.
+
+- **Spotify** — 7 tools (play, search, queue, playlists, devices) behind PKCE OAuth, interactive setup wizard, surfaced in `hermes tools`, cron usage documented ([#15121](https://github.com/NousResearch/hermes-agent/pull/15121), [#15130](https://github.com/NousResearch/hermes-agent/pull/15130), [#15154](https://github.com/NousResearch/hermes-agent/pull/15154), [#15180](https://github.com/NousResearch/hermes-agent/pull/15180))
+- **Google Meet** — join calls, transcribe, speak, follow up. Realtime OpenAI transport + Node bot server, full pipeline bundled as a plugin ([#16364](https://github.com/NousResearch/hermes-agent/pull/16364))
+
+## CLI quality-of-life
+
+- **`hermes -z <prompt>` one-shot mode** — non-interactive runs with `--model` / `--provider` / `HERMES_INFERENCE_MODEL`. Useful for cron and scripted agent calls. ([#15702](https://github.com/NousResearch/hermes-agent/pull/15702))
+- **`hermes update --check`** — preflight before applying updates, plus opt-in pre-update `HERMES_HOME` backup. ([#15704](https://github.com/NousResearch/hermes-agent/pull/15704), [#15841](https://github.com/NousResearch/hermes-agent/pull/15841))
+- **Models dashboard tab** — rich per-model analytics, switch main + auxiliary models from the dashboard. ([#17745](https://github.com/NousResearch/hermes-agent/pull/17745), [#17802](https://github.com/NousResearch/hermes-agent/pull/17802))
+
+## TUI
+
+- **~57% cold-start reduction** via lazy agent init, lazy provider imports (OpenAI / Anthropic / Firecrawl), `mtime`-cached `load_config()`, memoized tool definitions, precompiled dangerous-command patterns ([#17190](https://github.com/NousResearch/hermes-agent/pull/17190), [#17046](https://github.com/NousResearch/hermes-agent/pull/17046), [#17041](https://github.com/NousResearch/hermes-agent/pull/17041))
+- **LaTeX rendering** in transcript ([#17175](https://github.com/NousResearch/hermes-agent/pull/17175))
+- **`/reload` .env hot-reload** ([#17286](https://github.com/NousResearch/hermes-agent/pull/17286))
+- **`/mouse` toggle** — kills ConPTY's phantom mouse injection on Windows ([#15488](https://github.com/NousResearch/hermes-agent/pull/15488))
+- **Auto-resume of last session** — opt-in ([#17150](https://github.com/NousResearch/hermes-agent/pull/17150))
+
+## Other notable upgrades
+
+- **Pluggable TTS provider registry** — `tts.providers.<name>` registry with **Piper** as a native local TTS provider. Closes long-standing #8508. ([#17843](https://github.com/NousResearch/hermes-agent/pull/17843), [#17885](https://github.com/NousResearch/hermes-agent/pull/17885))
+- **Vercel Sandbox backend** — execute_code/terminal can now run in a Vercel Sandbox ([#17445](https://github.com/NousResearch/hermes-agent/pull/17445))
+- **Native multimodal image routing** — images route based on the model's actual vision capability rather than provider defaults ([#16506](https://github.com/NousResearch/hermes-agent/pull/16506))
+- **Gateway media parity** — native multi-image sending across Telegram, Discord, Slack, Mattermost, Email, Signal; centralized audio routing with FLAC support ([#17909](https://github.com/NousResearch/hermes-agent/pull/17909))
+- **Configurable prompt cache TTL** — `prompt_caching.cache_ttl`, default 5m, opt-in 1h for bursty sessions that keep cache warm ([#15065](https://github.com/NousResearch/hermes-agent/pull/15065))
+- **Secret redaction off by default** — prevents long-standing patch-corruption incidents from fake secret-shaped substrings. Opt in via `redaction.enabled: true`. ([#16794](https://github.com/NousResearch/hermes-agent/pull/16794))
+- **Humanizer skill** — strips AI-isms from text, ported from earlier branches ([#16787](https://github.com/NousResearch/hermes-agent/pull/16787))
+- **Bundled Langfuse observability plugin** + **hermes-achievements plugin** that scans full session history ([#16917](https://github.com/NousResearch/hermes-agent/pull/16917), [#17754](https://github.com/NousResearch/hermes-agent/pull/17754))
+
+---
+
+## Upgrading on the OPTX mesh
+
+The Mac runs the upstream Hermes Agent directly from `/Users/jettoptx/OPTX/hermes-agent` — `git pull && pip install -e .` brings it to v0.12.0. The Jetson primary and CorsairOne secondary are containerized; rebuild against the v0.12.0 image once the upstream release artifact is published. Until then, the docker-shipped containers may still report an older Hermes — do not panic, the Mac is the canonical source of truth for "current Hermes on this mesh."
+
+For deeper detail on any item above, follow the linked upstream PR or read the [full v0.12.0 release notes](https://github.com/NousResearch/hermes-agent/releases/tag/v0.12.0).
