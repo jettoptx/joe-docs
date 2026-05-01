@@ -1,0 +1,51 @@
+---
+title: xChat Native
+description: Original JettChat experience — X/Twitter OAuth 2.0 PKCE login, Ed25519 JWT sessions, Solana JTX gating.
+icon: Twitter
+---
+
+**xChat Native** is the original JettChat experience: sign in with X, connect a Solana wallet (or pay $8.88), get end-to-end encrypted chat with gaze cursor typing. It's the lowest-friction path into the JettChat product.
+
+Implementation: [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) + [`@jettoptx/auth`](https://github.com/jettoptx/joe-jettauth-optx).
+
+## OAuth flow
+
+Sign-in uses X/Twitter **OAuth 2.0 PKCE** with the following scopes:
+
+- `tweet.read`, `tweet.write`
+- `users.read`
+- `dm.read`, `dm.write`
+- `offline.access`
+
+After the authorization-code exchange:
+
+1. The auth route generates a fresh PKCE code verifier/challenge.
+2. On callback, the SDK exchanges the code for tokens.
+3. An **Ed25519 JWT** is signed by `@jettoptx/auth` and dropped into the `jettauth` httpOnly cookie.
+4. The X profile is cached in a separate client-readable `x_profile` cookie.
+
+## JTX gate
+
+After sign-in, JettChat's middleware enforces JTX access on protected routes. The four code-level tiers map onto the three [staking tiers](/docs/token/tiers):
+
+| Code tier | JTX held | Maps to |
+|-----------|---------|---------|
+| `basic` | ≥ 1 | Base entry — JettChat access |
+| `mojo` | ≥ 12 | MOJO subscription tier |
+| `dojo` | ≥ 444 | DOJO subscription tier |
+| `spaceCowboy` | ≥ 1,111 | SPACE COWBOY subscription tier |
+
+A 30-day Stripe-backed `basic` gate is available at $8.88 for users without JTX. See [Token / Subscriptions](/docs/token/subscriptions).
+
+## What's wired up
+
+- ✅ X OAuth 2.0 PKCE end-to-end
+- ✅ Solana JTX balance check via Helius RPC
+- ✅ Ed25519 JWT cookie sessions
+- ✅ AGT Gaze Triad biometrics (shared with Phantom Mode)
+- ✅ Stripe and Tempo CLI fallback payment rails
+- ✅ Founder bypass wallet for protocol treasury
+
+## Phantom Mode contrast
+
+If you need maximum privacy and metadata resistance — Tor-only transport, post-quantum crypto, hardware-backed keys, duress PIN with cryptographic wipe — use **[Phantom Mode](/docs/jettchat/phantom-mode)** instead. xChat Native is optimized for speed of onboarding and public networks; Phantom Mode is optimized for adversarial environments.

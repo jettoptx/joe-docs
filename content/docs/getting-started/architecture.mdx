@@ -1,28 +1,43 @@
 ---
 title: System Architecture
-description: End-to-end architecture from client gaze capture through edge compute to on-chain attestation.
+description: Two JettChat modes (xChat Native and Phantom Mode) sharing AGT gaze, JTX gating, and Solana-native attestation.
 icon: Layers
 ---
+
+## Two Modes, One Core
+
+JettChat supports two modes. Both share the AGT gaze pipeline, JTX gating, and Solana attestation; they differ at the auth surface and transport layer.
+
+|  | xChat Native | Phantom Mode |
+|---|---|---|
+| **Auth surface** | X OAuth 2.0 PKCE + Gaze Triad | Jett Hub visual SSO + Gaze Triad + JTX gate |
+| **Transport** | HTTPS | Triple Tor `.onion` |
+| **Crypto** | TLS + Ed25519 JWT | X25519 + ML-KEM-1024 (PQC), StrongBox/TEE keys |
+| **Wake** | Standard session | Ping-Pong biometric + duress PIN with wipe |
+| **Best for** | Faster onboarding, public networks | Maximum privacy and metadata resistance |
+| **Implementation** | [jettoptx/joe-jettchat-app](https://github.com/jettoptx/joe-jettchat-app) | [Secure-Legion/android](https://github.com/Secure-Legion/android) |
+
+**Phantom Mode flow:** `JettChat → Jett Auth Hub (Gaze Triad + Jett Hub visual + JTX check) → Secure-Legion Core (Tor + PQC + StrongBox + Ping-Pong + duress wipe) → Solana (JTX token gate + attestation)`.
 
 ## Architecture Overview
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
-│  CLIENT (Next.js / React Native)                        │
-│  ├── Gaze Camera Feed → MediaPipe → AGT Classification  │
-│  ├── Account Auth + Gaze Biometric (identity)           │
-│  └── Phantom / OKX Wallet Connection                    │
+│  CLIENT (Next.js / React Native / Android)             │
+│  ├── Gaze Camera Feed → MediaPipe → AGT Classification │
+│  ├── Mode A: X OAuth + Solana Wallet (xChat Native)    │
+│  └── Mode B: Jett Hub SSO + Tor (Phantom Mode)         │
 ├─────────────────────────────────────────────────────────┤
 │  EDGE COMPUTE                                           │
-│  ├── JOE Agent (AI-powered assistant)                   │
-│  ├── Real-time state engine (subscriptions)             │
-│  └── Encrypted mesh networking                          │
+│  ├── AARON Router — gaze verification + JTX gating     │
+│  ├── JOE Agent — multi-tool orchestration              │
+│  ├── HEDGEHOG — MCP gateway                            │
+│  └── SpacetimeDB — real-time edge database             │
 ├─────────────────────────────────────────────────────────┤
-│  ON-CHAIN (Solana Devnet / Mainnet)                     │
-│  ├── CSTB Trust DePIN Program (Anchor)                  │
-│  ├── $OPTX Token (Token-2022 SPL)                       │
-│  ├── $JTX Governance Token                              │
-│  └── LayerZero OFT Bridge (Solana ↔ EVM)               │
+│  ON-CHAIN (Solana)                                      │
+│  ├── CSTB Trust DePIN Program (Anchor)                 │
+│  ├── $OPTX Token (Token-2022 SPL)                      │
+│  └── $JTX Token (mainnet — JettChat gating)            │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -73,10 +88,10 @@ icon: Layers
 
 All private compute runs on **OPTX Validator Nodes** distributed across the network:
 
-- **AARON Router** — FastAPI gaze session manager + Solana bridge
-- **JOE Agent** — Autonomous AI agent with Matrix chat + tool execution
-- **HEDGEHOG** — MCP gateway routing AI queries through Grok, storing gaze data in SpacetimeDB
-- **SpacetimeDB** — Real-time database with reducers + subscriptions
-- **Conduit** — Matrix homeserver for federated agent communication
+- **AARON Router** — FastAPI gaze session manager + Solana bridge. Serves both JettChat modes.
+- **JOE Agent** — Dual-instance: Jetson Orin Nano (primary, runs AARON + HEDGEHOG + SpacetimeDB) + CorsairOne Windows container (secondary). See [AstroJOE](/docs/astrojoe) for runtime details.
+- **HEDGEHOG** — MCP gateway routing AI queries through Grok, storing gaze data in SpacetimeDB.
+- **SpacetimeDB** — Real-time database with reducers + subscriptions, exposed as `stdb.jettoptics.ai`.
+- **Conduit** — Matrix homeserver for federated agent communication. *Optional transport — not part of JettChat dual-mode auth or messaging core. See [Matrix Gateway](/docs/astrojoe/matrix).*
 
 Raw biometric data never leaves the validator node. Only 32-byte opaque proofs reach the blockchain.

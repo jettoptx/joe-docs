@@ -1,0 +1,44 @@
+---
+title: $JTX Token
+description: $JTX is the access and governance token for JettChat — Solana mainnet, four-tier gating, stake-or-subscribe duality.
+icon: Coins
+---
+
+**$JTX** is the JettChat access and governance token. It lives on **Solana mainnet** at:
+
+```
+9XpJiKEYzq5yDo5pJzRfjSRMPL2yPfDQXgiN7uYtBhUj
+```
+
+Standard SPL token, 6 decimals.
+
+## Why a token gate
+
+JettChat is gated to keep the network costly to abuse and aligned with users who want it to exist. Holding **1 JTX** is the lowest bar to entry, and that's by design — the gate is meant to filter automated abuse, not paywall users. Stripe and [Tempo CLI](https://github.com/jettoptx/tempo) fallbacks at $8.88 give wallet-less paths in.
+
+## Four tiers, three of them stakeable
+
+JettChat enforces four code-level tiers at the middleware. The top three map directly to the [staking tiers](/docs/token/tiers) on [astroknots.space/stake](https://www.astroknots.space/stake):
+
+| Code tier | JTX held | Maps to |
+|-----------|---------|---------|
+| `basic` | ≥ 1 | Base entry — JettChat access (both modes) |
+| `mojo` | ≥ 12 | [MOJO](/docs/token/tiers) subscription tier |
+| `dojo` | ≥ 444 | [DOJO](/docs/token/tiers) subscription tier |
+| `spaceCowboy` | ≥ 1,111 | [SPACE COWBOY](/docs/token/tiers) subscription tier |
+
+The staking page is the **source of truth** for prices, durations, and unlocks. The code values mirror the staking model, not the other way around.
+
+## Founder bypass
+
+The protocol-treasury wallet `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` is auto-tiered to `spaceCowboy` regardless of balance. This is documented in [On-Chain Addresses](/docs/getting-started/on-chain-addresses).
+
+## Where $JTX is used
+
+- **JettChat gating** — [JETT Auth](/docs/authentication/jett-auth) middleware on protected routes
+- **DePIN earning** — staked JTX earns OPTX rewards (see [DePIN](/docs/infrastructure/depin))
+- **Governance** — SPACE COWBOY tier unlocks governance voting
+
+## On-chain program
+
+The Anchor program backing $JTX/$CSTB compute-trust bonding lives at [jettoptx/joe-jtx-cstb-depin](https://github.com/jettoptx/joe-jtx-cstb-depin).

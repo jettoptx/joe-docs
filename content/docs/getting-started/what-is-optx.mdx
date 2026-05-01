@@ -1,18 +1,26 @@
 ---
 title: What is OPTX?
-description: Privacy-preserving spatial encryption for the agentic web. Gaze biometrics, DePIN attestation, and cross-chain bridging on Solana.
+description: JettOptx (OPTX) powers JettChat in two modes — xChat Native and Phantom Mode. Gaze biometrics, JTX gating, and Solana-native attestation.
 icon: BookOpen
 ---
 
-**OPTX** (Optical Program Technologic Extension) is a privacy-preserving spatial encryption protocol for the agentic web. It combines gaze biometrics, DePIN attestation, and cross-chain token bridging on Solana.
+**JettOptx (OPTX)** powers **JettChat**, which now operates in two modes:
+
+- **xChat Native** — original experience with X/Twitter OAuth and faster onboarding.
+- **Phantom Mode** — maximum-privacy experience powered by **Secure-Legion** (Tor + post-quantum crypto + hardware biometrics + Jett Hub).
+
+Both modes share the same core: **JETT Auth** with the **AGT** Gaze Triad (COG/EMO/ENV), **Jett Hub** visual SSO (primary in Phantom Mode), **JTX** token gating, and end-to-end encrypted messaging with gaze-cursor typing.
+
+**Phantom Mode adds:** triple Tor `.onion` hidden services, X25519 + ML-KEM-1024 post-quantum cryptography, StrongBox/TEE-backed keys, Ping-Pong biometric wake protocol, and a duress PIN that triggers cryptographic wipe. Implementation: [Secure-Legion/android](https://github.com/Secure-Legion/android).
 
 ## Core Primitives
 
-| Primitive | Description | Endpoint |
-|-----------|-------------|----------|
-| **Gaze Verification** | Integrate AGT biometric auth with 3-tensor classification (COG/EMO/ENV) | `/api/gaze/store` |
-| **Agent Wallet** | ERC-8004 non-transferable soulbound wallet for computational identity | `/api/wallet` |
-| **CSTB Attestation** | On-chain proof of gaze with DePIN reward distribution | `/api/attestation` |
+| Primitive | Description | Surface |
+|-----------|-------------|---------|
+| **Gaze Verification** | AGT biometric auth with 3-tensor classification ([COG/EMO/ENV](/docs/authentication/gaze)) | Both modes |
+| **JETT Auth** | Unified auth supporting [xChat Native + Phantom Mode](/docs/authentication/jett-auth) | Both modes |
+| **JTX Gating** | [4-tier access](/docs/token/tiers) on Solana mainnet (hold 1 JTX, or stake / subscribe) | Both modes |
+| **CSTB Attestation** | On-chain proof of gaze with DePIN reward distribution | Both modes |
 
 ## Naming Hierarchy
 

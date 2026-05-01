@@ -1,0 +1,48 @@
+---
+title: Tiers
+description: Canonical JettChat tier table — base entry plus three subscription tiers (MOJO / DOJO / SPACE COWBOY), each backable by JTX stake or USD/mo.
+icon: Layers
+---
+
+> This page mirrors [astroknots.space/stake](https://www.astroknots.space/stake). If those numbers ever differ, **the staking page wins**.
+
+## Base entry to JettChat
+
+Pick **any one**:
+
+- Hold **1 JTX** in your connected Solana wallet (cheapest sustained path)
+- Pay **$8.88** via Stripe (no wallet needed)
+- Pay **$8.88** via [Tempo CLI](https://github.com/jettoptx/tempo)
+
+Base entry unlocks JettChat in either [xChat Native](/docs/jettchat/xchat-native) or [Phantom Mode](/docs/jettchat/phantom-mode).
+
+## Subscription tiers
+
+Each tier is accessible by **either** staking JTX or paying USD per month.
+
+| Tier | JTX stake | Stake duration | Subscription | Earns | Headline unlocks |
+|------|-----------|----------------|--------------|-------|-------------------|
+| **MOJO** *(Starter)* | 12 JTX | 1 Year | $8.88 / mo | 12 OPTX/mo | Jett Native keyboard, Jett Augment customizations, Hub gaze keyboard + emoji packs, unlimited DOJO training, beta app access |
+| **DOJO** *(Popular)* | 444 JTX | 2 Years | $28.88 / mo | 444 OPTX/mo @ 2× fiat | Custom emoji creation, Augment Net Graph with AR navigation, priority [AARON Router](https://github.com/jettoptx/joe-aaron-router) access, DePIN node eligibility |
+| **SPACE COWBOY** *(Legendary)* | 1,111 JTX | Lifetime | $88.88 / mo | Unlimited OPTX mints | Full Jett Augment suite, complete AGT tensor pipeline, founder-tier AARON access, governance voting, future airdrop eligibility |
+
+## Code-level enforcement
+
+JettChat's middleware enforces these tiers via four code-level gate checks:
+
+| Code tier | Threshold | Maps to |
+|-----------|-----------|---------|
+| `basic` | ≥ 1 JTX held | Base entry |
+| `mojo` | ≥ 12 JTX held | MOJO tier |
+| `dojo` | ≥ 444 JTX held | DOJO tier |
+| `spaceCowboy` | ≥ 1,111 JTX held | SPACE COWBOY tier |
+
+The same balance is checked via Helius RPC on protected routes. See [`jettoptx/joe-jettchat-app/app/api/jtx-check`](https://github.com/jettoptx/joe-jettchat-app) for the implementation.
+
+## Founder bypass
+
+`FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` is auto-tiered to `spaceCowboy`. See [On-Chain Addresses](/docs/getting-started/on-chain-addresses).
+
+## Subscriptions vs. staking
+
+See [Subscriptions](/docs/token/subscriptions) for the Stripe / Tempo CLI flow.

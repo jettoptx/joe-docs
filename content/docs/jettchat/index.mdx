@@ -1,0 +1,43 @@
+---
+title: JettChat
+description: Encrypted AI chat with two modes — xChat Native (X OAuth + Solana) and Phantom Mode (Tor + post-quantum, hardware-backed).
+icon: MessageCircle
+---
+
+**JettChat** is the OPTX-native messaging client. It ships in two modes, each suited to a different threat model:
+
+- **[xChat Native](/docs/jettchat/xchat-native)** — sign in with X, hold 1 JTX (or pay $8.88), get end-to-end encrypted chat with gaze cursor typing. Faster onboarding for public networks.
+- **[Phantom Mode](/docs/jettchat/phantom-mode)** — Secure-Legion stack: triple Tor `.onion`, X25519 + ML-KEM-1024 hybrid PQC, hardware-backed keys (StrongBox/TEE), Ping-Pong biometric wake, duress PIN with cryptographic wipe.
+
+Both modes share the same **[E2EE messaging primitives](/docs/jettchat/messaging)**: gaze cursor typing, offline-first delivery, group chats, self-destruct messages.
+
+## Mode comparison
+
+|  | xChat Native | Phantom Mode |
+|---|---|---|
+| **Login** | Sign in with X (OAuth 2.0 PKCE) | Jett Hub visual SSO + JTX gate |
+| **Transport** | HTTPS | Triple Tor `.onion` |
+| **Crypto** | TLS + Ed25519 JWT | X25519 + ML-KEM-1024 (PQC) |
+| **Keys** | Software-managed | StrongBox / Secure Enclave / TEE |
+| **Wake** | Standard session | Ping-Pong biometric + duress PIN with wipe |
+| **Best for** | Faster onboarding | Maximum metadata resistance |
+| **Repo** | [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) | [`Secure-Legion/android`](https://github.com/Secure-Legion/android) |
+
+## Access flow (JETT Hub)
+
+After **Sign in with X**, the user picks any one of:
+
+- **Connect wallet · Hold 1 JTX**
+- **Pay $8.88** via Stripe (no wallet)
+- **Pay $8.88** via [Tempo CLI](https://github.com/jettoptx/tempo)
+
+See [JETT Auth](/docs/authentication/jett-auth) for the full auth surface and [Token / Tiers](/docs/token/tiers) for subscription upgrades.
+
+## Encryption brand names
+
+The cryptographic primitive behind Phantom Mode is referred to in two places:
+
+- **TKDF** — the SDK's name for the X25519 + ML-KEM-1024 hybrid construction, used in [`joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk).
+- **Secure-Legion** — the org-level brand for the same primitive plus Tor + StrongBox + Ping-Pong wake.
+
+They refer to the same underlying construction at different layers.
