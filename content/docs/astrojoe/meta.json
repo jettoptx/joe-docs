@@ -4,6 +4,7 @@
   "pages": [
     "index",
     "api",
+    "hermes-features",
     "hedgehog",
     "memory",
     "orchestration",
