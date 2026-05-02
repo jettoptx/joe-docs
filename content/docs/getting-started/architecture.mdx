@@ -89,9 +89,9 @@ JettChat supports two modes. Both share the AGT gaze pipeline, JTX gating, and S
 All private compute runs on **OPTX Validator Nodes** distributed across the network:
 
 - **AARON Router** — FastAPI gaze session manager + Solana bridge. Serves both JettChat modes.
-- **JOE Agent** — Dual-instance: Jetson Orin Nano (primary, runs AARON + HEDGEHOG + SpacetimeDB) + CorsairOne Windows container (secondary). See [AstroJOE](/docs/astrojoe) for runtime details.
+- **JOE Agent** — Dual-instance: edge-node primary (runs AARON + HEDGEHOG + SpacetimeDB) + containerized secondary for redundancy. See [AstroJOE](/docs/astrojoe) for runtime details.
 - **HEDGEHOG** — MCP gateway routing AI queries through Grok, storing gaze data in SpacetimeDB.
-- **SpacetimeDB** — Real-time database with reducers + subscriptions, exposed as `stdb.jettoptics.ai`.
+- **SpacetimeDB** — Real-time database with reducers + subscriptions on the edge node.
 - **Conduit** — Matrix homeserver for federated agent communication. *Optional transport — not part of JettChat dual-mode auth or messaging core. See [Matrix Gateway](/docs/astrojoe/matrix).*
 
 Raw biometric data never leaves the validator node. Only 32-byte opaque proofs reach the blockchain.

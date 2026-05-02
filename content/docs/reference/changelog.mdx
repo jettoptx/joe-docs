@@ -21,7 +21,7 @@ description: Version history and release notes for the OPTX ecosystem.
 - **Matrix Gateway** — reframed as **optional federation transport** for AstroJOE only; not part of JettChat dual-mode core.
 - **ERC-8004 Agent Wallet** — labeled **Roadmap**; design intent retained, no contract is deployed.
 - **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.12.0** (NousResearch tag `2026.4.30`, "The Curator release"). See "Hermes v0.12.0 alignment" sub-entry below.
-- **JOE topology** — explicitly **dual-instance**: Jetson Orin Nano (primary, runs AARON + HEDGEHOG + SpacetimeDB) + CorsairOne (secondary).
+- **JOE topology** — explicitly **dual-instance**: edge-node primary (runs AARON + HEDGEHOG + SpacetimeDB) + containerized secondary for redundancy.
 - **Docs domain** — README and intra-doc references updated from `optxspace.dev` → `jettoptx.dev` (canonical, per JETT Hub footer).
 
 ### Cross-org references
@@ -54,7 +54,7 @@ The OPTX deployment now tracks **Hermes Agent v0.12.0** (NousResearch tag `2026.
 - **Four new inference providers** added — broader fallback options on top of HEDGEHOG's Grok routing.
 - **Microsoft Teams + Yuanbao** added as the 18th and 19th messaging platforms (joining the existing Matrix/X/etc. set).
 - **Spotify + Google Meet** native integrations.
-- **ComfyUI + TouchDesigner-MCP** bundled by default — these MCP servers are now first-class for AstroJOE on Jetson + CorsairOne without manual installation.
+- **ComfyUI + TouchDesigner-MCP** bundled by default — these MCP servers are now first-class for AstroJOE on the agent mesh without manual installation.
 - **Humanizer skill** ported from earlier branches.
 - **~57% TUI cold-start reduction** — perceptibly faster `hermes` launch on edge nodes.
 

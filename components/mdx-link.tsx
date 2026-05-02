@@ -139,8 +139,14 @@ export function MdxLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 }
 
 /**
- * Custom heading component that opens MOA when the heading permalink is clicked.
- * Replaces Fumadocs' default Heading to intercept anchor clicks.
+ * Custom heading component.
+ * Heading text is plain (not styled as a link). On hover, a link icon appears
+ * next to the heading; clicking the icon opens the MOA overlay (when the
+ * current page maps to a node) and updates the URL hash.
+ *
+ * Previous behavior wrapped the heading text in an <a>, which made the entire
+ * heading look like an always-clickable link. That was visually noisy and
+ * surprised readers. The interactive affordance is now hover-only, on the icon.
  */
 function MoaHeading({
   as,
@@ -155,16 +161,17 @@ function MoaHeading({
 
   return (
     <As
-      className={`flex scroll-m-28 flex-row items-center gap-2 ${className ?? ""}`}
+      className={`group flex scroll-m-28 flex-row items-center gap-2 ${className ?? ""}`}
       {...props}
     >
+      <span>{props.children}</span>
       <a
-        data-card=""
         href={`#${props.id}`}
-        className="peer"
+        aria-label={`Link to ${typeof props.children === "string" ? props.children : "section"}`}
+        className="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
         onClick={
           currentNode
-            ? (e) => {
+            ? () => {
                 window.dispatchEvent(
                   new CustomEvent("augment-space-open", { detail: currentNode })
                 );
@@ -172,12 +179,11 @@ function MoaHeading({
             : undefined
         }
       >
-        {props.children}
+        <LinkIcon
+          aria-hidden
+          className="size-3.5 shrink-0 text-fd-muted-foreground"
+        />
       </a>
-      <LinkIcon
-        aria-hidden
-        className="size-3.5 shrink-0 text-fd-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
-      />
     </As>
   );
 }

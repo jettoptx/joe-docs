@@ -6,7 +6,7 @@ description: "Agent j(OS)H — the primary intelligent agent in the OPTX Agentic
 
 import { D2Diagram } from "@/components/d2-diagram";
 
-**JOE** (Jett Optics Engine) is the jOSH Operating Environment — the primary intelligent agent in the OPTX ecosystem. It runs on [Hermes Agent](https://github.com/NousResearch/hermes-agent) with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state. JOE is **dual-instance**: a primary on Jetson Orin Nano (running AARON + HEDGEHOG + SpacetimeDB) and a secondary on CorsairOne. The [hermes-optx-api v0.3.0](/docs/astrojoe/api) provides SSE streaming chat, Tempo wallet billing, and gateway capability probing.
+**JOE** (Jett Optics Engine) is the jOSH Operating Environment — the primary intelligent agent in the OPTX ecosystem. It runs on [Hermes Agent](https://github.com/NousResearch/hermes-agent) with Grok 4.20 via the HEDGEHOG gateway, backed by SpacetimeDB for persistent memory and real-time state. JOE is **dual-instance**: a primary edge node (running AARON + HEDGEHOG + SpacetimeDB) and a secondary containerized instance for redundancy. The [hermes-optx-api v0.3.0](/docs/astrojoe/api) provides SSE streaming chat, Tempo wallet billing, and gateway capability probing.
 
 
 ## Architecture
