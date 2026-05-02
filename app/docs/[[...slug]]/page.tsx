@@ -27,9 +27,19 @@ const PAGE_AGT: Record<string, AgtEntry> = {
     "getting-started/what-is-optx":       { tensor: "COG", node: "what-is-optx",          emo: 25, env: 20, cog: 55 },
     "getting-started/architecture":       { tensor: "COG", node: "architecture-overview",  emo: 15, env: 30, cog: 55 },
     "getting-started/on-chain-addresses": { tensor: "ENV", node: "on-chain",   emo: 10, env: 80, cog: 10 },
+    // JettChat (v2.0.0)
+    "jettchat":                  { tensor: "EMO", node: "jettchat",            emo: 55, env: 25, cog: 20 },
+    "jettchat/xchat-native":     { tensor: "EMO", node: "xchat-native",        emo: 60, env: 20, cog: 20 },
+    "jettchat/phantom-mode":     { tensor: "ENV", node: "phantom-mode",        emo: 30, env: 55, cog: 15 },
+    "jettchat/messaging":        { tensor: "EMO", node: "jettchat-messaging",  emo: 60, env: 25, cog: 15 },
     // Authentication
+    "authentication/jett-auth": { tensor: "EMO", node: "jett-auth", emo: 55, env: 20, cog: 25 },
     "authentication/gaze":   { tensor: "EMO", node: "gaze",   emo: 55, env: 5,  cog: 40 },
     "authentication/wallet": { tensor: "EMO", node: "wallet", emo: 50, env: 40, cog: 10 },
+    // Token (v2.0.0)
+    "token":               { tensor: "ENV", node: "token",                emo: 25, env: 50, cog: 25 },
+    "token/tiers":         { tensor: "COG", node: "token-tiers",          emo: 20, env: 30, cog: 50 },
+    "token/subscriptions": { tensor: "COG", node: "token-subscriptions",  emo: 25, env: 20, cog: 55 },
     // AARON Protocol
     "protocol":                    { tensor: "COG", node: "aaron-protocol",    emo: 20, env: 15, cog: 65 },
     "protocol/how-it-works":       { tensor: "COG", node: "how-it-works",     emo: 35, env: 10, cog: 55 },
@@ -39,6 +49,7 @@ const PAGE_AGT: Record<string, AgtEntry> = {
     // JOE — Jett Optics Engine
     "astrojoe":               { tensor: "EMO", node: "astrojoe",      emo: 45, env: 20, cog: 35 },
     "astrojoe/api":           { tensor: "COG", node: "hermes-api",    emo: 10, env: 15, cog: 75 },
+    "astrojoe/hermes-features": { tensor: "COG", node: "hermes-features", emo: 10, env: 25, cog: 65 },
     "astrojoe/hedgehog":      { tensor: "ENV", node: "hedgehog-doc",  emo: 20, env: 65, cog: 15 },
     "astrojoe/matrix":        { tensor: "ENV", node: "matrix",        emo: 15, env: 70, cog: 15 },
     "astrojoe/memory":        { tensor: "COG", node: "memory",        emo: 10, env: 25, cog: 65 },
@@ -53,17 +64,16 @@ const PAGE_AGT: Record<string, AgtEntry> = {
     "architecture/task-lifecycle": { tensor: "COG", node: "task-lifecycle",   emo: 15, env: 15, cog: 70 },
     "architecture/task-states":    { tensor: "COG", node: "task-states",      emo: 10, env: 10, cog: 80 },
     "architecture/topology":       { tensor: "ENV", node: "topology",         emo: 15, env: 75, cog: 10 },
-    // On-Chain Bridge
+    // On-Chain Bridge (Solana-only post v2.0.0; EVM/XRPL retired pending re-implementation)
     "on-chain-bridge":               { tensor: "EMO", node: "bridge-hub",     emo: 50, env: 40, cog: 10 },
     "on-chain-bridge/solana-native": { tensor: "EMO", node: "solana-native",  emo: 45, env: 45, cog: 10 },
-    "on-chain-bridge/evm-layerzero": { tensor: "EMO", node: "evm-layerzero",  emo: 55, env: 35, cog: 10 },
-    "on-chain-bridge/xrpl-wormhole": { tensor: "EMO", node: "xrpl-wormhole", emo: 55, env: 35, cog: 10 },
     // Infrastructure
     "infrastructure/edge":  { tensor: "ENV", node: "edge-mcp", emo: 20, env: 70, cog: 10 },
     "infrastructure/depin": { tensor: "ENV", node: "depin",    emo: 15, env: 65, cog: 20 },
     // Reference
     "reference/api": { tensor: "COG", node: "api-ref",   emo: 5,  env: 5,  cog: 90 },
     "reference/changelog": { tensor: "COG", node: "changelog", emo: 10, env: 10, cog: 80 },
+    "reference/ecosystem": { tensor: "ENV", node: "ecosystem", emo: 25, env: 60, cog: 15 },
     "reference":     { tensor: "COG", node: "doc-index", emo: 10, env: 10, cog: 80 },
 };
 
