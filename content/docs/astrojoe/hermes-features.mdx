@@ -6,7 +6,7 @@ icon: Sparkles
 
 > **Hermes Agent v0.12.0** ("The Curator release", NousResearch tag `2026.4.30`) shipped 2026-04-30. **1,096 commits** · **550 merged PRs** · **213 community contributors** since v0.11.0. Full upstream release notes: [hermes-agent/RELEASE_v0.12.0](https://github.com/NousResearch/hermes-agent/releases/tag/v0.12.0).
 
-This page captures the features that matter for AstroJOE / JOE deployments on the OPTX [agent mesh](/docs/architecture/topology) — Jetson Orin Nano (primary) + CorsairOne (secondary) + Mac (operator). Where a feature is a thin wrapper over upstream behavior, the upstream PR is linked.
+This page captures the features that matter for AstroJOE / JOE deployments on the OPTX [agent mesh](/docs/architecture/topology) — edge-node primary + containerized secondary + operator workstation. Where a feature is a thin wrapper over upstream behavior, the upstream PR is linked.
 
 ## Autonomous Curator
 
@@ -37,7 +37,7 @@ The background review fork (the core of Hermes' self-improvement: after each tur
 
 ## Bundled MCP servers — ComfyUI + TouchDesigner
 
-Two creative-coding MCP servers moved from optional to **bundled by default**. AstroJOE on Jetson and CorsairOne now ships with these tools without manual installation.
+Two creative-coding MCP servers moved from optional to **bundled by default**. AstroJOE across the agent mesh now ships with these tools without manual installation.
 
 ### ComfyUI v5
 
@@ -108,6 +108,6 @@ Both ship as bundled plugins/skills, not bolt-ons.
 
 ## Upgrading on the OPTX mesh
 
-The Mac runs the upstream Hermes Agent directly from `/Users/jettoptx/OPTX/hermes-agent` — `git pull && pip install -e .` brings it to v0.12.0. The Jetson primary and CorsairOne secondary are containerized; rebuild against the v0.12.0 image once the upstream release artifact is published. Until then, the docker-shipped containers may still report an older Hermes — do not panic, the Mac is the canonical source of truth for "current Hermes on this mesh."
+The operator workstation tracks the upstream Hermes Agent directly from a local clone — `git pull && pip install -e .` brings it to v0.12.0. The edge-node primary and containerized secondary are Docker-shipped; rebuild against the v0.12.0 image once the upstream release artifact is published. Until then, the deployed containers may still report an older Hermes — the operator workstation is the canonical source of truth for "current Hermes on this mesh."
 
 For deeper detail on any item above, follow the linked upstream PR or read the [full v0.12.0 release notes](https://github.com/NousResearch/hermes-agent/releases/tag/v0.12.0).

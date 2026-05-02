@@ -15,7 +15,7 @@ import { D2Diagram } from "@/components/d2-diagram";
 | <span style={{color: "#60a5fa"}}>**Devices**</span> | Desktop / Workstation, Mobile, Seekers |
 | <span style={{color: "#eab308"}}>**Tailscale**</span> | WireGuard encrypted mesh tunnels |
 | <span style={{color: "#f43f5e"}}>**Edge Node**</span> | K3s, SpacetimeDB, HEDGEHOG v3.6.0, AARON, Conduit v0.10.12, Edge JOE (matrix-nio relay) |
-| <span style={{color: "#60a5fa"}}>**Orchestration**</span> | AstroJOE (Hermes Agent in Docker — dual-instance: Jetson primary + CorsairOne secondary), Workspace UI, AgenC Coordinator |
+| <span style={{color: "#60a5fa"}}>**Orchestration**</span> | AstroJOE (Hermes Agent in Docker — dual-instance: edge-node primary + containerized secondary), Workspace UI, AgenC Coordinator |
 | <span style={{color: "#eab308"}}>**Cloud**</span> | Vercel, Convex, Solana, xAI Grok |
 
 ## Edge Node — Validator Services
@@ -32,7 +32,7 @@ import { D2Diagram } from "@/components/d2-diagram";
 
 | Service | Role |
 |---------|------|
-| **AstroJOE** | Primary agent brain — [Hermes Agent](https://github.com/NousResearch/hermes-agent) in Docker, Grok 4.20 via HEDGEHOG. Dual-instance: Jetson primary + CorsairOne secondary. |
+| **AstroJOE** | Primary agent brain — [Hermes Agent](https://github.com/NousResearch/hermes-agent) in Docker, Grok 4.20 via HEDGEHOG. Dual-instance: edge-node primary + containerized secondary. |
 | **Hermes Workspace** | Agent workspace UI |
 | **AgenC Coordinator** | SubJOE agent swarm orchestration |
 
