@@ -260,6 +260,20 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v2.0.1</span> &mdash; May 14, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use <strong>Space Grotesk</strong> via next/font/google; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>
+                      <li>&#x2022; Heading colors: neutral white in dark / near-black in light, with OPTX orange on hover</li>
+                      <li>&#x2022; Headings are no longer links: removed the anchor wrapper, click handler, permalink chain icon, scroll-to-self behavior, and cursor:pointer. Plain text with hover-orange visual cue only</li>
+                      <li>&#x2022; Body links: dropped the underline-on-hover and the globe icon next to internal /docs links (e.g. next to &ldquo;Token&rdquo; and &ldquo;JettChat&rdquo; references). Hover now shifts to lighter orange instead</li>
+                      <li>&#x2022; TOC: orange clip-path elbow indicator slides between active sections (Fumadocs default) plus a static dot at the active link, sitting on a gray trace line</li>
+                      <li>&#x2022; MOA: clicking a sidebar link no longer auto-pans the camera (mobile-friendly)</li>
+                      <li>&#x2022; MOA selected-node glow: OPTX orange instead of yellow (canvas + side panel card)</li>
+                      <li>&#x2022; Sidebar: fixed corrupted em-dash in &ldquo;JOE &mdash; Jett Optics Engine&rdquo; group title (was rendering as a U+FFFD diamond)</li>
+                      <li>&#x2022; Removed Copy for Agents button (desktop TOC footer + mobile FAB) and deleted the three unused component files</li>
+                      <li>&#x2022; Build: hoisted D2Diagram MDX import in astrojoe/index above prose so Vercel prerender succeeds</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v2.0.0</span> &mdash; April 30, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Dual-mode JettChat: new <code>/docs/jettchat</code> section covering xChat Native (X OAuth) and Phantom Mode (Tor + post-quantum, in Secure-Legion/android)</li>
