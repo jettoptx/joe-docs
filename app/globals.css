@@ -433,7 +433,8 @@ nav[aria-label="breadcrumb"] {
 
 .prose a:hover,
 [data-mdx] a:hover {
-  text-decoration: underline !important;
+  color: rgb(255, 140, 50) !important;
+  text-decoration: none !important;
 }
 
 /* Tables */
