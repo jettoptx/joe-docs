@@ -1,10 +1,10 @@
 ---
 icon: Code
 title: Hermes OPTX API
-description: Enhanced API bridge for Hermes Agent v0.8.0+ — SSE streaming chat, pluggable memory, task orchestration, Tempo wallet billing.
+description: Enhanced API bridge for Hermes Agent — SSE streaming chat, pluggable memory, task orchestration, Tempo wallet billing.
 ---
 
-The **Hermes OPTX API** is a FastAPI sidecar that extends Hermes Agent v0.8.0+ with enhanced endpoints for JettChat and Hermes Workspace. Open source at [joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api).
+The **Hermes OPTX API** is a FastAPI sidecar that extends [Hermes Agent](https://github.com/NousResearch/hermes-agent) with enhanced endpoints for JettChat and Hermes Workspace. Open source at [joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api).
 
 ## Why It Exists
 
@@ -45,7 +45,7 @@ curl -N -X POST http://localhost:8643/api/sessions/abc123/chat/stream \
 | `done` | `{session_id, status}` | Stream complete |
 | `error` | `{error, session_id}` | Error occurred |
 
-The stream auto-falls back from Hermes v0.8.0 session API to `/v1/chat/completions` if the upstream doesn't support session-scoped chat.
+The stream auto-falls back from the Hermes session API to `/v1/chat/completions` if the upstream doesn't support session-scoped chat.
 
 ## Gateway Capability Probing
 
@@ -72,7 +72,7 @@ At startup, the API probes the upstream Hermes Agent and exposes detected capabi
 
 | Mode | Description |
 |------|-------------|
-| **enhanced-hermes** | Full Hermes v0.8.0+ gateway with all features |
+| **enhanced-hermes** | Full Hermes Agent gateway with all features |
 | **portable** | Basic gateway, limited feature set |
 | **disconnected** | Upstream unreachable, local-only features still work |
 

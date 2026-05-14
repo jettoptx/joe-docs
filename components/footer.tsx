@@ -72,7 +72,9 @@ export function SiteFooter() {
                 { label: "Protocol", href: "/docs/protocol" },
                 { label: "API Reference", href: "/docs/reference/api" },
                 { label: "Gaze Guide", href: "/docs/authentication/gaze" },
-                { label: "LayerZero Bridge", href: "/docs/on-chain-bridge/evm-layerzero" },
+                { label: "JettChat", href: "/docs/jettchat" },
+                { label: "JETT Auth", href: "/docs/authentication/jett-auth" },
+                { label: "Token / JTX", href: "/docs/token" },
                 { label: "DePIN", href: "/docs/infrastructure/depin" },
               ].map((link) => (
                 <li key={link.label}>
@@ -250,7 +252,7 @@ export function SiteFooter() {
         <div className="mt-10 pt-6 border-t border-fd-border">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50">
-              Last updated: April 5, 2026 &mdash; v1.8.3
+              Last updated: April 30, 2026 &mdash; v2.0.0
             </p>
             <details className="group">
               <summary className="font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/50 hover:text-orange-400 transition-colors cursor-pointer select-none">
@@ -258,7 +260,7 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
-                  <li><span className="text-orange-400">v1.9.0</span> &mdash; April 29, 2026
+                  <li><span className="text-orange-400">v2.0.1</span> &mdash; May 14, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use <strong>Space Grotesk</strong> via next/font/google; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>
                       <li>&#x2022; Heading colors: neutral white in dark / near-black in light, with OPTX orange on hover</li>
@@ -270,6 +272,30 @@ export function SiteFooter() {
                       <li>&#x2022; Sidebar: fixed corrupted em-dash in &ldquo;JOE &mdash; Jett Optics Engine&rdquo; group title (was rendering as a U+FFFD diamond)</li>
                       <li>&#x2022; Removed Copy for Agents button (desktop TOC footer + mobile FAB) and deleted the three unused component files</li>
                       <li>&#x2022; Build: hoisted D2Diagram MDX import in astrojoe/index above prose so Vercel prerender succeeds</li>
+                    </ul>
+                  </li>
+                  <li><span className="text-orange-400">v2.0.0</span> &mdash; April 30, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Dual-mode JettChat: new <code>/docs/jettchat</code> section covering xChat Native (X OAuth) and Phantom Mode (Tor + post-quantum, in Secure-Legion/android)</li>
+                      <li>&#x2022; New <code>/docs/token</code> section: canonical 3-tier model mirroring astroknots.space/stake (MOJO 12 JTX/$8.88mo, DOJO 444 JTX/$28.88mo, SPACE COWBOY 1,111 JTX/$88.88mo)</li>
+                      <li>&#x2022; New <code>/docs/authentication/jett-auth</code> unified auth surface page</li>
+                      <li>&#x2022; New <code>/docs/reference/ecosystem</code> outlining all jettoptx + Secure-Legion repos</li>
+                      <li>&#x2022; Pricing fixes: DOJO is $28.88/mo (not 6 months); top tier renamed UNLIMITED → SPACE COWBOY</li>
+                      <li>&#x2022; Solana-only stance: on-chain-bridge EVM/XRPL pages retired</li>
+                      <li>&#x2022; ERC-8004 Agent Wallet labeled Roadmap; Matrix Gateway demoted to optional transport</li>
+                      <li>&#x2022; Hermes Agent aligned to v0.12.0 ("The Curator release", NousResearch tag <code>2026.4.30</code>) &mdash; autonomous skill curator, +4 providers, Teams + Yuanbao platforms, ComfyUI + TouchDesigner-MCP bundled, ~57% TUI cold-start cut</li>
+                      <li>&#x2022; Domain corrected to jettoptx.dev (was optxspace.dev)</li>
+                      <li>&#x2022; Coordinated 6 cross-org README PRs (jettauth-optx, aaron-router, jettchat-sdk, jettchat-app, joe-core, jtx-cstb-depin)</li>
+                    </ul>
+                  </li>
+                  <li><span className="text-orange-400">v1.9.0</span> &mdash; April 11, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; D2 Diagrams: replaced 12 Mermaid + 3 ASCII diagrams with D2 (ELK layout, Dark Mauve theme, sketch mode) across 15 MDX pages</li>
+                      <li>&#x2022; D2Diagram component: click-to-enlarge lightbox overlay with fullscreen viewport</li>
+                      <li>&#x2022; Content links → MOA: internal doc links open MOA overlay with target node selected</li>
+                      <li>&#x2022; Heading permalinks → MOA: heading anchors open MOA with current page node highlighted</li>
+                      <li>&#x2022; Mobile sidebar: full-width when expanded, larger fonts (15px / 14px), purple glow on active item</li>
+                      <li>&#x2022; Docs INDEX: added "Connected" column listing all MOA graph connections + density summary</li>
                     </ul>
                   </li>
                   <li><span className="text-orange-400">v1.8.3</span> &mdash; April 5, 2026

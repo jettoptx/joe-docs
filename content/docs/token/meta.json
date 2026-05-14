@@ -1,0 +1,5 @@
+{
+  "title": "Token",
+  "icon": "Coins",
+  "pages": ["index", "tiers", "subscriptions"]
+}

@@ -21,19 +21,18 @@ icon: Hash
 ## Token Standards
 
 - **$OPTX** and **$CSTB** use the **Token-2022 (SPL)** standard with transfer hooks for DePIN reward distribution
-- **$JTX** is a standard SPL token on mainnet for governance
-- **LayerZero OFT** wrapping enables cross-chain bridging to EVM chains (Base, Ethereum)
+- **$JTX** is a standard SPL token on mainnet, used for [JettChat tier gating](/docs/token/tiers)
+- OPTX is **Solana-native**. See [On-Chain Bridge](/docs/on-chain-bridge) for attestation-only bridging policy.
 
 ## Wallets
 
 | Entity | Address | Purpose |
 |--------|---------|---------|
 | **JOE Agent** | `EFvgELE1Hb4PC5tbPTAe8v1uEDGee8nwYBMCU42bZRGk` | Autonomous agent operations |
-| **JOE (ETH/Base)** | `0xB06c9B91Fa4B460551880459dc35803DC7567b93` | EVM operations |
-| **JOE (XRPL)** | `rq9mNYMKhzy9EgmBmwfWKn6fs5qgPpVmk` | TraderJoe swarm wallet |
 | **Jetson Edge JOE** | `PJM2Y4xqCSqxX1g9AWN5ejy8s6o9SeGfUTbj2cKEycs` | Edge node operations |
 | **JTX-TRUST** | `HkJoo6829ANVxPNCVDURjZazRncWv1ht3WfyDc2GD5oH` | Trust keypair |
-| **Founder** | `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` | Protocol treasury |
+| **Founder** | `FEUwuvXbbSYTCEhhqgAt2viTsEnromNNDsapoFvyfy3H` | Protocol treasury (also founder-tier bypass on JettChat gating) |
+| **JettChat Auth Cookie Issuer** | See [`@jettoptx/auth`](https://github.com/jettoptx/joe-jettauth-optx) | Ed25519 JWT signing key — managed by the SDK, not exposed publicly |
 
 ## Metaplex Agent Identity
 

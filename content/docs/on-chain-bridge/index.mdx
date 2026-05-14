@@ -1,25 +1,24 @@
 ---
 icon: Share2
 title: On-Chain Bridge
-description: Multi-chain bridge architecture — OPTX native Solana to EVM, XRPL, and LayerZero omnichain messaging.
+description: OPTX is Solana-native. All verification stays on Solana via the AARON protocol; cross-chain bridging is on the roadmap.
 ---
 
 import { D2Diagram } from "@/components/d2-diagram";
 
-The **On-Chain Bridge** maps every path that connects OPTX to external chains. The core rule: all verification stays on Solana via the <span style={{color: "#eab308"}}>AARON protocol</span>. Everything that leaves Solana passes through bridge infrastructure.
+The **On-Chain Bridge** maps every path that connects OPTX to external chains. The core rule: all verification stays on Solana via the <span style={{color: "#eab308"}}>AARON protocol</span>.
+
+> **Status:** OPTX flows are currently **Solana-only**. EVM and XRPL bridging are on the roadmap. Earlier versions of these docs described LayerZero OFT and Wormhole NTT pages — those have been retired pending re-implementation.
 
 ## Bridge Hub
 
-<D2Diagram src="/diagrams/bridge-hub.svg" alt="On-Chain Bridge Hub — OPTX through AARON to Solana, EVM, XRPL, and LayerZero" caption="On-Chain Bridge Hub" />
+<D2Diagram src="/diagrams/bridge-hub.svg" alt="On-Chain Bridge Hub — OPTX through AARON to Solana" caption="On-Chain Bridge Hub" />
 
 | Node | Description |
 |------|-------------|
 | **OPTX** | $OPTX token — source of all bridge flows |
 | **AARON** | AARON Protocol — Solana-native verification router |
 | **SOL** | Solana — home chain, direct SPL / Token-2022 |
-| **EVM** | EVM Chains — Ethereum, Base, Arbitrum, Polygon |
-| **XRPL** | XRP Ledger — Wormhole NTT bridge target |
-| **LZ** | LayerZero — omnichain messaging layer |
 
 ## Routing Logic
 
@@ -28,23 +27,14 @@ The <span style={{color: "#eab308"}}>AARON Router</span> on the Jetson edge node
 | Destination | Protocol | Asset Flow | Status |
 |-------------|----------|-----------|--------|
 | **Solana Native** | Direct SPL / Token-2022 | $OPTX, $JTX, $CSTB, Metaplex Core | Live |
-| **EVM Chains** | LayerZero OFT | Wrapped $OPTX (ERC-20) | Devnet |
-| **XRPL** | Wormhole NTT | USDC burn/mint, xSPECTAR NFTs | Live |
-| **Omnichain** | LayerZero Messaging | Cross-chain DVN verification | Devnet |
+| EVM / XRPL / Omnichain | — | Roadmap | Not currently routed |
 
 ## Key Delineation
 
-**Native vs. Bridged**:
-
-- <span style={{color: "#eab308"}}>**AARON Protocol**</span> is Solana-native. Gaze verification, biometric proofs, DePIN staking, and agent identity all happen on-chain via Helius RPC. This is the trust root.
-- <span style={{color: "#60a5fa"}}>**Bridge Infrastructure**</span> handles everything that leaves Solana. LayerZero wraps $OPTX for EVM chains. Wormhole NTT burns/mints native USDC for XRPL flows. Neither bridge touches the verification layer.
-
-The AARON router decides **what** gets bridged. The bridge protocols decide **how** it moves.
+<span style={{color: "#eab308"}}>**AARON Protocol**</span> is Solana-native. Gaze verification, biometric proofs, DePIN staking, and agent identity all happen on-chain via Helius RPC. This is the trust root.
 
 ## Section Pages
 
 | Page | Chain | Protocol |
 |------|-------|----------|
 | [Solana Native](/docs/on-chain-bridge/solana-native) | Solana | SPL / Token-2022 / Metaplex |
-| [EVM via LayerZero](/docs/on-chain-bridge/evm-layerzero) | ETH, Base, ARB, POLY | LayerZero OFT |
-| [XRPL via Wormhole](/docs/on-chain-bridge/xrpl-wormhole) | XRPL | Wormhole NTT, xSPECTAR |

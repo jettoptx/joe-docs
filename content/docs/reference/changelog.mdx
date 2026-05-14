@@ -4,13 +4,13 @@ title: Changelog
 description: Version history and release notes for the OPTX ecosystem.
 ---
 
-## 2026-04-29 — Docs typography + TOC + MOA UX refresh
+## 2026-05-14 — v2.0.1: Docs typography + TOC + MOA UX refresh
 
 ### Changed
 - **Center docs typography**: page titles and section headers (`h1`–`h4`) now render in **Space Grotesk** loaded via `next/font/google` (weights 300/400/500/600/700, exposed as `--font-space-grotesk`). Letter-spacing tightened at display sizes (-0.022em → -0.008em). Sidebar, brand wordmark, AGT badges, and small UI accents continue to use Orbitron. Body text continues to use Geist Mono. Pairing rationale: Space Grotesk was redrawn from Space Mono with proportional widths, so it carries similar geometric DNA to Geist Mono while giving a clear hierarchy contrast.
 - **Heading colors**: doc headers are now bright white in dark mode and near-black in light mode (previously orange). Hover state shifts to OPTX orange.
-- **Headings are not links**: the previous heading→MOA click behavior, permalink chain icon, scroll-to-self anchor jump, and `cursor: pointer` are all gone. Headings render as plain text and respond to hover with an orange color shift as the only visual cue. MOA can still be opened from the sidebar `/docs` links and the Augment Space button.
-- **Body links cleaned up**: dropped the `text-decoration: underline` on `.prose a:hover` (no more underline-on-hover for body links) and the small globe SVG icon that `MdxLink` injected after every internal `/docs/...` reference. Body links still open the MOA overlay when their target maps to a node, but the affordance is now color-only (orange → lighter orange on hover).
+- **Headings are not links**: removed the anchor wrapper, click handler, permalink chain icon, scroll-to-self behavior, and `cursor: pointer` from every doc heading. Headings render as plain text and respond to hover with an orange color shift as the only visual cue. MOA can still be opened from the sidebar `/docs` links and the Augment Space button.
+- **Body links cleaned up**: dropped the `text-decoration: underline` on `.prose a:hover` (no more underline-on-hover for body links) and the small globe SVG icon that `MdxLink` injected after every internal `/docs/...` reference (the icon you saw next to `Token`, `JettChat`, etc. in body content). Links still open the MOA overlay when their target maps to a node, but the affordance is now color-only (orange → lighter orange on hover).
 - **TOC styling**: the right-side "On this page" sidebar uses Fumadocs' default indented hierarchy. The sliding **orange clip-path elbow** indicator (Fumadocs' built-in animated thumb) shows the active section range, paired with a static **orange dot** on the active link (5px circle with a 3px soft glow), both sitting on the gray trace line. The previous AGT-dot-per-item markers are removed. Hover stays orange.
 
 ### Fixed
@@ -23,6 +23,64 @@ description: Version history and release notes for the OPTX ecosystem.
 - **Inter** font load — never shipped to production. Headers transitioned to a system-font stack, then to Space Grotesk; the Inter import was removed when it became unused.
 - **`DocTitleMoaLink` component** and the `MoaHeading` anchor wrapper — both made headings clickable to open MOA. With the no-link decision, both are dead weight; deleted.
 - **Copy for Agents** button (desktop TOC footer + mobile FAB) — removed both, deleted `components/copy-for-agents-btn.tsx`, `components/copy-for-agents.tsx`, and `components/mobile-copy-btn.tsx`. Also dropped the per-page `readFileSync` of raw MDX in `app/docs/[[...slug]]/page.tsx` since nothing consumed it.
+
+---
+
+## 2026-04-30 — Dual-mode JettChat: xChat Native + Phantom Mode
+
+### Added
+- **JettChat section** — new top-level `/docs/jettchat` documenting both modes. Pages: [overview](/docs/jettchat), [xChat Native](/docs/jettchat/xchat-native), [Phantom Mode](/docs/jettchat/phantom-mode), [messaging](/docs/jettchat/messaging).
+- **Token section** — new `/docs/token` mirroring [astroknots.space/stake](https://www.astroknots.space/stake): [overview](/docs/token), [tiers](/docs/token/tiers), [subscriptions](/docs/token/subscriptions). Canonical 3-tier model: MOJO ($8.88/mo or 12 JTX/1y), DOJO ($28.88/mo or 444 JTX/2y), SPACE COWBOY ($88.88/mo or 1,111 JTX/lifetime).
+- **JETT Auth page** — new `/docs/authentication/jett-auth` covering both auth surfaces.
+- **JETT Hub access flow** — Sign in with X → Hold 1 JTX *or* Pay $8.88 (Stripe) *or* Pay $8.88 (Tempo CLI).
+
+### Changed
+- **What is OPTX** — reframed around dual-mode JettChat (xChat Native + Phantom Mode).
+- **System Architecture** — adds mode comparison table; drops LayerZero/EVM from top-level diagram.
+- **DOJO/MOJO pricing** — fixed: DOJO is `$28.88 / mo` (not 6 months); top tier is **SPACE COWBOY $88.88 / mo** (renamed from "UNLIMITED"). Each tier shows JTX-stake and USD-subscription duality.
+- **On-Chain Addresses** — Solana-only; XRPL JOE wallet row removed; LayerZero/EVM line replaced with bridge cross-link.
+- **On-Chain Bridge** — EVM (`evm-layerzero`) and XRPL (`xrpl-wormhole`) pages retired pending re-implementation.
+- **Matrix Gateway** — reframed as **optional federation transport** for AstroJOE only; not part of JettChat dual-mode core.
+- **ERC-8004 Agent Wallet** — labeled **Roadmap**; design intent retained, no contract is deployed.
+- **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.12.0** (NousResearch tag `2026.4.30`, "The Curator release"). See "Hermes v0.12.0 alignment" sub-entry below.
+- **JOE topology** — explicitly **dual-instance**: edge-node primary (runs AARON + HEDGEHOG + SpacetimeDB) + containerized secondary for redundancy.
+- **Docs domain** — README and intra-doc references updated from `optxspace.dev` → `jettoptx.dev` (canonical, per JETT Hub footer).
+
+### Cross-org references
+- **xChat Native** → [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app), SDK at [`jettoptx/joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx).
+- **Phantom Mode** → [`Secure-Legion/android`](https://github.com/Secure-Legion/android) (Tor + post-quantum messenger, patent pending) and [`Secure-Legion/tor-hsservice-patched`](https://github.com/Secure-Legion/tor-hsservice-patched) (triple `.onion` topology).
+- **TKDF ↔ Secure-Legion** — same X25519 + ML-KEM-1024 hybrid construction, different brand layers (SDK vs. org).
+
+### Companion PRs across the `jettoptx` org
+
+The dual-mode framing landed in seven coordinated PRs. All update READMEs / metadata only — no code or contract changes:
+
+| Repo | PR | Change |
+|------|----|--------|
+| [`joe-docs`](https://github.com/jettoptx/joe-docs) | [#dual-mode-jettchat](https://github.com/jettoptx/joe-docs/tree/docs/dual-mode-jettchat) | This overhaul (29 files, +518/−272) |
+| [`joe-jettauth-optx`](https://github.com/jettoptx/joe-jettauth-optx) | [PR #1](https://github.com/jettoptx/joe-jettauth-optx/pull/1) | README dual-mode intro + repo description rewrite |
+| [`joe-aaron-router`](https://github.com/jettoptx/joe-aaron-router) | [PR #1](https://github.com/jettoptx/joe-aaron-router/pull/1) | README sentence: AARON serves both modes |
+| [`joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk) | [PR #1](https://github.com/jettoptx/joe-jettchat-sdk/pull/1) | README clarifies TKDF ↔ Secure-Legion are the same primitive |
+| [`joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) | [PR #15](https://github.com/jettoptx/joe-jettchat-app/pull/15) | README dual-mode intro + canonical pricing tiers (DOJO `$28.88/mo`, SPACE COWBOY rename) |
+| [`joe-core`](https://github.com/jettoptx/joe-core) | [PR #7](https://github.com/jettoptx/joe-core/pull/7) | README header cross-link to both modes |
+| [`joe-jtx-cstb-depin`](https://github.com/jettoptx/joe-jtx-cstb-depin) | [PR #3](https://github.com/jettoptx/joe-jtx-cstb-depin/pull/3) | Subscription tier table rebuilt against canonical staking model; docs link → jettoptx.dev/docs |
+
+Three private repos with overlapping JettChat scope are **on hold** pending disambiguation: `jettoptx/jettchat`, `jettoptx/jett-auth-sdk`, and `jettoptx/tempo` (Tempo CLI role needs confirmation — see open items in the source plan).
+
+### Hermes v0.12.0 alignment
+
+The OPTX deployment now tracks **Hermes Agent v0.12.0** (NousResearch tag `2026.4.30`) — *"The Curator release."* Released 2026-04-30 (1,096 commits, 550 PRs, 213 contributors since v0.11.0). Full feature breakdown in the new [Hermes v0.12.0 Features](/docs/astrojoe/hermes-features) page. Headline features that affect AstroJOE / JOE deployments on the [agent mesh](/docs/architecture/topology):
+
+- **Autonomous Curator** — background process grades, prunes, and consolidates the skill library without operator intervention. Aligns with the existing AstroJOE self-maintenance protocol.
+- **Self-improvement loop** substantially upgraded; review summaries surface in the TUI transcript and via `hermes curator status` (most-used + least-used skills).
+- **Four new inference providers** added — broader fallback options on top of HEDGEHOG's Grok routing.
+- **Microsoft Teams + Yuanbao** added as the 18th and 19th messaging platforms (joining the existing Matrix/X/etc. set).
+- **Spotify + Google Meet** native integrations.
+- **ComfyUI + TouchDesigner-MCP** bundled by default — these MCP servers are now first-class for AstroJOE on the agent mesh without manual installation.
+- **Humanizer skill** ported from earlier branches.
+- **~57% TUI cold-start reduction** — perceptibly faster `hermes` launch on edge nodes.
+
+Pinned version references in the docs site were unpinned in prose during this overhaul (link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) instead). Where a version *is* required for a hard dependency claim, use **v0.12.0**.
 
 ---
 

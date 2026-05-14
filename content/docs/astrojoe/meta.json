@@ -4,10 +4,11 @@
   "pages": [
     "index",
     "api",
+    "hermes-features",
     "hedgehog",
-    "matrix",
     "memory",
     "orchestration",
-    "skills"
+    "skills",
+    "matrix"
   ]
 }

@@ -20,6 +20,8 @@ import {
   Sun,
   Moon,
   BookOpen,
+  MessageCircle,
+  Coins,
 } from "lucide-react";
 
 /* ── AGT color system ── */
@@ -40,9 +42,21 @@ const SUB_PAGES: Record<string, SubPage[]> = {
     { label: "System Architecture", href: "/docs/getting-started/architecture", agt: "COG" },
     { label: "On-Chain Addresses", href: "/docs/getting-started/on-chain-addresses", agt: "ENV" },
   ],
+  "/docs/jettchat": [
+    { label: "JettChat Overview", href: "/docs/jettchat", agt: "EMO" },
+    { label: "xChat Native", href: "/docs/jettchat/xchat-native", agt: "EMO" },
+    { label: "Phantom Mode", href: "/docs/jettchat/phantom-mode", agt: "ENV" },
+    { label: "Messaging Features", href: "/docs/jettchat/messaging", agt: "EMO" },
+  ],
   "/docs/authentication/gaze": [
+    { label: "JETT Auth", href: "/docs/authentication/jett-auth", agt: "EMO" },
     { label: "Gaze Verification", href: "/docs/authentication/gaze", agt: "EMO" },
-    { label: "Agent Wallet", href: "/docs/authentication/wallet", agt: "EMO" },
+    { label: "Agent Wallet (Roadmap)", href: "/docs/authentication/wallet", agt: "EMO" },
+  ],
+  "/docs/token": [
+    { label: "$JTX Token", href: "/docs/token", agt: "ENV" },
+    { label: "Tiers", href: "/docs/token/tiers", agt: "COG" },
+    { label: "Subscriptions", href: "/docs/token/subscriptions", agt: "COG" },
   ],
   "/docs/protocol": [
     { label: "Protocol Overview", href: "/docs/protocol", agt: "COG" },
@@ -54,10 +68,12 @@ const SUB_PAGES: Record<string, SubPage[]> = {
   "/docs/astrojoe": [
     { label: "JOE Overview", href: "/docs/astrojoe", agt: "EMO" },
     { label: "Hermes OPTX API", href: "/docs/astrojoe/api", agt: "COG" },
+    { label: "Hermes v0.12.0 Features", href: "/docs/astrojoe/hermes-features", agt: "COG" },
     { label: "HEDGEHOG Gateway", href: "/docs/astrojoe/hedgehog", agt: "ENV" },
     { label: "Memory System", href: "/docs/astrojoe/memory", agt: "COG" },
     { label: "Task Orchestration", href: "/docs/astrojoe/orchestration", agt: "COG" },
     { label: "Skills System", href: "/docs/astrojoe/skills", agt: "COG" },
+    { label: "Matrix Gateway (Optional)", href: "/docs/astrojoe/matrix", agt: "ENV" },
   ],
   "/docs/architecture": [
     { label: "Architecture Flows", href: "/docs/architecture", agt: "COG" },
@@ -72,8 +88,6 @@ const SUB_PAGES: Record<string, SubPage[]> = {
   "/docs/on-chain-bridge": [
     { label: "Bridge Hub", href: "/docs/on-chain-bridge", agt: "EMO" },
     { label: "Solana Native", href: "/docs/on-chain-bridge/solana-native", agt: "EMO" },
-    { label: "EVM via LayerZero", href: "/docs/on-chain-bridge/evm-layerzero", agt: "EMO" },
-    { label: "XRPL via Wormhole", href: "/docs/on-chain-bridge/xrpl-wormhole", agt: "EMO" },
   ],
   "/docs/infrastructure/edge": [
     { label: "Edge MCP Overview", href: "/docs/infrastructure/edge", agt: "ENV" },
@@ -82,6 +96,8 @@ const SUB_PAGES: Record<string, SubPage[]> = {
   "/docs/reference/api": [
     { label: "API Reference", href: "/docs/reference/api", agt: "COG" },
     { label: "Documentation Index", href: "/docs/reference", agt: "COG" },
+    { label: "Ecosystem Repos", href: "/docs/reference/ecosystem", agt: "ENV" },
+    { label: "Changelog", href: "/docs/reference/changelog", agt: "COG" },
   ],
 };
 
@@ -95,7 +111,9 @@ interface NavSection {
 const NAV_SECTIONS: NavSection[] = [
   { label: "Jett Optics", href: "/docs/dojo", icon: Atom },
   { label: "Getting Started", href: "/docs/getting-started/what-is-optx", icon: Rocket },
+  { label: "JettChat", href: "/docs/jettchat", icon: MessageCircle },
   { label: "Authentication", href: "/docs/authentication/gaze", icon: Lock },
+  { label: "Token", href: "/docs/token", icon: Coins },
   { label: "AARON Protocol", href: "/docs/protocol", icon: Cpu },
   { label: "JOE Engine", href: "/docs/astrojoe", icon: BrainCircuit },
   { label: "Architecture", href: "/docs/architecture", icon: Workflow },

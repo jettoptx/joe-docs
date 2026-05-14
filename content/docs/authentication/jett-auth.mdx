@@ -1,0 +1,51 @@
+---
+title: JETT Auth
+description: Unified auth surface for JettChat — supports both xChat Native and Phantom Mode.
+icon: KeyRound
+---
+
+**JETT Auth** is the unified authentication layer behind JettChat. It supports both modes the chat client ships with.
+
+## Two Modes, One Auth Core
+
+|  | xChat Native | Phantom Mode |
+|---|---|---|
+| Login | X/Twitter OAuth 2.0 PKCE | Jett Hub visual SSO + JTX gate |
+| Biometric | AGT Gaze Triad (COG/EMO/ENV) | AGT Gaze Triad + Ping-Pong wake |
+| Session | Ed25519 JWT in `jettauth` cookie | PQC-wrapped session, hardware-bound |
+| Wipe trigger | Standard logout | Duress PIN → cryptographic wipe |
+| SDK | [`@jettoptx/auth`](https://github.com/jettoptx/joe-jettauth-optx) | [Secure-Legion/android](https://github.com/Secure-Legion/android) |
+
+Both modes verify gaze through the same [AGT pipeline](/docs/authentication/gaze).
+
+## Access Flow (JETT Hub)
+
+After **Sign in with X**, the user picks any one of:
+
+- **Connect wallet · Hold 1 JTX** (cheapest sustained path)
+- **Pay $8.88 — no wallet needed** (Stripe)
+- **Pay with Tempo CLI · $8.88**
+
+Once gated, optional subscription tiers unlock more features (stake JTX *or* pay USD/mo):
+
+| Tier | JTX stake | Duration | Subscription |
+|------|-----------|----------|--------------|
+| **MOJO** | 12 JTX | 1 Year | $8.88 / mo |
+| **DOJO** | 444 JTX | 2 Years | $28.88 / mo |
+| **SPACE COWBOY** | 1,111 JTX | Lifetime | $88.88 / mo |
+
+See [Token / Tiers](/docs/token/tiers) for the canonical table mirroring [astroknots.space/stake](https://www.astroknots.space/stake).
+
+## xChat Native specifics
+
+X/Twitter OAuth 2.0 PKCE flow with the following scopes: `tweet.read`, `tweet.write`, `users.read`, `dm.read`, `dm.write`, `offline.access`. After exchange, the SDK issues an Ed25519 JWT into the `jettauth` httpOnly cookie. The JTX gate is enforced as middleware on protected routes.
+
+Implementation: [`jettoptx/joe-jettchat-app`](https://github.com/jettoptx/joe-jettchat-app) (`app/api/auth/x/`) and [`@jettoptx/auth`](https://github.com/jettoptx/joe-jettauth-optx).
+
+## Phantom Mode specifics
+
+Phantom Mode adds a Tor-only path with post-quantum cryptography (X25519 + ML-KEM-1024) and hardware-backed keys (StrongBox on Android, Secure Enclave / TEE elsewhere). The Jett Hub visual SSO replaces OAuth entirely — no third-party identity provider is contacted. A duress PIN, if entered at any auth surface, triggers a cryptographic wipe rather than unlocking the session.
+
+Tor topology uses a triple `.onion` hidden-service layout via [Secure-Legion/tor-hsservice-patched](https://github.com/Secure-Legion/tor-hsservice-patched), a Tor 0.40 fork with intro-point exposure for OnionBalance coordination across multi-device messaging.
+
+> **Status:** Phantom Mode is shipped. Implementation lives in [Secure-Legion/android](https://github.com/Secure-Legion/android); refer to that repo's release notes for current build status.

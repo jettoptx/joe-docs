@@ -1,0 +1,64 @@
+---
+title: Phantom Mode
+description: Maximum-privacy JettChat — Secure-Legion stack with triple Tor onions, post-quantum crypto, hardware-backed keys, duress PIN with cryptographic wipe.
+icon: ShieldOff
+---
+
+> **The first messenger that protects your identity, not just your messages.** Serverless, blockchain-integrated, private payments. — *[Secure-Legion](https://github.com/Secure-Legion)*
+
+**Phantom Mode** is JettChat for adversarial environments. It replaces every layer of the standard auth + transport stack with a privacy-first variant.
+
+Implementation: [`Secure-Legion/android`](https://github.com/Secure-Legion/android) (patent pending).
+
+## What changes vs. xChat Native
+
+|  | xChat Native | Phantom Mode |
+|---|---|---|
+| **Identity provider** | X/Twitter OAuth | None — no third-party IdP contacted |
+| **Auth surface** | OAuth + Solana wallet | Jett Hub visual SSO + JTX gate |
+| **Transport** | HTTPS | **Triple Tor `.onion` hidden services** |
+| **Asymmetric crypto** | TLS / Ed25519 | **X25519 + ML-KEM-1024** (post-quantum hybrid) |
+| **Key storage** | Software-managed | **StrongBox** (Android) / Secure Enclave / TEE |
+| **Wake protocol** | Standard session resume | **Ping-Pong biometric wake** |
+| **Duress trigger** | None | **Duress PIN → cryptographic wipe** |
+
+## Triple onion topology
+
+Phantom Mode runs three Tor hidden services in a coordinated layout, using [Secure-Legion/tor-hsservice-patched](https://github.com/Secure-Legion/tor-hsservice-patched) — a fork of `tor-hsservice` 0.40 with intro-point exposure for OnionBalance multi-device coordination.
+
+This means a single Phantom Mode identity can be reachable across multiple devices without exposing the user's IP, machine fingerprint, or device-to-device correlation to a server.
+
+## Post-quantum cryptography
+
+Session keys use a **hybrid construction**: classical X25519 ECDH combined with **ML-KEM-1024** (the NIST-standardized lattice KEM, FIPS 203). A future quantum adversary would need to break both to recover keys.
+
+This same construction is sometimes referred to as **TKDF** in the [`joe-jettchat-sdk`](https://github.com/jettoptx/joe-jettchat-sdk) repo — TKDF is the SDK-layer name; Secure-Legion is the org-level brand wrapping the primitive plus Tor and hardware key storage.
+
+## Hardware-backed keys
+
+Long-term identity keys are generated and stored inside the device's secure element:
+
+- **Android**: StrongBox Keymaster (when present) or TEE.
+- **Other platforms**: Secure Enclave or platform equivalent.
+
+The keys never leave hardware; signing happens through the secure-element interface.
+
+## Ping-Pong biometric wake
+
+Re-opening Phantom Mode after a session pause requires a **Ping-Pong** challenge: a brief gaze interaction (AGT-tensor verified) plus a hardware-attested response from the secure element. This binds the session to both the body (biometric) and the device (hardware key) without exposing biometric raw data.
+
+See [Gaze Verification](/docs/authentication/gaze) for the AGT Triad pipeline (COG/EMO/ENV) used by both modes.
+
+## Duress PIN with cryptographic wipe
+
+In addition to the normal unlock, Phantom Mode accepts a **duress PIN**. Entering it does not unlock the session — it triggers an immediate cryptographic wipe of message history, key material, and identity state. The app appears to behave normally to a coercing observer; the underlying data is gone.
+
+## What stays the same
+
+- AGT Gaze Triad biometrics (COG/EMO/ENV)
+- JTX token gating on Solana mainnet
+- E2EE messaging features: gaze cursor typing, offline-first delivery, groups, self-destruct messages
+
+## Status
+
+Phantom Mode is shipped via [`Secure-Legion/android`](https://github.com/Secure-Legion/android). Refer to that repo's release notes for current build status and platform availability.

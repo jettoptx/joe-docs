@@ -1,11 +1,13 @@
 {
   "title": "OPTX Docs",
   "pages": [
-    "dojo",
     "getting-started",
+    "jettchat",
     "authentication",
+    "token",
     "protocol",
     "astrojoe",
+    "dojo",
     "architecture",
     "on-chain-bridge",
     "infrastructure",
