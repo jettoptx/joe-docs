@@ -36,6 +36,12 @@
   --fd-accent-foreground: oklch(0.08 0 0);
   --fd-popover: oklch(1 0 0);
   --fd-secondary: oklch(0.95 0 0);
+
+  /* Light-mode orange: burnt brick-orange that matches the JETT OPTICS
+     poster palette (vs the neon #FF6900 used in dark mode, which is too
+     garish on light backgrounds). */
+  --color-orange-500: rgb(220, 78, 31);
+  --accent: rgb(168, 60, 24);
 }
 
 /* ═══ Typography — Bold headers like AgenC ═══ */

@@ -36,6 +36,8 @@ import {
   Globe,
   Code,
   FileText,
+  MessageCircle,
+  Coins,
 } from "lucide-react";
 
 const icons: Record<string, React.FC<{ className?: string }>> = {
@@ -73,6 +75,8 @@ const icons: Record<string, React.FC<{ className?: string }>> = {
   Globe,
   Code,
   FileText,
+  MessageCircle,
+  Coins,
 };
 
 export const source = loader({
