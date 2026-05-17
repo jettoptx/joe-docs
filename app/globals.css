@@ -39,8 +39,12 @@
 
   /* Light-mode orange: burnt brick-orange that matches the JETT OPTICS
      poster palette (vs the neon #FF6900 used in dark mode, which is too
-     garish on light backgrounds). */
+     garish on light backgrounds). Covers --color-orange-500 (section
+     headers, OPTX wordmark, AUGMENT SPACE button, sidebar accents) and
+     --color-orange-400 (link hover states in header + footer + privacy +
+     research-labs pages). */
   --color-orange-500: rgb(220, 78, 31);
+  --color-orange-400: rgb(232, 105, 60);
   --accent: rgb(168, 60, 24);
 }
 
