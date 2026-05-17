@@ -1,15 +1,15 @@
 ---
 title: Biometric Proof Registry
-description: JOULE templates, knot-encoded gaze keys, and the biometric proof submission flow.
+description: JOULE templates, astro-encoded gaze keys, and the biometric proof submission flow.
 icon: ScanFace
 ---
 
-Each gaze verification session produces a **JOULE template** — a knot encoding of the user's AGT tensor sequence. The AARON protocol hashes this into a **knot invariant** and stores it on-chain.
+Each gaze verification session produces a **JOULE template** — a proprietary encoding of the user's AGT tensor sequence. The AARON protocol hashes this into a **astro_knot invariant** and stores it on-chain.
 
 ## JOULE Template
 
 ```typescript
-// JOULE Template — knot-encoded gaze key
+// JOULE Template — astro-encoded gaze key
 interface JOULETemplate {
   timestamp: number;
   sessionNonce: string;
@@ -17,8 +17,8 @@ interface JOULETemplate {
   gazeSequence: GazeTensor[];        // ordered AGT tensor sequence
   holdDurations: number[];           // ms per position
   transitionVectors: number[][];     // gaze path between positions
-  polynomialEncoding: string;        // proprietary knot encoding
-  knotPolynomial: string;            // knot invariant identifier
+  astroEncoding: string;        // proprietary encoding
+  astroKnot: string;            // astro_knot invariant identifier
   verificationHash: string;          // cryptographic proof hash
 }
 
