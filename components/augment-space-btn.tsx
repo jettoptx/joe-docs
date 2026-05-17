@@ -30,7 +30,6 @@ const PATH_TO_NODE: Record<string, string> = {
   "/docs/astrojoe/hedgehog": "hedgehog-doc",
   "/docs/astrojoe/api": "hermes-api",
   "/docs/astrojoe/hermes-features": "hermes-features",
-  "/docs/astrojoe/matrix": "matrix",
   "/docs/architecture": "arch-flows",
   "/docs/architecture/task-lifecycle": "task-lifecycle",
   "/docs/architecture/swarm-dag": "swarm-dag",

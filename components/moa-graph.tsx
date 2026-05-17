@@ -79,7 +79,6 @@ const DOC_NODES: DocNode[] = [
   { id: "hedgehog-doc", label: "HEDGEHOG Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/hedgehog", description: "Multi-API AI gateway on edge hardware", emo: 20, env: 65, cog: 15 },
   { id: "hermes-api", label: "Hermes API", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/api", description: "Hermes OPTX API endpoints and configuration", emo: 10, env: 15, cog: 75 },
   { id: "hermes-features", label: "Hermes v0.12.0", group: "astrojoe", agt: "COG", href: "/docs/astrojoe/hermes-features", description: "The Curator release — autonomous skill curator, +4 providers, ComfyUI + TouchDesigner-MCP bundled, ~57% TUI cold-start cut", emo: 10, env: 25, cog: 65 },
-  { id: "matrix", label: "Matrix Gateway", group: "astrojoe", agt: "ENV", href: "/docs/astrojoe/matrix", description: "Optional federation transport for AstroJOE — not part of JettChat dual-mode core", emo: 15, env: 70, cog: 15 },
 
   // Architecture Flows
   { id: "arch-flows", label: "Architecture Flows", group: "architecture", agt: "COG", href: "/docs/architecture", description: "Mermaid diagrams for every major system flow", emo: 15, env: 20, cog: 65 },

@@ -31,7 +31,6 @@ const PATH_TO_NODE: Record<string, string> = {
   "/docs/astrojoe/memory": "memory",
   "/docs/astrojoe/orchestration": "orchestration",
   "/docs/astrojoe/hedgehog": "hedgehog-doc",
-  "/docs/astrojoe/matrix": "matrix",
   "/docs/astrojoe/api": "hermes-api",
   "/docs/astrojoe/hermes-features": "hermes-features",
   "/docs/architecture": "arch-flows",

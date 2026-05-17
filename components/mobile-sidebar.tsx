@@ -73,7 +73,6 @@ const SUB_PAGES: Record<string, SubPage[]> = {
     { label: "Memory System", href: "/docs/astrojoe/memory", agt: "COG" },
     { label: "Task Orchestration", href: "/docs/astrojoe/orchestration", agt: "COG" },
     { label: "Skills System", href: "/docs/astrojoe/skills", agt: "COG" },
-    { label: "Matrix Gateway (Optional)", href: "/docs/astrojoe/matrix", agt: "ENV" },
   ],
   "/docs/architecture": [
     { label: "Architecture Flows", href: "/docs/architecture", agt: "COG" },
