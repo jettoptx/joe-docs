@@ -124,12 +124,12 @@ export function SiteFooter() {
             <ul className="space-y-2.5">
               {[
                 {
-                  label: "jettoptx-hermes-api",
-                  href: "https://github.com/jettoptx/jettoptx-hermes-api",
-                },
-                {
                   label: "jettoptx-aaron-router",
                   href: "https://github.com/jettoptx/jettoptx-aaron-router",
+                },
+                {
+                  label: "hermes-xai-oauth-wsl",
+                  href: "https://github.com/jettoptx/hermes-xai-oauth-wsl",
                 },
                 {
                   label: "jettoptx-cstb-depin",

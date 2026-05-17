@@ -11,7 +11,7 @@ Live at **[jettoptx.dev](https://jettoptx.dev)**
 | Repo | Type | Description |
 |------|------|-------------|
 | **[jettoptx-docs](https://github.com/jettoptx/jettoptx-docs)** | Docs Engine | Next.js 16 + Fumadocs + MDX — this repo |
-| **[jettoptx-hermes-api](https://github.com/jettoptx/jettoptx-hermes-api)** | API Bridge | FastAPI bridge for [Hermes Agent](https://github.com/NousResearch/hermes-agent), MPP pay-per-request |
+| **[hermes-xai-oauth-wsl](https://github.com/jettoptx/hermes-xai-oauth-wsl)** | Hermes WSL Tool | Workaround + Hyper-V firewall fix for logging into xAI SuperGrok via Hermes Agent on WSL2 |
 | **[jettoptx-cstb-depin](https://github.com/jettoptx/jettoptx-cstb-depin)** | On-chain Program | DePIN Anchor program for $JTX/$CSTB compute-trust bonding on Solana |
 | **[jettoptx-aaron-router](https://github.com/jettoptx/jettoptx-aaron-router)** | Edge Router | AARON gaze verification router — FastAPI, Proof-of-Insight, AGT pipeline |
 
