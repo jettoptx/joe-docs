@@ -106,9 +106,9 @@ Pinned version references in the docs site were unpinned in prose during this ov
 - `joe.ps1` launcher syntax errors — Unicode em-dashes replaced with ASCII
 
 ### Infrastructure
-- **AstroJOE**: Docker on orchestration host, Hermes v0.8.0, Grok 4.20-0309-reasoning
-- **Edge JOE**: Edge node, matrix-nio relay, strict mention filter
-- **Conduit**: v0.10.12, public via Cloudflare Tunnel at `matrix.jettoptics.ai`
+- **AstroJOE**: Containerized orchestration host, Hermes (current release), Grok 4.20-0309-reasoning
+- **Federation transport**: Optional inter-agent communication
+- **Homeserver**: Self-hosted, accessed via tunneled subdomain
 - **HEDGEHOG**: v3.6.0, REST gateway on edge node, 1700+ queries served
 
 ### Wallets
@@ -142,7 +142,7 @@ Pinned version references in the docs site were unpinned in prose during this ov
 ### Added
 - Cloudflare Tunnel for `matrix.jettoptics.ai` (replaced mesh network funnel)
 - X API OAuth 1.0a posting via `@jettoptx` account
-- Cortex bridge — matrix-nio listener to SpacetimeDB `process_matrix_message` reducer
+- Cortex bridge — federation transport listener to SpacetimeDB `process_inbound_message` reducer
 - Image support in cortex bridge (m.image, m.audio, m.video, m.file events)
 - Element X mobile login via `.well-known` discovery
 
