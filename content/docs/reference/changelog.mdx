@@ -21,7 +21,12 @@ description: Version history and release notes for the OPTX ecosystem.
 - **Matrix operational disclosure scrub.** Deleted `/docs/astrojoe/matrix` and removed every inbound reference across 4 content files and 5 components (MOA graph node, sidebar entry, link maps, tensor map). Wiped operational Matrix disclosures from `topology.mdx` + the historical entries in this changelog: bot MXID (`@astrojoe:jettoptics.ai`), homeserver implementation + version (Conduit v0.10.12), public hostname (`matrix.jettoptics.ai`), bridge library (`matrix-nio`), `/sync` long-poll integration pattern, dual-edge topology, `MATRIX_PASSWORD` / `MATRIX_ENCRYPTION` env model, and the auth allowlist + mention-filter pattern. Generic "federation transport" terminology retained.
 
 ### Process
-- **Changelog currency rule** added at [/docs/rules](/docs/rules) as agent rule #9 and human rule #5: every shipped change MUST update both the footer changelog block (`components/footer.tsx`) AND this long-form page in the same session — either in the same commit as the work or as an immediate follow-up. Applies to LLMs, VLMs, and human contributors equally. Also fixed the stale "Last updated: April 30, 2026 — v2.0.0" line in the footer.
+- **Changelog currency rule** added to both rule surfaces:
+  - The MDX page at [/docs/rules](/docs/rules) — new "9. Changelog Currency (NON-NEGOTIABLE)" section under *For Agents & LLMs*, "Always Update the Changelog (Same Session)" section under *For Human Developers*, and a new checklist item at the bottom.
+  - The DOCS RULES side panel — `components/docs-rules-content.ts` AGENT_RULES rule #9 + HUMAN_RULES rule #5.
+- Every shipped change MUST update both the footer changelog block (`components/footer.tsx`) AND this long-form page in the same session — either in the same commit as the work or as an immediate follow-up. Applies to LLMs, VLMs, and human contributors equally.
+- Also fixed the stale "Last updated: April 30, 2026 — v2.0.0" line in the footer (now correctly reads v2.0.2).
+- Style rule #8 updated to warn against hardcoding `rgb(255, 105, 0)` — agents should use `var(--color-orange-500)` so the burnt-brick light-mode override cascades.
 
 ---
 

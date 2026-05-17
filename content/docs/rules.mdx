@@ -100,9 +100,24 @@ Sub-pages are auto-discovered by Fumadocs. If adding a **new top-level section**
 ### 8. Style & Naming
 
 - **Fonts**: Orbitron (`--font-orbitron`) for headings/labels, Geist Mono (`--font-geist-mono`) for body/code
-- **Colors**: OPTX orange `rgb(255, 105, 0)` for accents, AGT tensor colors for classification
+- **Colors**: `var(--color-orange-500)` for OPTX-orange accents — **never hardcode `rgb(255, 105, 0)`**. The var resolves to neon `#FF6900` in dark mode and burnt brick `rgb(220, 78, 31)` in light mode. AGT tensor colors are still hardcoded by design.
 - **Icons**: Use [Lucide](https://lucide.dev) icon names in frontmatter
 - **Descriptions**: One sentence per concept, keep it concise
+
+### 9. Changelog Currency (NON-NEGOTIABLE)
+
+**Every shipped change MUST be reflected in BOTH changelog surfaces in the same session.** Applies to LLMs, VLMs, and human contributors equally — no exceptions.
+
+The two surfaces:
+
+1. **Footer changelog block** — the `<details><summary>Changelog</summary>` `<li>` entries in `components/footer.tsx`. Also bump the *"Last updated: &lt;date&gt; — v&lt;version&gt;"* line one level up.
+2. **Long-form page** — `content/docs/reference/changelog.mdx`, organized into `### Added`, `### Changed`, `### Security`, `### Process` subsections.
+
+Either land the changelog update in the **same commit** as the work, or as an **immediate follow-up commit** before the session ends. Don't leave the visible changelog stale relative to the deployed app.
+
+**Versioning:**
+- Within the same calendar day, **extend the most recent version entry** with new bullets.
+- **Bump** (e.g. `v2.0.2` → `v2.0.3`) when crossing into a new day OR shipping a clearly distinct release.
 
 ---
 
@@ -131,6 +146,15 @@ Update **3 files** after creating content:
 | `components/mobile-sidebar.tsx` | Entry in `SUB_PAGES` under parent section |
 | `components/augment-space-btn.tsx` | Path-to-nodeId in `PATH_TO_NODE` |
 
+### Always Update the Changelog (Same Session)
+
+Every shipped change lands in **both** changelog surfaces — same commit or immediate follow-up. The two places:
+
+1. `components/footer.tsx` — the footer changelog block + the `Last updated: <date> — v<version>` line
+2. `content/docs/reference/changelog.mdx` — the long-form page
+
+Within a calendar day, extend the most recent version entry. Bump the version when crossing days or shipping a distinct release. No orphaned releases.
+
 ### Using joe-docs as a Template
 
 joe-docs is designed to be forked and customized:
@@ -156,3 +180,4 @@ When adding a new page, use this checklist:
 - [ ] Added entry to `SUB_PAGES` in `mobile-sidebar.tsx`
 - [ ] Added path mapping to `PATH_TO_NODE` in `augment-space-btn.tsx`
 - [ ] (If new section) Updated `content/docs/meta.json`
+- [ ] **Updated both changelog surfaces** (footer block in `components/footer.tsx` + long-form `content/docs/reference/changelog.mdx`) and bumped *Last updated: &lt;date&gt; — v&lt;version&gt;*
