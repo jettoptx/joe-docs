@@ -4,6 +4,24 @@ title: Changelog
 description: Version history and release notes for the OPTX ecosystem.
 ---
 
+## 2026-05-17 — v2.0.2: Light-mode burnt orange + sidebar icons + IP scrub + Matrix security scrub + gaze video
+
+### Added
+- **Sidebar icons** rendered for JettChat (`MessageCircle`) and Token (`Coins`) categories. Both were declared in `meta.json` all along but never imported into `lib/source.ts`, so the resolver silently returned `undefined`. Now both icons appear next to the section headers.
+- **"Open Source" landing callout** at the bottom of `/docs` promoting `jettoptx-aaron-router` as the public flagship — FastAPI · Proof-of-Insight · AGT pipeline · Solana DePIN attestation.
+- **Video embed** on `/docs/authentication/gaze` — AGT Intro Learner mp4 self-hosted under `/videos/`, full-width 16:9, native HTML5 controls, no autoplay, lazy `preload="metadata"`.
+
+### Changed
+- **Light-mode burnt orange theme.** Refactored 22 hardcoded `rgb(255, 105, 0)` usages to `var(--color-orange-500)` across `app/globals.css`, header (`app/docs/layout.tsx`), footer (`components/footer.tsx`), AGENTS banner (`components/agent-banner.tsx`), DOCS RULES panel (`components/docs-rules-panel.tsx`), and body links (`components/mdx-link.tsx`). Added `:root:not(.dark)` override to a burnt brick (`rgb(220, 78, 31)`) that matches the JETT OPTICS poster palette. Dark mode keeps the neon `#FF6900` via the `:root` default. `--color-orange-400` also overridden in light mode (`rgb(232, 105, 60)`) for matching link-hover states.
+- **Ecosystem repo links** updated to `jettoptx-*` canonical names (org rename from `joe-*` completed). GitHub still redirects the old slugs but the new links skip the hop. Order in the footer REPOS column: `jettoptx-aaron-router`, `jettoptx-cstb-depin`, `jettoptx-docs`, `hermes-xai-oauth-wsl` (the non-org-prefixed companion tool at the bottom).
+- **Ecosystem swap.** `jettoptx-hermes-api` (degraded) replaced by `hermes-xai-oauth-wsl` in the footer REPOS column and README ecosystem table.
+
+### Security
+- **IP scrub for public release.** Renamed `knot_polynomial` → `astro_knot` and `polynomial_encoding` → `astro_encoding` across `/docs/protocol/*` (struct fields, TS interfaces, reducer args). Reworded the ecosystem table row for the astroknots repo. Math-revealing vocabulary (Jones / Alexander / braid / knot-theoretic / knot-encoded / knot invariant) no longer appears in any public-facing doc.
+- **Matrix operational disclosure scrub.** Deleted `/docs/astrojoe/matrix` and removed every inbound reference across 4 content files and 5 components (MOA graph node, sidebar entry, link maps, tensor map). Wiped operational Matrix disclosures from `topology.mdx` + the historical entries in this changelog: bot MXID (`@astrojoe:jettoptics.ai`), homeserver implementation + version (Conduit v0.10.12), public hostname (`matrix.jettoptics.ai`), bridge library (`matrix-nio`), `/sync` long-poll integration pattern, dual-edge topology, `MATRIX_PASSWORD` / `MATRIX_ENCRYPTION` env model, and the auth allowlist + mention-filter pattern. Generic "federation transport" terminology retained.
+
+---
+
 ## 2026-05-14 — v2.0.1: Docs typography + TOC + MOA UX refresh
 
 ### Changed
