@@ -20,6 +20,9 @@ description: Version history and release notes for the OPTX ecosystem.
 - **IP scrub for public release.** Renamed `knot_polynomial` → `astro_knot` and `polynomial_encoding` → `astro_encoding` across `/docs/protocol/*` (struct fields, TS interfaces, reducer args). Reworded the ecosystem table row for the astroknots repo. Math-revealing vocabulary (Jones / Alexander / braid / knot-theoretic / knot-encoded / knot invariant) no longer appears in any public-facing doc.
 - **Matrix operational disclosure scrub.** Deleted `/docs/astrojoe/matrix` and removed every inbound reference across 4 content files and 5 components (MOA graph node, sidebar entry, link maps, tensor map). Wiped operational Matrix disclosures from `topology.mdx` + the historical entries in this changelog: bot MXID (`@astrojoe:jettoptics.ai`), homeserver implementation + version (Conduit v0.10.12), public hostname (`matrix.jettoptics.ai`), bridge library (`matrix-nio`), `/sync` long-poll integration pattern, dual-edge topology, `MATRIX_PASSWORD` / `MATRIX_ENCRYPTION` env model, and the auth allowlist + mention-filter pattern. Generic "federation transport" terminology retained.
 
+### Process
+- **Changelog currency rule** added at [/docs/rules](/docs/rules) as agent rule #9 and human rule #5: every shipped change MUST update both the footer changelog block (`components/footer.tsx`) AND this long-form page in the same session — either in the same commit as the work or as an immediate follow-up. Applies to LLMs, VLMs, and human contributors equally. Also fixed the stale "Last updated: April 30, 2026 — v2.0.0" line in the footer.
+
 ---
 
 ## 2026-05-14 — v2.0.1: Docs typography + TOC + MOA UX refresh
