@@ -124,20 +124,20 @@ export function SiteFooter() {
             <ul className="space-y-2.5">
               {[
                 {
-                  label: "joe-optx-hermes-api",
-                  href: "https://github.com/jettoptx/joe-optx-hermes-api",
+                  label: "jettoptx-hermes-api",
+                  href: "https://github.com/jettoptx/jettoptx-hermes-api",
                 },
                 {
-                  label: "joe-aaron-router",
-                  href: "https://github.com/jettoptx/joe-aaron-router",
+                  label: "jettoptx-aaron-router",
+                  href: "https://github.com/jettoptx/jettoptx-aaron-router",
                 },
                 {
-                  label: "joe-jtx-cstb-depin",
-                  href: "https://github.com/jettoptx/joe-jtx-cstb-depin",
+                  label: "jettoptx-cstb-depin",
+                  href: "https://github.com/jettoptx/jettoptx-cstb-depin",
                 },
                 {
-                  label: "joe-docs",
-                  href: "https://github.com/jettoptx/joe-docs",
+                  label: "jettoptx-docs",
+                  href: "https://github.com/jettoptx/jettoptx-docs",
                 },
               ].map((link) => (
                 <li key={link.label}>
@@ -260,6 +260,14 @@ export function SiteFooter() {
               </summary>
               <div className="mt-3 p-4 rounded-lg bg-fd-background/50 border border-fd-border max-w-lg">
                 <ul className="space-y-1.5 font-[family-name:var(--font-geist-mono)] text-xs text-fd-muted-foreground/70">
+                  <li><span className="text-orange-400">v2.0.2</span> &mdash; May 17, 2026
+                    <ul className="ml-3 mt-1 space-y-1">
+                      <li>&#x2022; Sidebar icons: <code>MessageCircle</code> (JettChat) and <code>Coins</code> (Token) were configured in <code>meta.json</code> but never imported in <code>lib/source.ts</code>; resolver silently returned undefined. Both added to the lucide-react imports and icon map.</li>
+                      <li>&#x2022; Light-mode burnt orange: refactored 22 hardcoded <code>rgb(255, 105, 0)</code> usages to <code>var(--color-orange-500)</code>. Added <code>:root:not(.dark)</code> override to <code>rgb(220, 78, 31)</code> brick &mdash; section headers, sidebar accents, header OPTX wordmark, footer OPTX wordmark, DOCS RULES panel, body links, and AGENTS banner now cascade through the var.</li>
+                      <li>&#x2022; Dark mode keeps the neon <code>#FF6900</code> via the <code>:root</code> default; <code>--color-orange-400</code> also overridden in light mode to <code>rgb(232, 105, 60)</code> for matching link-hover states.</li>
+                      <li>&#x2022; Ecosystem repo links updated to <code>jettoptx-*</code> canonical names (org rename from <code>joe-*</code> completed; GitHub still redirects the old slugs but new links skip the hop).</li>
+                    </ul>
+                  </li>
                   <li><span className="text-orange-400">v2.0.1</span> &mdash; May 14, 2026
                     <ul className="ml-3 mt-1 space-y-1">
                       <li>&#x2022; Typography: doc headers (h1&ndash;h4) now use <strong>Space Grotesk</strong> via next/font/google; sidebar, brand wordmark, and AGT badges stay Orbitron; body stays Geist Mono</li>

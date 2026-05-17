@@ -10,10 +10,10 @@ Live at **[jettoptx.dev](https://jettoptx.dev)**
 
 | Repo | Type | Description |
 |------|------|-------------|
-| **[joe-docs](https://github.com/jettoptx/joe-docs)** | Docs Engine | Next.js 16 + Fumadocs + MDX — this repo |
-| **[joe-optx-hermes-api](https://github.com/jettoptx/joe-optx-hermes-api)** | API Bridge | FastAPI bridge for [Hermes Agent](https://github.com/NousResearch/hermes-agent), MPP pay-per-request |
-| **[joe-jtx-cstb-depin](https://github.com/jettoptx/joe-jtx-cstb-depin)** | On-chain Program | DePIN Anchor program for $JTX/$CSTB compute-trust bonding on Solana |
-| **[joe-aaron-router](https://github.com/jettoptx/joe-aaron-router)** | Edge Router | AARON gaze verification router — FastAPI, Proof-of-Insight, AGT pipeline |
+| **[jettoptx-docs](https://github.com/jettoptx/jettoptx-docs)** | Docs Engine | Next.js 16 + Fumadocs + MDX — this repo |
+| **[jettoptx-hermes-api](https://github.com/jettoptx/jettoptx-hermes-api)** | API Bridge | FastAPI bridge for [Hermes Agent](https://github.com/NousResearch/hermes-agent), MPP pay-per-request |
+| **[jettoptx-cstb-depin](https://github.com/jettoptx/jettoptx-cstb-depin)** | On-chain Program | DePIN Anchor program for $JTX/$CSTB compute-trust bonding on Solana |
+| **[jettoptx-aaron-router](https://github.com/jettoptx/jettoptx-aaron-router)** | Edge Router | AARON gaze verification router — FastAPI, Proof-of-Insight, AGT pipeline |
 
 ### Internal Modules (documented here)
 
@@ -85,7 +85,7 @@ Frontmatter fields: `title`, `description`, `icon` (Lucide icon name for sidebar
 
 Want to spin up docs for your own agent, SDK, or CLI? Follow these steps:
 
-1. **Fork & Clone** — `git clone https://github.com/jettoptx/joe-docs.git my-docs`
+1. **Fork & Clone** — `git clone https://github.com/jettoptx/jettoptx-docs.git my-docs`
 2. **Replace Content** — Swap MDX files in `content/docs/` with your own
 3. **Customize Graph** — Edit MOA node data in `components/moa/` to map your project's architecture
 4. **Configure Sidebar** — Update `lib/source.ts` for your navigation structure
@@ -224,7 +224,7 @@ to the DePIN program on Solana.
 ## Install
 
 ```bash
-git clone https://github.com/jettoptx/joe-aaron-router.git
+git clone https://github.com/jettoptx/jettoptx-aaron-router.git
 cd joe-aaron-router
 pip install -r requirements.txt
 cp .env.example .env   # fill AARON_VALIDATOR_KEY and HELIUS_RPC_URL
