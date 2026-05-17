@@ -19,8 +19,8 @@ async function submitToAARON(template: JOULETemplate, userId: number) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       user_id: userId,
-      polynomial: template.polynomialEncoding,
-      knot: template.knotPolynomial,
+      encoding: template.astroEncoding,
+      astro_knot: template.astroKnot,
       hash: template.verificationHash,
       durations: template.holdDurations,
       confidence: 0.85,
