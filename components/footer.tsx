@@ -128,16 +128,16 @@ export function SiteFooter() {
                   href: "https://github.com/jettoptx/jettoptx-aaron-router",
                 },
                 {
-                  label: "hermes-xai-oauth-wsl",
-                  href: "https://github.com/jettoptx/hermes-xai-oauth-wsl",
-                },
-                {
                   label: "jettoptx-cstb-depin",
                   href: "https://github.com/jettoptx/jettoptx-cstb-depin",
                 },
                 {
                   label: "jettoptx-docs",
                   href: "https://github.com/jettoptx/jettoptx-docs",
+                },
+                {
+                  label: "hermes-xai-oauth-wsl",
+                  href: "https://github.com/jettoptx/hermes-xai-oauth-wsl",
                 },
               ].map((link) => (
                 <li key={link.label}>
