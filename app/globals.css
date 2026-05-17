@@ -70,7 +70,7 @@
 
 .prose h1:hover,
 [data-mdx] h1:hover {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
 }
 
 /* Section headers (h2) — system font semibold */
@@ -142,7 +142,7 @@
 /* Headings hover orange (visual cue only — headings are not links) */
 .prose :is(h2, h3, h4):hover,
 [data-mdx] :is(h2, h3, h4):hover {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   transition: color 0.15s ease !important;
 }
 
@@ -313,20 +313,20 @@ nav[data-fd-sidebar] {
 }
 
 .dark [data-fd-sidebar] [data-fd-sidebar-group-label] {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
 }
 
 /* Sidebar links active state — orange */
 [data-fd-sidebar] a[data-active="true"],
 [data-fd-sidebar] [data-active="true"] {
-  color: rgb(255, 105, 0) !important;
-  border-left-color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
+  border-left-color: var(--color-orange-500) !important;
 }
 
 /* TOC — right sidebar "On this page" */
 [data-fd-toc] a[data-active="true"] {
-  color: rgb(255, 105, 0) !important;
-  border-left-color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
+  border-left-color: var(--color-orange-500) !important;
 }
 
 /* ═══ TOC — gray trace line + orange clip-path elbow + active dot ═══ */
@@ -335,7 +335,7 @@ nav[data-fd-sidebar] {
    This is the bracket/elbow indicator that animates between heading
    positions as you scroll, showing which section range is active. */
 #nd-toc [style*="clip-path"] {
-  background: rgb(255, 105, 0) !important;
+  background: var(--color-orange-500) !important;
   transition: clip-path 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
@@ -347,7 +347,7 @@ nav[data-fd-sidebar] {
 
 /* Active link — orange text, slightly heavier */
 #nd-toc a[data-active="true"] {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   font-weight: 600 !important;
 }
 
@@ -367,7 +367,7 @@ nav[data-fd-sidebar] {
     width: 5px !important;
     height: 5px !important;
     border-radius: 9999px !important;
-    background: rgb(255, 105, 0) !important;
+    background: var(--color-orange-500) !important;
     box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.2) !important;
     z-index: 2 !important;
   }
@@ -432,7 +432,7 @@ nav[aria-label="breadcrumb"] {
 /* Links in prose — orange */
 .prose a,
 [data-mdx] a {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   text-decoration: none !important;
   font-weight: 500 !important;
 }
@@ -458,7 +458,7 @@ nav[aria-label="breadcrumb"] {
 }
 
 .dark .prose table th {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
 }
 
 /* Ensure logo is not clipped in nav */
@@ -802,7 +802,7 @@ aside#nd-sidebar > div:last-child button.augment-space-btn {
 
 /* Section header buttons (collapsible groups) — orange text */
 aside#nd-sidebar button[aria-expanded] {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
   font-weight: 700 !important;
   font-size: 0.72rem !important;
@@ -812,7 +812,7 @@ aside#nd-sidebar button[aria-expanded] {
 
 /* Section header buttons that are also links (JOE, etc.) */
 aside#nd-sidebar a[href^="/docs"]:has(svg[data-icon="true"]) {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   font-family: var(--font-orbitron), "Orbitron", sans-serif !important;
   font-weight: 700 !important;
   font-size: 0.72rem !important;
@@ -822,19 +822,19 @@ aside#nd-sidebar a[href^="/docs"]:has(svg[data-icon="true"]) {
 
 /* Section header icons — muted orange */
 aside#nd-sidebar button[aria-expanded] svg:not([data-icon="true"]) {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   opacity: 0.4 !important;
 }
 
 /* Chevron icon on section headers */
 aside#nd-sidebar button[aria-expanded] svg[data-icon="true"] {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   opacity: 0.3 !important;
 }
 
 /* Section link-headers with chevron */
 aside#nd-sidebar a[href^="/docs"] svg[data-icon="true"] {
-  color: rgb(255, 105, 0) !important;
+  color: var(--color-orange-500) !important;
   opacity: 0.3 !important;
 }
 
