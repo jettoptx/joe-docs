@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               style={{ objectFit: "contain" }}
             />
             <span className="font-[family-name:var(--font-orbitron)] font-bold text-sm md:text-lg tracking-wider whitespace-nowrap">
-              <span style={{ color: "rgb(255, 105, 0)" }}>OPTX</span>{" "}
+              <span style={{ color: "var(--color-orange-500)" }}>OPTX</span>{" "}
               <span className="opacity-60">DOCS</span>
             </span>
           </Link>

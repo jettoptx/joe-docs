@@ -18,7 +18,7 @@ export function SiteFooter() {
                 style={{ objectFit: "contain" }}
               />
               <span className="font-[family-name:var(--font-orbitron)] font-bold text-lg tracking-wider">
-                <span style={{ color: "rgb(255, 105, 0)" }}>OPTX</span>
+                <span style={{ color: "var(--color-orange-500)" }}>OPTX</span>
               </span>
             </div>
             <p className="font-[family-name:var(--font-geist-mono)] text-sm text-fd-muted-foreground leading-relaxed max-w-xs mb-4">

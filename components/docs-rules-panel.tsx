@@ -69,13 +69,13 @@ export function DocsRulesPanel() {
                   router.push("/docs/rules");
                   setTimeout(() => setOpen(false), 100);
                 }}
-                className="text-[9px] md:text-[11px] text-fd-muted-foreground hover:text-[rgb(255,105,0)] transition-colors uppercase tracking-wider cursor-pointer"
+                className="text-[9px] md:text-[11px] text-fd-muted-foreground hover:text-[var(--color-orange-500)] transition-colors uppercase tracking-wider cursor-pointer"
               >
                 Full Page
               </button>
               <button
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors px-2 py-1 rounded-md hover:bg-[rgba(255,105,0,0.08)]"
+                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--color-orange-500)] hover:text-[rgb(255,140,50)] transition-colors px-2 py-1 rounded-md hover:bg-[rgba(255,105,0,0.08)]"
               >
                 Close
               </button>
@@ -128,7 +128,7 @@ function TabButton({ active, onClick, label }: { active: boolean; onClick: () =>
         font-[family-name:var(--font-orbitron)] transition-all duration-150
         ${
           active
-            ? "text-[rgb(255,105,0)] bg-[rgba(255,105,0,0.1)] border border-[rgba(255,105,0,0.25)]"
+            ? "text-[var(--color-orange-500)] bg-[rgba(255,105,0,0.1)] border border-[rgba(255,105,0,0.25)]"
             : "text-fd-muted-foreground hover:text-fd-foreground bg-fd-accent/20 border border-transparent hover:border-fd-border/50"
         }
       `}
@@ -151,7 +151,7 @@ function RuleCard({ rule }: { rule: DocsRule }) {
           {rule.files.map((f) => (
             <span
               key={f}
-              className="text-[7px] md:text-[9px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded bg-[rgba(255,105,0,0.08)] text-[rgb(255,105,0)] border border-[rgba(255,105,0,0.15)]"
+              className="text-[7px] md:text-[9px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded bg-[rgba(255,105,0,0.08)] text-[var(--color-orange-500)] border border-[rgba(255,105,0,0.15)]"
             >
               {f}
             </span>

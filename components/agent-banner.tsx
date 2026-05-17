@@ -19,13 +19,13 @@ export function AgentBanner() {
       <span className="text-fd-muted-foreground">Read</span>
       <button
         onClick={openRules}
-        className="font-bold text-[rgb(255,105,0)] hover:underline cursor-pointer uppercase tracking-wider"
+        className="font-bold text-[var(--color-orange-500)] hover:underline cursor-pointer uppercase tracking-wider"
       >
         DOCS RULES
       </button>
       <Link
         href="/docs/rules"
-        className="text-fd-muted-foreground hover:text-[rgb(255,105,0)] transition-colors"
+        className="text-fd-muted-foreground hover:text-[var(--color-orange-500)] transition-colors"
         tabIndex={-1}
       >
         /docs/rules

@@ -80,7 +80,7 @@ export function MdxLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
               new CustomEvent("augment-space-open", { detail: currentNode })
             );
           }}
-          className="text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors cursor-pointer"
+          className="text-[var(--color-orange-500)] hover:text-[rgb(255,140,50)] transition-colors cursor-pointer"
           title={`View in MOA: ${currentNode}`}
         >
           {children}
@@ -110,7 +110,7 @@ export function MdxLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
             new CustomEvent("augment-space-open", { detail: nodeId })
           );
         }}
-        className="text-[rgb(255,105,0)] hover:text-[rgb(255,140,50)] transition-colors cursor-pointer"
+        className="text-[var(--color-orange-500)] hover:text-[rgb(255,140,50)] transition-colors cursor-pointer"
         title={`View in MOA: ${nodeId}`}
       >
         {children}
