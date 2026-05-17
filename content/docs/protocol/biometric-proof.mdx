@@ -44,7 +44,7 @@ pub struct BiometricProof {
     #[autoinc]
     pub id: u64,
     pub user_id: u64,
-    pub polynomial_encoding: String,   // proprietary knot encoding
+    pub astro_encoding: String,        // proprietary encoding
     pub astro_knot: String,            // astro_knot invariant identifier
     pub verification_hash: String,     // cryptographic proof hash
     pub hold_durations_ms: Vec<u64>,
@@ -57,7 +57,7 @@ pub struct BiometricProof {
 pub fn submit_biometric_proof(
     ctx: &ReducerContext,
     user_id: u64,
-    polynomial: String,
+    encoding: String,
     knot: String,
     hash: String,
     durations: Vec<u64>,
@@ -71,7 +71,7 @@ pub fn submit_biometric_proof(
     BiometricProof::insert(BiometricProof {
         id: 0,
         user_id,
-        polynomial_encoding: polynomial,
+        astro_encoding: encoding,
         astro_knot: knot,
         verification_hash: hash,
         hold_durations_ms: durations,
