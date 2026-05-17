@@ -40,7 +40,7 @@ description: Version history and release notes for the OPTX ecosystem.
 - **DOJO/MOJO pricing** — fixed: DOJO is `$28.88 / mo` (not 6 months); top tier is **SPACE COWBOY $88.88 / mo** (renamed from "UNLIMITED"). Each tier shows JTX-stake and USD-subscription duality.
 - **On-Chain Addresses** — Solana-only; XRPL JOE wallet row removed; LayerZero/EVM line replaced with bridge cross-link.
 - **On-Chain Bridge** — EVM (`evm-layerzero`) and XRPL (`xrpl-wormhole`) pages retired pending re-implementation.
-- **Matrix Gateway** — reframed as **optional federation transport** for AstroJOE only; not part of JettChat dual-mode core.
+- **Matrix federation** — reframed as **optional transport** for AstroJOE only; not part of JettChat dual-mode core.
 - **ERC-8004 Agent Wallet** — labeled **Roadmap**; design intent retained, no contract is deployed.
 - **Hermes versioning** — pinned `v0.8.0` references unpinned in prose; doc-site convention is now to link to [hermes-agent releases](https://github.com/NousResearch/hermes-agent/releases) rather than embed version numbers. Local canonical Hermes version is **v0.12.0** (NousResearch tag `2026.4.30`, "The Curator release"). See "Hermes v0.12.0 alignment" sub-entry below.
 - **JOE topology** — explicitly **dual-instance**: edge-node primary (runs AARON + HEDGEHOG + SpacetimeDB) + containerized secondary for redundancy.
@@ -84,10 +84,10 @@ Pinned version references in the docs site were unpinned in prose during this ov
 
 ---
 
-## 2026-04-11 — Hermes v0.8.0 Matrix Gateway
+## 2026-04-11 — Hermes v0.8.0 federation transport
 
 ### Added
-- **Native Matrix gateway** — AstroJOE auto-responds in OPTX Command Room via Hermes built-in Matrix support
+- **Native federation transport** — AstroJOE auto-responds in the operator command room via Hermes built-in federation support
 - **Self-maintenance protocol** — AstroJOE now proactively updates SOUL.md, skills, and dev logs as infrastructure changes
 - **Hermes harness documentation** — SOUL.md includes full tool inventory, skill system, gateway config, MCP integrations
 - **SOL funding scripts** — `scripts/fund-agents.sh` and `scripts/check-balances.sh` for agent wallet management

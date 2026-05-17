@@ -293,7 +293,7 @@ export function SiteFooter() {
                       <li>&#x2022; New <code>/docs/reference/ecosystem</code> outlining all jettoptx + Secure-Legion repos</li>
                       <li>&#x2022; Pricing fixes: DOJO is $28.88/mo (not 6 months); top tier renamed UNLIMITED → SPACE COWBOY</li>
                       <li>&#x2022; Solana-only stance: on-chain-bridge EVM/XRPL pages retired</li>
-                      <li>&#x2022; ERC-8004 Agent Wallet labeled Roadmap; Matrix Gateway demoted to optional transport</li>
+                      <li>&#x2022; ERC-8004 Agent Wallet labeled Roadmap; Matrix federation demoted to optional transport</li>
                       <li>&#x2022; Hermes Agent aligned to v0.12.0 ("The Curator release", NousResearch tag <code>2026.4.30</code>) &mdash; autonomous skill curator, +4 providers, Teams + Yuanbao platforms, ComfyUI + TouchDesigner-MCP bundled, ~57% TUI cold-start cut</li>
                       <li>&#x2022; Domain corrected to jettoptx.dev (was optxspace.dev)</li>
                       <li>&#x2022; Coordinated 6 cross-org README PRs (jettauth-optx, aaron-router, jettchat-sdk, jettchat-app, joe-core, jtx-cstb-depin)</li>

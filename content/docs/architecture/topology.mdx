@@ -68,20 +68,6 @@ All internal communication flows through **Tailscale** mesh networking with Wire
 - `jettoptics.ai` — Vercel CDN
 - `matrix.jettoptics.ai` — Federated Matrix homeserver (via Cloudflare Tunnel)
 
-## Communication Flow
-
-```
-Matrix Client (Element X / Web)
-  → Conduit Homeserver (edge node)
-    → Hermes Matrix Gateway (AstroJOE, /sync long-poll)
-      → Grok 4.20 via HEDGEHOG REST API
-        → Response posted back to room
-
-Edge JOE (matrix-nio, edge node)
-  → Strict @joe: mention filter
-    → Relay to AstroJOE if needed
-```
-
 ## Related
 - [System Architecture](/docs/getting-started/architecture) — High-level overview
 - [Edge MCP](/docs/infrastructure/edge) — HEDGEHOG on validator node details
