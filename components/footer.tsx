@@ -45,11 +45,11 @@ export function SiteFooter() {
                 </svg>
               </a>
               <a
-                href="https://github.com/jettoptx/optx-hermes-api"
+                href="https://github.com/jettoptx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-fd-muted-foreground hover:text-orange-400 transition-colors"
-                aria-label="GitHub"
+                aria-label="GitHub — jettoptx organization"
               >
                 <svg
                   className="w-5 h-5"
@@ -273,6 +273,7 @@ export function SiteFooter() {
                       <li>&#x2022; <strong>Security scrub:</strong> deleted <code>/docs/astrojoe/matrix</code> page and removed every inbound reference across 4 content pages and 5 components (MOA graph node, sidebar entry, link maps). Wiped all operational Matrix disclosures from <code>topology.mdx</code> + <code>reference/changelog.mdx</code> &mdash; bot MXID, homeserver impl + version (Conduit v0.10.12), public hostname (<code>matrix.jettoptics.ai</code>), library (<code>matrix-nio</code>), <code>/sync</code> long-poll mechanism, the dual-edge topology, the <code>MATRIX_PASSWORD</code> / <code>MATRIX_ENCRYPTION</code> env model, and the auth allowlist + mention-filter pattern. Generic "federation transport" terminology kept.</li>
                       <li>&#x2022; New video embed on <code>/docs/authentication/gaze</code> &mdash; AGT Intro Learner mp4 self-hosted under <code>/videos/</code>, HTML5 native controls, no autoplay.</li>
                       <li>&#x2022; <strong>Standing rule added at <a href="/docs/rules" className="underline">/docs/rules</a>:</strong> the changelog (both footer block and <code>reference/changelog.mdx</code>) MUST be updated in the same session as any shipped change. Applies to LLMs, VLMs, and human contributors. Added to both rule surfaces &mdash; the MDX page at <code>/docs/rules</code> (agents + humans sections + checklist) AND the side-panel data at <code>components/docs-rules-content.ts</code> (AGENT_RULES #9 + HUMAN_RULES #5). Also fixed stale "Last updated: April 30, 2026 &mdash; v2.0.0" footer line.</li>
+                      <li>&#x2022; Brand-block GitHub icon (footer top-left) repointed from the now-deleted <code>jettoptx/optx-hermes-api</code> path to the org root <code>github.com/jettoptx</code>, where visitors land on the public repo list.</li>
                     </ul>
                   </li>
                   <li><span className="text-orange-400">v2.0.1</span> &mdash; May 14, 2026
